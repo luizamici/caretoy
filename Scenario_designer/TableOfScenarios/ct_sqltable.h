@@ -20,15 +20,13 @@ public:
     void insertIntoTable(QSqlRecord scenarioRecord);
     void copyIntoTable(QSqlRecord scenarioRecord);
     void deleteFromTable(QString id_scenario);
+    bool save(QHash<QString,QString> scenario);
     QHash<QString,QString> getSelected();
     QSqlRecord getSelectedRecord();
-    void submitAll();
+    bool submitAll();
 
 private:
     QModelIndex getIndex(QString id_scenario);
-    
-public slots:
-    void save(QHash<QString,QString> scenario);
     
 };
 

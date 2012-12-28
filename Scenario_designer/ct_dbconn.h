@@ -14,11 +14,8 @@ class CTDBConn : public QObject
 public:
     explicit CTDBConn(QObject *parent = 0);
 
-    void insertScenario(QHash<QString,QString> scenario);
     QSqlDatabase db;
     QSqlDatabase getConnection();
-
-//    void checkScenarioTable();
     
 signals:
     

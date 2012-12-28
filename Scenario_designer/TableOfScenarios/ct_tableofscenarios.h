@@ -27,11 +27,12 @@ private slots:
     void on_qbt_delete_clicked();
     void on_qbt_submit_clicked();
 
+public slots:
+    void save(QHash<QString,QString> scenario);
+
 private:
     Ui::CTTableOfScenarios *ui;
     QStatusBar *statusBar;
-
-
 
 signals:
     void newScenario();

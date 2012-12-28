@@ -66,8 +66,6 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     connect(qpbReset, SIGNAL(clicked()), scenarioCanvas, SLOT(resetScenario()));
     connect(qpbLoad, SIGNAL(clicked()), scenarioCanvas, SLOT(loadScenario()));
     connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(saveScenario()));
-//    connect(qpbSaveToDB,SIGNAL(clicked()),scenarioCanvas,SLOT(saveScenarioToDB()));
-
     connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -83,6 +81,7 @@ void CTScenarioConfig::saveScenarioToDB()
     CTDialog *dialog = new CTDialog();
     connect(dialog,SIGNAL(accepted(QString,QString,QString)),scenarioCanvas,
             SLOT(getInfoAndSave(QString,QString,QString)));
+
     if(!scenarioCanvas->isNewScenario())
     {
         dialog->setData(scenarioCanvas->getDescription(),

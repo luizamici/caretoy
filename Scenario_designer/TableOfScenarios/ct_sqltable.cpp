@@ -12,7 +12,7 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
     /*Selecting columns the desired columns of the DB table in the desired order*/
     QSqlQuery query(tr("SELECT id,execution_day,execution_order,creation_date, "
                        "last_edited,description,xml_description "
-                       "FROM test_scenario ORDER BY execution_day"),db->getConnection());
+                       "FROM test_scenario"),db->getConnection());
     tableModel->setQuery(query);
 //    tableModel->select();
 
@@ -27,7 +27,9 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
     /*disabling the editing through the table view*/
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    /*enablig the sorting of the table by clicked column*/
     this->setSortingEnabled(true);
+
     this->horizontalHeader()->resizeSections(QHeaderView :: ResizeToContents);
     this->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     this->verticalHeader()->hide();
@@ -36,10 +38,14 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
     this->setColumnHidden(tableModel->fieldIndex("id"),true);
     this->setColumnHidden(tableModel->fieldIndex("xml_description"), true);
 
+    /*activates selection of whole row*/
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    /*initialize sorting by execution day*/
+    this->sortByColumn(1,Qt::AscendingOrder);
 }
 
-void CTSqlTable::save(QHash<QString, QString> scenario)
+bool CTSqlTable::save(QHash<QString, QString> scenario)
 {
     if(scenario["id"] == ""){
         QSqlRecord newScenario = tableModel->record();
@@ -48,6 +54,7 @@ void CTSqlTable::save(QHash<QString, QString> scenario)
             newScenario.setValue(key,scenario[key]);
         }
         insertIntoTable(newScenario);
+        return true;
     }else{
         QModelIndex index = getIndex(scenario["id"]);
         int row = index.row();
@@ -59,7 +66,9 @@ void CTSqlTable::save(QHash<QString, QString> scenario)
              */
             tableModel->setData(indexOfCell,scenario[key],Qt::EditRole);
         }
+        return true;
     }
+    return false;
 }
 
 /*Inserts a new record in the table*/
@@ -69,8 +78,7 @@ void CTSqlTable::insertIntoTable(QSqlRecord scenarioRecord)
     scenarioRecord.remove(0);
     tableModel->insertRecord(tableModel->rowCount(QModelIndex()),
                              scenarioRecord);
-    /*Since the inserted record goes to the bottom of the table*/
-    scrollToBottom();
+
     /*Putting attention on the inserted record*/
     selectRow(tableModel->rowCount(QModelIndex()) - 1);
 }
@@ -142,15 +150,17 @@ QModelIndex CTSqlTable::getIndex(QString id_scenario)
 
 
 /*submits all cached changes*/
-void CTSqlTable::submitAll()
+bool CTSqlTable::submitAll()
 {
     tableModel->database().transaction();
 
     if(tableModel->submitAll()){
         tableModel->database().commit();
-        qDebug() << "SUCCESS";}
+        qDebug() << "SUCCESS";
+        return true;}
     else{
         tableModel->database().rollback();
         qDebug() << "there was an error " << tableModel->lastError().text();
+        return false;
     }
 }

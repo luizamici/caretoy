@@ -71,16 +71,12 @@ CTConfToyFlower::CTConfToyFlower(QWidget *parent) :
     }
 
     /* Establish automatic enabling/disabling of related event controls */
-//    connect(ui->qrb_pressure_event, SIGNAL(toggled(bool)),
-//            ui->qsb_pressure, SLOT(setEnabled(bool)));
     connect(ui->qrb_force_event, SIGNAL(toggled(bool)),
             ui->qsb_force, SLOT(setEnabled(bool)));
     connect(ui->qrb_force_event,SIGNAL(toggled(bool)),
             ui->qcb_force,SLOT(setEnabled(bool)));
     connect(ui->qrb_position_event, SIGNAL(toggled(bool)),
             ui->qcb_position, SLOT(setEnabled(bool)));
-//    connect(ui->qrb_reach_event, SIGNAL(toggled(bool)),
-//            ui->qcb_reach, SLOT(setEnabled(bool)));
     connect(ui->qrb_body_event,SIGNAL(toggled(bool)),
             ui->qcb_body,SLOT(setEnabled(bool)));
     connect(ui->qrb_head_event,SIGNAL(toggled(bool)),
@@ -175,13 +171,6 @@ bool CTConfToyFlower::setParameters(QDomElement root)
     {
         ui->qrb_null_event->setChecked(true);
     }
-//    else if ("pressure" == event_name)
-//    {
-//        ui->qrb_pressure_event->setChecked(true);
-//        double value =
-//                event.namedItem("condition").toElement().text().toDouble();
-//        ui->qsb_pressure->setValue(value);
-//    }
     else if ("force" == event_name)
     {
         ui->qrb_force_event->setChecked(true);
@@ -209,13 +198,6 @@ bool CTConfToyFlower::setParameters(QDomElement root)
         QString value = event.namedItem("condition").toElement().text();
         ui->qcb_head->setCurrentIndex(ui->qcb_head->findText(value));
     }
-//    else if ("reach" == event_name)
-//    {
-//        ui->qrb_reach_event->setChecked(true);
-//        QString value = event.namedItem("condition").toElement().text();
-//        ui->qcb_reach->setCurrentIndex(ui->qcb_reach->findText(value));
-//    }
-
     /* Set block feedback actions */
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
     QDomElement actions_block = feedback_block.namedItem("actions").toElement();
@@ -334,16 +316,6 @@ QDomElement CTConfToyFlower::getParameters()
         condition.setAttribute("type", "none");
         condition.appendChild(doc.createTextNode("null"));
     }
-//    else if (ui->qrb_pressure_event->isChecked())
-//    {
-//        event.setAttribute("id", 1);
-//        event.setAttribute("name", "pressure");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "numerical");
-//        condition.appendChild(
-//                    doc.createTextNode(ui->qsb_pressure->cleanText()));
-//    }
     else if (ui->qrb_force_event->isChecked())
     {
         event.setAttribute("id", 2);
@@ -384,15 +356,6 @@ QDomElement CTConfToyFlower::getParameters()
         condition.appendChild(
                     doc.createTextNode(ui->qcb_head->currentText()));
     }
-//    else if (ui->qrb_reach_event->isChecked())
-//    {
-//        event.setAttribute("id", 4);
-//        event.setAttribute("name", "reach");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "textual");
-//        condition.appendChild(doc.createTextNode(ui->qcb_reach->currentText()));
-//    }
 
     /* Insert block feedback actions */
     QDomElement actions = doc.createElement("actions");
