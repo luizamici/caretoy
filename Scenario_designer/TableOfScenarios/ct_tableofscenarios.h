@@ -2,6 +2,8 @@
 #define CT_TABLEOFSCENARIOS_H
 
 #include <QWidget>
+#include <QtGui>
+#include <QSqlRecord>
 #include "ct_sqltable.h"
 
 namespace Ui {
@@ -27,13 +29,14 @@ private slots:
 
 private:
     Ui::CTTableOfScenarios *ui;
+    QStatusBar *statusBar;
 
 
 
 signals:
     void newScenario();
     void editScenario(QHash<QString,QString> scenario);
-
+    void copyScenario(QHash<QString,QString> scenario);
 };
 
 #endif // CT_TABLEOFSCENARIOS_H

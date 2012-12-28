@@ -9,11 +9,11 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
     tableModel->setTable("test_scenario");
     tableModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
 
-    /*Independent select from the column order of the db*/
-    QSqlQuery query(tr("SELECT id,execution_day,execution_order,creation_date,last_edited,description,xml_description "
+    /*Selecting columns the desired columns of the DB table in the desired order*/
+    QSqlQuery query(tr("SELECT id,execution_day,execution_order,creation_date, "
+                       "last_edited,description,xml_description "
                        "FROM test_scenario ORDER BY execution_day"),db->getConnection());
     tableModel->setQuery(query);
-
 //    tableModel->select();
 
     tableModel->setHeaderData(1,Qt::Horizontal,tr("Execution day"));
@@ -26,7 +26,8 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
 
     /*disabling the editing through the table view*/
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    this->setSortingEnabled(true);
+
+    this->setSortingEnabled(true);
     this->horizontalHeader()->resizeSections(QHeaderView :: ResizeToContents);
     this->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     this->verticalHeader()->hide();
@@ -46,33 +47,71 @@ void CTSqlTable::save(QHash<QString, QString> scenario)
         foreach(QString key,scenario.keys()){
             newScenario.setValue(key,scenario[key]);
         }
-        /*removing id from the record since the DBMS should set it*/
-        newScenario.remove(0);
-
-        tableModel->insertRecord(tableModel->rowCount(QModelIndex()),newScenario);
+        insertIntoTable(newScenario);
     }else{
-        QModelIndex index;
-        int row;
-        for(int i = 0; i < tableModel->rowCount(); i++)
-        {
-            if(tableModel->data(tableModel->index(i,0)).toString() == scenario["id"])
-            {
-                index = tableModel->index(i,0);
-                row = index.row();
-            }
-         }
-         foreach(QString key, scenario.keys()){
+        QModelIndex index = getIndex(scenario["id"]);
+        int row = index.row();
+        foreach(QString key, scenario.keys()){
             int fieldIndex = tableModel->fieldIndex(key);
-            index = tableModel->index(row, fieldIndex);
-                    /*
-                     *The changes are saved locally in the SQL model
-                     */
-            tableModel->setData(index,scenario[key],Qt::EditRole);
-          }
+            QModelIndex indexOfCell = tableModel->index(row, fieldIndex);
+            /*
+             *The changes are saved locally in the SQL model
+             */
+            tableModel->setData(indexOfCell,scenario[key],Qt::EditRole);
+        }
     }
 }
 
+/*Inserts a new record in the table*/
+void CTSqlTable::insertIntoTable(QSqlRecord scenarioRecord)
+{
+    /*removing id from the record since the DBMS should set it*/
+    scenarioRecord.remove(0);
+    tableModel->insertRecord(tableModel->rowCount(QModelIndex()),
+                             scenarioRecord);
+    /*Since the inserted record goes to the bottom of the table*/
+    scrollToBottom();
+    /*Putting attention on the inserted record*/
+    selectRow(tableModel->rowCount(QModelIndex()) - 1);
+}
+
+
+void CTSqlTable::copyIntoTable(QSqlRecord scenarioRecord)
+{
+    /*adding the (copy) suffix to the description*/
+    scenarioRecord.setValue("description",scenarioRecord.value("description").
+                            toString() + "(copy)");
+    insertIntoTable(scenarioRecord);
+}
+
+void CTSqlTable::deleteFromTable(QString id_scenario)
+{
+    QModelIndex index = getIndex(id_scenario);
+    int row = index.row();
+    if(tableModel->index(row,0).isValid())
+        tableModel->removeRows(row,1);
+}
+
+/*retreives the selected as hashmap, comfortable as input for other windows*/
 QHash<QString,QString> CTSqlTable::getSelected()
+{
+    QSqlRecord scenarioRecord = getSelectedRecord();
+    /*
+     *Preparing the selected patient's data as hashMap for then returning it
+     */
+    QHash<QString,QString> scenario;
+
+    scenario["id"] = scenarioRecord.value("id").toString();
+    scenario["execution_day"] = scenarioRecord.value("execution_day").toString();
+    scenario["execution_order"] = scenarioRecord.value("execution_order").toString();
+    scenario["description"] = scenarioRecord.value("description").toString();
+    scenario["xml_description"] = scenarioRecord.value("xml_description").toString();
+    return scenario;
+}
+
+
+/*retreives the selected as sqlRecord for copying it*/
+QSqlRecord CTSqlTable::getSelectedRecord()
 {
     /*
      *Getting the selected row's index through the QTableView::currentIndex()
@@ -85,20 +124,24 @@ QHash<QString,QString> CTSqlTable::getSelected()
      *Getting the selected row of the table model
      */
     QSqlRecord scenarioRecord = tableModel->record(row);
-    /*
-     *Preparing the selected patient's data for then returning it
-     */
-    QHash<QString,QString> scenario;
-
-    scenario["id"] = scenarioRecord.value("id").toString();
-    scenario["execution_day"] = scenarioRecord.value("execution_day").toString();
-    scenario["execution_order"] = scenarioRecord.value("execution_order").toString();
-    scenario["description"] = scenarioRecord.value("description").toString();
-    scenario["xml_description"] = scenarioRecord.value("xml_description").toString();
-
-    return scenario;
+    return scenarioRecord;
 }
 
+QModelIndex CTSqlTable::getIndex(QString id_scenario)
+{
+    QModelIndex index;
+    for(int i = 0; i < tableModel->rowCount(); i++)
+    {
+        if(tableModel->data(tableModel->index(i,0)).toString() == id_scenario)
+        {
+            index = tableModel->index(i,0);
+        }
+    }
+    return index;
+}
+
+
+/*submits all cached changes*/
 void CTSqlTable::submitAll()
 {
     tableModel->database().transaction();

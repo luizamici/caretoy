@@ -17,11 +17,15 @@ public:
     CTDBConn *db;
     CTSqlModel *tableModel;
 
+    void insertIntoTable(QSqlRecord scenarioRecord);
+    void copyIntoTable(QSqlRecord scenarioRecord);
+    void deleteFromTable(QString id_scenario);
     QHash<QString,QString> getSelected();
+    QSqlRecord getSelectedRecord();
     void submitAll();
 
-
-signals:
+private:
+    QModelIndex getIndex(QString id_scenario);
     
 public slots:
     void save(QHash<QString,QString> scenario);

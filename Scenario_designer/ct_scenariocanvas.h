@@ -16,6 +16,10 @@ class CTScenarioCanvas : public QWidget
 public:
     explicit CTScenarioCanvas(QWidget *parent = 0);
     void initialize();
+    bool isNewScenario();
+    QString getDescription();
+    QString getExecutionDay();
+    QString getExecutionOrder();
 
 
 private:
@@ -41,7 +45,6 @@ public slots:
     void resetScenario();
     void loadScenario();
     void saveScenario();
-    void saveScenarioToDB();
     void loadScenario(QHash<QString,QString> scenario);
 
 private slots:

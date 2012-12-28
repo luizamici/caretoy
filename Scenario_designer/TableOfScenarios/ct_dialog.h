@@ -2,6 +2,8 @@
 #define CT_DIALOG_H
 
 #include <QWidget>
+#include <QtGui>
+#include <QDebug>
 
 namespace Ui {
 class CTDialog;
@@ -15,7 +17,6 @@ public:
     explicit CTDialog(QWidget *parent = 0);
     ~CTDialog();
 
-    void clear();
     void setData(QString description, QString execution_day, QString execution_order);
     
 private slots:

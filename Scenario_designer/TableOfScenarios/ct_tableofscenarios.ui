@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>761</width>
-    <height>304</height>
+    <width>956</width>
+    <height>332</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
    <property name="spacing">
     <number>7</number>
    </property>
@@ -60,6 +60,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="qbt_copy">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>Copy</string>
        </property>
@@ -67,6 +70,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="qbt_delete">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>Delete</string>
        </property>
@@ -80,6 +86,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -15,6 +15,9 @@ public:
 
     CTScenarioCanvas *scenarioCanvas;
 
+private slots:
+    void saveScenarioToDB();
+
 };
 
 #endif // CT_SCENARIOCONFIG_H

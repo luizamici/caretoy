@@ -493,28 +493,17 @@ void CTScenarioCanvas::saveScenario()
     }
 }
 
-/*Temporary slot for saving the scenario xml to the DB-directly*/
-void CTScenarioCanvas::saveScenarioToDB()
-{
-    CTDialog *dialog = new CTDialog();
-    connect(dialog,SIGNAL(accepted(QString,QString,QString)),this, SLOT(getInfoAndSave(QString,QString,QString)));
-    /*checks if the scenario is new*/
-    if(id_scenario.isEmpty()){
-        dialog->clear();
-        dialog->show();
-    }else{
-        dialog->setData(description,execution_day,execution_order);
-        dialog->show();
-    }
-}
 
-void CTScenarioCanvas::getInfoAndSave(QString description, QString execution_day, QString execution_order)
+void CTScenarioCanvas::getInfoAndSave(QString description,
+                                      QString execution_day,
+                                      QString execution_order)
 {
     QHash<QString,QString> scenario;
     if(!this->blocks.isEmpty())
     {
         QDomDocument doc("");
-        doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
+        doc.appendChild(doc.createProcessingInstruction(
+                            "xml","version=\"1.0\" encoding=\"UTF-8\""));
         QDomElement root = doc.createElement("scenario_data");
         doc.appendChild(root);
         QDomElement subroot = doc.createElement("blocks");
@@ -525,18 +514,19 @@ void CTScenarioCanvas::getInfoAndSave(QString description, QString execution_day
             subroot.appendChild(this->blocks.at(i)->getConfiguration());
         }
         if(id_scenario.isEmpty()){
-            scenario["creation_date"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
+            scenario["creation_date"] = QDateTime::currentDateTime().
+                    toString("yyyy-MM-dd HH:mm");
         }
         if(!id_scenario.isEmpty()){
             scenario["id"] = id_scenario;
         }
         scenario["xml_description"] = doc.toString();
-        scenario["last_edited"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
+        scenario["last_edited"] = QDateTime::currentDateTime().
+                toString("yyyy-MM-dd HH:mm");
         scenario["execution_day"] = execution_day;
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
 
-        qDebug() << doc.toString();
         emit save(scenario);
     }
 }
@@ -564,4 +554,28 @@ void CTScenarioCanvas::getInfoAndSave()
         qDebug() << doc.toString();
         emit save(scenario);
     }
+}
+
+
+bool CTScenarioCanvas::isNewScenario()
+{
+    if(id_scenario.isEmpty())
+        return true;
+    else
+        return false;
+}
+
+QString CTScenarioCanvas::getDescription()
+{
+    return this->description;
+}
+
+QString CTScenarioCanvas::getExecutionDay()
+{
+    return this->execution_day;
+}
+
+QString CTScenarioCanvas::getExecutionOrder()
+{
+    return this->execution_order;
 }

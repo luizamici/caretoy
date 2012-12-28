@@ -5,6 +5,7 @@ CTSqlModel::CTSqlModel(QWidget *parent, QSqlDatabase db) :
 {
 }
 
+/*Making 'setQuery' public*/
 void CTSqlModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
