@@ -17,12 +17,14 @@ public:
     QString getName();
     QPixmap getImage();
     QDomElement getConfiguration();
+    QString getConfiguration(QString str);
     void enableConfig(bool value);
 
 private:
     Ui::CTSimpleBlock *ui;
     int id;
     QDomElement config;
+    QString xml_config;
     bool configurable;
 
 protected:
@@ -30,6 +32,7 @@ protected:
 
 public slots:
     void setConfiguration(QDomElement root);
+    void setConfiguration(QString xml);
 };
 
 #endif // CT_SIMPLEBLOCK_H

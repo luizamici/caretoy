@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtXml>
+#include <QXmlStreamWriter>
 
 /* ########################################################################## */
 
@@ -122,6 +123,7 @@ public:
     CTDoubleSpinBox *duration_max;
     void setParameters(QDomElement root);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 /* ########################################################################## */
@@ -147,6 +149,7 @@ public:
     QComboBox *sound;
     void setParameters(QDomElement root);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 /* ########################################################################## */

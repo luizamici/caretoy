@@ -55,9 +55,9 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     buttonLayout->addStretch();
     QPushButton *qpbLoad = new QPushButton("Load");
     buttonLayout->addWidget(qpbLoad);
-    QPushButton *qpbSave = new QPushButton("Save");
-    buttonLayout->addWidget(qpbSave);
-    QPushButton *qpbSaveToDB = new QPushButton("Save to DB");
+//    QPushButton *qpbSave = new QPushButton("Save");
+//    buttonLayout->addWidget(qpbSave);
+    QPushButton *qpbSaveToDB = new QPushButton("Save");
     buttonLayout->addWidget(qpbSaveToDB);
     QPushButton *qpbCancel = new QPushButton("Cancel");
     buttonLayout->addWidget(qpbCancel);
@@ -65,7 +65,7 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     // Establish connections
     connect(qpbReset, SIGNAL(clicked()), scenarioCanvas, SLOT(resetScenario()));
     connect(qpbLoad, SIGNAL(clicked()), scenarioCanvas, SLOT(loadScenario()));
-    connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(saveScenario()));
+//    connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(saveScenario()));
     connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
 

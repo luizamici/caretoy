@@ -734,6 +734,34 @@ void CTConstLight::setParameters(QDomElement root)
 //    duration_max->setValue(val_duration_max);
 }
 
+
+void CTConstLight::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+    if( NULL != activation)
+        stream.writeEndElement(); //end stimulus
+}
+
+
 QDomElement CTConstLight::getParameters()
 {
     QDomDocument doc;
@@ -955,6 +983,45 @@ void CTSpeaker::setParameters(QDomElement root)
 
     QString val_sound = root.namedItem("sound").toElement().text();
     sound->setCurrentIndex(sound->findText(val_sound));
+}
+
+void CTSpeaker::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    stream.writeAttribute("left_front",left_front->isChecked() ? "true" : "false");
+    stream.writeAttribute("left_rear",left_rear->isChecked() ? "true" : "false");
+    stream.writeAttribute("right_front",right_front->isChecked() ? "true" : "false");
+    stream.writeAttribute("right_rear",right_rear->isChecked() ? "true" : "false");
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+    stream.writeStartElement("volume");
+    stream.writeTextElement("from", volume_min->cleanText());
+    stream.writeTextElement("to", volume_max->cleanText());
+    stream.writeEndElement(); //end volume
+
+    stream.writeStartElement("sound");
+    stream.writeCharacters(sound->currentText());
+    stream.writeEndElement(); // end sound
+
+    if (NULL != activation)
+        stream.writeEndElement(); //end stimulus
 }
 
 QDomElement CTSpeaker::getParameters()

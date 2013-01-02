@@ -19,6 +19,27 @@ CTBlockConfig::~CTBlockConfig()
     delete ui;
 }
 
+
+void CTBlockConfig::showParameters(int id, QString xml)
+{
+    this->id = id;
+
+    switch (id) {
+    case CT_BLOCK_FLOWER:
+    {
+        CTConfToyFlower *config = new CTConfToyFlower();
+        ui->qsa_config->setWidget(config);
+        if (!xml.isEmpty()) {
+            if(!config->setParameters(xml))
+               qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void CTBlockConfig::showParameters(int id, QDomElement root)
 {
     qDebug() << "CTBlockConfig::showParameters check root is NULLs " << root.isNull() << root.text();
@@ -210,7 +231,7 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_FLOWER:
     {
         CTConfToyFlower *config = (CTConfToyFlower *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_MICKEY:

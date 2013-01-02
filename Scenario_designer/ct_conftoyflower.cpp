@@ -107,6 +107,32 @@ CTConfToyFlower::~CTConfToyFlower()
  * \brief CTConfToyFlower::setParameters
  *
  * Sets values of all configurable block parameters based on the content of the
+ * supplied XML string.
+ *
+ * \param xml containing data of all configurable parameters.
+ */
+bool CTConfToyFlower::setParameters(QString xml)
+{
+    qDebug() << xml;
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource *source = new QXmlInputSource();
+    source->setData(xml);
+
+    CTXmlHandler *handler = new CTXmlHandler;
+    handler->setWidget("flower", this);
+    xmlReader.setContentHandler(handler);
+    xmlReader.setErrorHandler(handler);
+
+    bool ok = xmlReader.parse(source);
+    return true;
+}
+
+
+/*!
+ * \brief CTConfToyFlower::setParameters
+ *
+ * Sets values of all configurable block parameters based on the content of the
  * supplied XML tree.
  *
  * \param root XML tree containing data of all configurable parameters.
@@ -250,6 +276,149 @@ bool CTConfToyFlower::setParameters(QDomElement root)
     ui->qsb_pause->setValue(duration - calculateRequiredTime());
     return true;
 }
+
+/*!
+ * \brief CTConfToyFlower::getParameters
+ *
+ * Retrieves values of all configurable block parameters and returns them as
+ * an XML string.
+ *
+ * \return XML containing data of all configurable parameters.
+ */
+QString CTConfToyFlower::getParameters(QString value){
+
+    value = "This function uses QXmlStreamWriter";
+
+    QString parameters;
+    QXmlStreamWriter stream(&parameters);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("block");
+    stream.writeAttribute("id", "1");
+    stream.writeAttribute("name", "flower");
+
+    /* Insert block comment */
+    stream.writeStartElement("comment");
+    stream.writeCharacters(ui->qte_comment->toPlainText());
+    stream.writeEndElement(); //end comment
+
+    /* Insert block runtime */
+    stream.writeStartElement("runtime");
+    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
+            + ui->qsb_pause->cleanText().toDouble();
+    stream.writeTextElement("duration",QString::number(duration_calculated));
+    stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
+    stream.writeEndElement(); //end runtime
+
+    /* Insert block stimuli */
+    stream.writeStartElement("stimuli");
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_stimuli));
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_stimuli.at(i)->getParameters(stream);
+    }
+    stream.writeEndElement(); // end stimuli
+
+    /* Insert block feedback events */
+    stream.writeStartElement("feedback");
+    stream.writeStartElement("event");
+    if (ui->qrb_null_event->isChecked())
+    {
+        stream.writeAttribute("id", "0");
+        stream.writeAttribute("name", "none");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","none");
+        stream.writeCharacters("");
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_force_event->isChecked())
+    {
+        stream.writeAttribute("id", "2");
+        stream.writeAttribute("name", "force");
+        stream.writeAttribute("sensor", ui->qcb_force->currentText());
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","numerical");
+        stream.writeCharacters(ui->qsb_force->cleanText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_position_event->isChecked())
+    {
+        stream.writeAttribute("id", "3");
+        stream.writeAttribute("name", "position");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_position->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_body_event->isChecked())
+    {
+        stream.writeAttribute("id", "4");
+        stream.writeAttribute("name", "body");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_body->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_head_event->isChecked())
+    {
+        stream.writeAttribute("id", "5");
+        stream.writeAttribute("name", "head");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_head->currentText());
+        stream.writeEndElement();//end condition
+    }
+    stream.writeEndElement(); //end event
+
+    /* Insert block feedback actions */
+    stream.writeStartElement("actions");
+    int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_actions));
+
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+
+    }
+    stream.writeEndElement(); //end actions
+    stream.writeEndElement(); //end feedback
+    stream.writeEndElement(); // end block
+
+    return parameters;
+}
+
 
 /*!
  * \brief CTConfToyFlower::getParameters

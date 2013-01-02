@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_customwidgets.h"
+#include "ct_xmlhandler.h"
 
 namespace Ui { class CTConfToyFlower; }
 
@@ -15,7 +16,10 @@ public:
     explicit CTConfToyFlower(QWidget *parent = 0);
     ~CTConfToyFlower();
     bool setParameters(QDomElement root);
+    bool setParameters(QString xml);
     QDomElement getParameters();
+
+    QString getParameters(QString value);
 
 private:
     Ui::CTConfToyFlower *ui;

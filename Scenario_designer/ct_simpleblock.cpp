@@ -68,6 +68,17 @@ QPixmap CTSimpleBlock::getImage()
     return pixmap;
 }
 
+void CTSimpleBlock::setConfiguration(QString xml)
+{
+    xml_config = xml;
+}
+
+QString CTSimpleBlock::getConfiguration(QString str)
+{
+    str = "Using Sax Parser";
+    return xml_config;
+}
+
 void CTSimpleBlock::setConfiguration(QDomElement root)
 {
     config = root;
@@ -94,9 +105,12 @@ void CTSimpleBlock::mouseDoubleClickEvent(QMouseEvent *event)
         CTBlockConfig block_config;
         block_config.setWindowTitle("Block configuration: " +
                                     ui->qlb_block_name->text());
-        block_config.showParameters(id, config);
-        connect(&block_config, SIGNAL(finishedConfig(QDomElement)),
-                this, SLOT(setConfiguration(QDomElement)));
+//        block_config.showParameters(id, config);
+        block_config.showParameters(id, xml_config);
+        connect(&block_config,SIGNAL(finishedConfig(QString)),
+                this, SLOT(setConfiguration(QString)));
+//        connect(&block_config, SIGNAL(finishedConfig(QDomElement)),
+//                this, SLOT(setConfiguration(QDomElement)));
         block_config.exec();
     }
     else { event->ignore(); }

@@ -33,6 +33,7 @@ public:
     explicit CTBlockConfig(QWidget *parent = 0);
     ~CTBlockConfig();
     void showParameters(int id, QDomElement root);
+    void showParameters(int id, QString xml);
 
 private:
     Ui::CTBlockConfig *ui;
@@ -40,6 +41,7 @@ private:
 
 signals:
     void finishedConfig(QDomElement root);
+    void finishedConfig(QString xml);
 
 private slots:
     void resetConfig();

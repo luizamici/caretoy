@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     TableOfScenarios/ct_tableofscenarios.cpp \
     TableOfScenarios/ct_sqltable.cpp \
     TableOfScenarios/ct_sqlmodel.cpp \
-    TableOfScenarios/ct_dialog.cpp
+    TableOfScenarios/ct_dialog.cpp \
+    ct_xmlhandler.cpp
 
 HEADERS += \
     ct_customwidgets.h \
@@ -51,7 +52,8 @@ HEADERS += \
     TableOfScenarios/ct_tableofscenarios.h \
     TableOfScenarios/ct_sqltable.h \
     TableOfScenarios/ct_sqlmodel.h \
-    TableOfScenarios/ct_dialog.h
+    TableOfScenarios/ct_dialog.h \
+    ct_xmlhandler.h
 
 FORMS += \
     ct_conftoystick.ui \

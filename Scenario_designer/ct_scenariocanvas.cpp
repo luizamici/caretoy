@@ -313,7 +313,7 @@ void CTScenarioCanvas::loadScenario()
                 {
                     CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
                     new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
+                    new_block->setConfiguration(" ");
                     blocks.append(new_block);
                 }
                 else if ("ring" == block_name)
@@ -526,6 +526,7 @@ void CTScenarioCanvas::getInfoAndSave(QString description,
         scenario["execution_day"] = execution_day;
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
+        qDebug() << scenario;
 
         emit save(scenario);
     }
