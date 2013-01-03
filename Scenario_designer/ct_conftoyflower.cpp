@@ -115,16 +115,27 @@ bool CTConfToyFlower::setParameters(QString xml)
 {
     qDebug() << xml;
 
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
+    int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
+
     QXmlSimpleReader xmlReader;
     QXmlInputSource *source = new QXmlInputSource();
     source->setData(xml);
 
     CTXmlHandler *handler = new CTXmlHandler;
-    handler->setWidget("flower", this);
+    /*
+     *Passing pointer of the class to the xml parser handler,
+     *in order to set the parsed values into it's input fields
+     */
+    handler->setWidget("flower", this, num_stimuli, num_actions);
+    handler->setStimuli(light_stimuli, speaker_stimuli);
+    handler->setActions(light_actions, speaker_actions);
+
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
+    qDebug() << "The parsing went ok? " << ok;
     return true;
 }
 

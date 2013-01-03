@@ -122,6 +122,7 @@ public:
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString,QVariant> attr);
     QDomElement getParameters();
     void getParameters(QXmlStreamWriter &stream);
 };
@@ -148,6 +149,7 @@ public:
     CTDoubleSpinBox *duration_max;
     QComboBox *sound;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString, QVariant> attr);
     QDomElement getParameters();
     void getParameters(QXmlStreamWriter &stream);
 };

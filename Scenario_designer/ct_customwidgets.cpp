@@ -703,6 +703,21 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 }
 
+void CTConstLight::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ){state->setChecked(true); }
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMinimum(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+}
+
 void CTConstLight::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -932,6 +947,32 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
 
     /**************************************************************************/
 }
+
+void CTSpeaker::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ) {state->setChecked(true);}
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMaximum(attr["val_duration_min"].toDouble());
+        duration_min->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+    volume_min->setMinimum(attr["val_volume_min"].toDouble());
+    volume_min->setValue(attr["val_volume_min"].toDouble());
+    volume_max->setValue(attr["val_volume_max"].toDouble());
+
+    if(attr["left_rear"].toString() == "true"){ left_rear->setChecked(true);}
+    if(attr["left_front"].toString() == "true"){ left_front->setChecked(true);}
+    if(attr["right_front"].toString() == "true"){ right_front->setChecked(true);}
+    if(attr["right_rear"].toString() == "true") { right_rear->setChecked(true);}
+
+    sound->setCurrentIndex(sound->findText(attr["sound"].toString()));
+}
+
 
 void CTSpeaker::setParameters(QDomElement root)
 {
