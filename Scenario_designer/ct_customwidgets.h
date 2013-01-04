@@ -104,7 +104,9 @@ public:
     CTSpinBox *intensity_min;
     CTSpinBox *intensity_max;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString,QVariant> attr);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 /* ########################################################################## */
@@ -170,7 +172,9 @@ public:
     CTDoubleSpinBox *duration_max;
     QComboBox *video;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString,QVariant> attr);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 #endif // CT_CUSTOMWIDGETS_H

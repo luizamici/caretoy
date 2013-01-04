@@ -10,20 +10,22 @@ void CTXmlHandler::setWidget(QString id_widget, QWidget *widget, int stimuli, in
     {
         CTConfToyFlower *flower = static_cast<CTConfToyFlower*>(widget);
 
-        qDebug() << flower->children().at(0) << flower->children().at(1);
         /*Setting pointers to each ui component of the widget flower*/
         qte_comment = flower->findChild<QPlainTextEdit*>("qte_comment");
-        qsb_block_duration = flower->findChild<QSpinBox*>("qsb_block_duration");
-        qsb_block_repetitions = flower->findChild<QSpinBox*>("qsb_block_repetitions");
+        qsb_block_repetitions = flower->findChild<CTSpinBox*>("qsb_block_repetitions");
         qrb_null_event = flower->findChild<QRadioButton*>("qrb_null_event");
         qrb_force_event = flower->findChild<QRadioButton*>("qrb_force_event");
         qcb_force = flower->findChild<QComboBox*>("qcb_force");
+        qsb_force = flower->findChild<CTDoubleSpinBox*>("qsb_force");
         qrb_position_event = flower->findChild<QRadioButton*>("qrb_position_event");
         qcb_position = flower->findChild<QComboBox*>("qcb_position");
         qrb_body_event = flower->findChild<QRadioButton*>("qrb_body_event");
         qcb_body = flower->findChild<QComboBox*>("qcb_body");
         qcb_head = flower->findChild<QComboBox*>("qcb_head");
         qrb_head_event = flower->findChild<QRadioButton*>("qrb_head_event");
+
+        qsb_duration_min = flower->findChild<CTDoubleSpinBox*>("qsb_duration_min");
+        qsb_duration_max = flower->findChild<CTDoubleSpinBox*>("qsb_duration_max");
     }
 }
 
@@ -105,7 +107,7 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
         /*Processing of one stimulus*/
         if(att.value("enabled") != "false" )
             enabled = true;
-        else
+        else if(att.value("enabled") == "false")
             enabled = false;
         if(att.value("name") == "light")
         {
@@ -122,6 +124,7 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             attr["right_front"] = att.value("right_front");
             attr["right_rear"] = att.value("right_rear");
         }
+    /* Actions block processing*/
     }if(qName == "event" && elementName.contains("feedback"))
     {
         attr["event_name"] = att.value("name");
@@ -138,7 +141,7 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
     }
     if(qName == "action" && elementName.contains("actions"))
     {
-        /*Processing of one stimulus*/
+        /*Processing of one action*/
         if(att.value("enabled") != "false" )
             enabled = true;
         else
@@ -172,28 +175,16 @@ bool CTXmlHandler::characters(const QString& ch)
         qte_comment->setPlainText(ch);
     /* Set block runtime */
     if(elementName.contains("runtime") && elementName.contains("duration"))
-        //TODO
-        qDebug() << "********";
+    {
+        block_duration = ch.toDouble();
+        qDebug() << "parsed block duration" << block_duration;}
     if(elementName.contains("runtime") && elementName.contains("repetitions"))
         qsb_block_repetitions->setValue(ch.toInt());
 
     /* Set block stimuli/actions attributes*/
+
     if(elementName.contains("stimulus") && elementName.contains("activation"))
         attr["val_activation"] = ch;
-    if(elementName.contains("duration") && elementName.contains("from"))
-        attr["val_duration_min"] = ch;
-    if(elementName.contains("duration") && elementName.contains("to"))
-    {
-        attr["val_duration_max"] = ch;
-        if(attr["type"] == "light_stimulus" || attr["type"] == "light_action"){
-            light->setParameters(enabled, attr);
-            attr.clear();
-        }if(attr["type"] == "light_action")
-        {
-            //TODO set the value of the qsb_duration_min, qsb_duration_max
-            //WARNING: custom spinbox class used!
-        }
-    }
     if(elementName.contains("volume") && elementName.contains("from"))
     {
         attr["val_volume_min"] = ch;
@@ -205,16 +196,30 @@ bool CTXmlHandler::characters(const QString& ch)
     if(elementName.contains("sound"))
     {
         attr["sound"] = ch;
+    }
+    if(elementName.contains("duration") && elementName.contains("from"))
+        attr["val_duration_min"] = ch;
+    if(elementName.contains("duration") && elementName.contains("to"))
+    {
+        attr["val_duration_max"] = ch;
+        if(attr["type"] == "light_action" || attr["type"] == "speaker_action")
+        {
+            qsb_duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
+            qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
+        if(attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+        {
+            light->setParameters(enabled, attr);
+            attr.clear();
+        }
         if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
         {
             speaker->setParameters(enabled,attr);
             attr.clear();
-        }if(attr["type"] == "speaker_action")
-        {
-            //TODO set the value of the qsb_duration_min, qsb_duration_max
-            //WARNING: custom spinbox class used!
         }
     }
+
 
     /* Set block feedback events */
     if(elementName.contains("feedback") && elementName.contains("event")
@@ -229,8 +234,7 @@ bool CTXmlHandler::characters(const QString& ch)
             qrb_force_event->setChecked(true);
             qcb_force->setCurrentIndex(qcb_force->findText(
                                            attr["sensor"].toString()));
-            //TODO set the spin box with the value read
-            //WARNING: a custom spinbox class is used!
+            qsb_force->setValue(ch.toDouble());
         }
         else if("position" == attr["event_name"])
         {
@@ -297,4 +301,9 @@ QStringList& CTXmlHandler::names ()
 QList<int>& CTXmlHandler::indentations ()
 {
     return elementIndentation;
+}
+
+double CTXmlHandler::getBlockDuration()
+{
+    return this->block_duration;
 }

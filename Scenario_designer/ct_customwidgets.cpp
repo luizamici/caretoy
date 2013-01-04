@@ -545,6 +545,25 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 }
 
+void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ){state->setChecked(true); }
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMinimum(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+    intensity_min->setValue(attr["val_intensity_min"].toInt());
+    intensity_max->setValue(attr["val_intensity_max"].toInt());
+}
+
+//TOBE deprecated
 void CTLight::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -586,6 +605,39 @@ void CTLight::setParameters(QDomElement root)
     intensity_max->setValue(val_intensity_max);
 }
 
+
+void CTLight::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+    stream.writeStartElement("intensity");
+    stream.writeTextElement("from",intensity_min->cleanText());
+    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeEndElement(); // end intensity
+
+    if( NULL != activation)
+        stream.writeEndElement(); //end stimulus
+}
+
+//TOBE deprecated
 QDomElement CTLight::getParameters()
 {
     QDomDocument doc;
@@ -718,6 +770,7 @@ void CTConstLight::setParameters(bool b, QHash<QString,QVariant> attr)
     }
 }
 
+//TOBE deprecated
 void CTConstLight::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -776,7 +829,7 @@ void CTConstLight::getParameters(QXmlStreamWriter &stream){
         stream.writeEndElement(); //end stimulus
 }
 
-
+//TOBE deprecated
 QDomElement CTConstLight::getParameters()
 {
     QDomDocument doc;
@@ -973,7 +1026,7 @@ void CTSpeaker::setParameters(bool b, QHash<QString,QVariant> attr)
     sound->setCurrentIndex(sound->findText(attr["sound"].toString()));
 }
 
-
+//TOBE deprecated
 void CTSpeaker::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -1045,13 +1098,6 @@ void CTSpeaker::getParameters(QXmlStreamWriter &stream){
         stream.writeCharacters(activation->cleanText());
         stream.writeEndElement(); //end activation
     }
-    if(NULL != duration_min && NULL!= duration_max)
-    {
-        stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
-        stream.writeEndElement(); //end duration
-    }
     stream.writeStartElement("volume");
     stream.writeTextElement("from", volume_min->cleanText());
     stream.writeTextElement("to", volume_max->cleanText());
@@ -1061,10 +1107,19 @@ void CTSpeaker::getParameters(QXmlStreamWriter &stream){
     stream.writeCharacters(sound->currentText());
     stream.writeEndElement(); // end sound
 
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+
     if (NULL != activation)
         stream.writeEndElement(); //end stimulus
 }
 
+//TOBE deprecated
 QDomElement CTSpeaker::getParameters()
 {
     QDomDocument doc;
@@ -1199,6 +1254,24 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 }
 
+
+void CTScreen::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ){state->setChecked(true); }
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMinimum(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+    video->setCurrentIndex(video->findText(attr["val_video"].toString()));
+}
+
+
 /*!
  * \brief CTScreen::setParameters
  *
@@ -1207,6 +1280,8 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
  *
  * \param root XML tree containing all parameters.
  */
+
+//TOBE deprecated
 void CTScreen::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -1243,6 +1318,38 @@ void CTScreen::setParameters(QDomElement root)
     video->setCurrentIndex(video->findText(val_video));
 }
 
+void CTScreen::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+
+    stream.writeStartElement("video");
+    stream.writeCharacters(video->currentText());
+    stream.writeEndElement();// end video
+
+    if( NULL != activation)
+        stream.writeEndElement(); //end stimulus
+}
+
+
 /*!
  * \brief CTScreen::getParameters
  *
@@ -1250,6 +1357,7 @@ void CTScreen::setParameters(QDomElement root)
  *
  * \return XML tree containing data of all configurable parameters.
  */
+//TOBE deprecated
 QDomElement CTScreen::getParameters()
 {
     QDomDocument doc;

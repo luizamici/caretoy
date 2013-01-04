@@ -12,6 +12,7 @@ CTConfToyFlower::CTConfToyFlower(QWidget *parent) :
 
     /*Initialy disables the tab for the feedback-action*/
     ui->tabFeedbackAction->setDisabled(true);
+    block_duration = 0.0;
 
     for (int i = 0; i < NUM_LIGHTS; i++)
     {
@@ -136,6 +137,11 @@ bool CTConfToyFlower::setParameters(QString xml)
 
     bool ok = xmlReader.parse(source);
     qDebug() << "The parsing went ok? " << ok;
+    block_duration = handler->getBlockDuration();
+    if(ok)
+    {
+        updateBlockRuntime(1.0);
+    }
     return true;
 }
 
@@ -651,5 +657,11 @@ void CTConfToyFlower::updateBlockRuntime(double value)
 {
     value = 0;
     ui->qsb_block_duration->setValue(calculateRequiredTime());
+    /*Checks if the overall value of the block duration contains the pause*/
+    if(calculateRequiredTime() < block_duration)
+    {
+        qDebug() << "calculateRequiredTime() < block_duration";
+        ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
+    }
 }
 

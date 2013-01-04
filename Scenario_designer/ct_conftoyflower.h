@@ -24,8 +24,9 @@ private:
     Ui::CTConfToyFlower *ui;
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli, speaker_actions;
-    double calculateRequiredTime();
 
+    double calculateRequiredTime();
+    double block_duration;
 private slots:
     void updateBlockRuntime(bool value);
     void updateBlockRuntime(double value);
