@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_customwidgets.h"
+#include "ct_xmlhandler.h"
 
 namespace Ui { class CTConfToyStick; }
 
@@ -15,14 +16,16 @@ public:
     explicit CTConfToyStick(QWidget *parent = 0);
     ~CTConfToyStick();
     bool setParameters(QDomElement root);
+    bool setParameters(QString xml);
     QDomElement getParameters();
+    QString getParameters(QString value);
 
 private:
     Ui::CTConfToyStick *ui;
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli,  speaker_actions;
     double calculateRequiredTime();
-
+    double block_duration;
 private slots:
     void updateBlockRuntime(bool value);
     void updateBlockRuntime(double value);

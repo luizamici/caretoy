@@ -621,6 +621,10 @@ void CTLight::getParameters(QXmlStreamWriter &stream){
         stream.writeCharacters(activation->cleanText());
         stream.writeEndElement(); //end activation
     }
+    stream.writeStartElement("intensity");
+    stream.writeTextElement("from",intensity_min->cleanText());
+    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeEndElement(); // end intensity
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
@@ -628,10 +632,7 @@ void CTLight::getParameters(QXmlStreamWriter &stream){
         stream.writeTextElement("to", duration_max->cleanText());
         stream.writeEndElement(); //end duration
     }
-    stream.writeStartElement("intensity");
-    stream.writeTextElement("from",intensity_min->cleanText());
-    stream.writeTextElement("to",intensity_max->cleanText());
-    stream.writeEndElement(); // end intensity
+
 
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus

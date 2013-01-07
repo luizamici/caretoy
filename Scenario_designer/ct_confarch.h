@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_customwidgets.h"
+#include "ct_xmlhandler.h"
 
 namespace Ui { class CTConfArch; }
 
@@ -15,12 +16,15 @@ public:
     explicit CTConfArch(QWidget *parent = 0);
     ~CTConfArch();
     bool setParameters(QDomElement root);
+    bool setParameters(QString xml);
     QDomElement getParameters();
+    QString getParameters(QString value);
 
 private:
     Ui::CTConfArch *ui;
     QList<CTLight *> light_stimuli;
     double calculateRequiredTime();
+    double block_duration;
 
 private slots:
     void updateBlockRuntime(bool value);

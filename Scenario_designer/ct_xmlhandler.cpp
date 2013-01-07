@@ -1,57 +1,94 @@
 #include "ct_xmlhandler.h"
 #include <QDebug>
 
-void CTXmlHandler::setWidget(QString id_widget, QWidget *widget, int stimuli, int actions)
+bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
+{
+    /*Setting pointers to each ui component of the widget*/
+    qte_comment = widget->findChild<QPlainTextEdit*>("qte_comment");
+    qsb_block_repetitions = widget->findChild<CTSpinBox*>("qsb_block_repetitions");
+    if(id_widget != CT_BLOCK_ARCH){
+        qrb_null_event = widget->findChild<QRadioButton*>("qrb_null_event");
+        qrb_position_event = widget->findChild<QRadioButton*>("qrb_position_event");
+        qcb_position = widget->findChild<QComboBox*>("qcb_position");
+        qrb_body_event = widget->findChild<QRadioButton*>("qrb_body_event");
+        qcb_body = widget->findChild<QComboBox*>("qcb_body");
+        qcb_head = widget->findChild<QComboBox*>("qcb_head");
+        qrb_head_event = widget->findChild<QRadioButton*>("qrb_head_event");
+
+        qsb_duration_min = widget->findChild<CTDoubleSpinBox*>("qsb_duration_min");
+        qsb_duration_max = widget->findChild<CTDoubleSpinBox*>("qsb_duration_max");
+    }
+
+    if(id_widget == CT_BLOCK_FLOWER || id_widget == CT_BLOCK_MICKEY)
+    {
+        qrb_force_event = widget->findChild<QRadioButton*>("qrb_force_event");
+        qsb_force = widget->findChild<CTDoubleSpinBox*>("qsb_force");
+    }
+    if(id_widget == CT_BLOCK_MICKEY || id_widget == CT_BLOCK_RING
+            || id_widget == CT_BLOCK_STICK || id_widget == CT_BLOCK_U)
+    {
+        qrb_pressure_event = widget->findChild<QRadioButton*>("qrb_pressure_event");
+        qsb_pressure = widget->findChild<CTDoubleSpinBox*>("qsb_pressure");
+    }
+    if(id_widget == CT_BLOCK_FLOWER || id_widget == CT_BLOCK_MICKEY)
+    {
+        qcb_force = widget->findChild<QComboBox*>("qcb_force");
+    }
+    if(id_widget == CT_BLOCK_RING || id_widget == CT_BLOCK_U)
+    {
+        qcb_pressure = widget->findChild<QComboBox*>("qcb_pressure");
+    }
+
+}
+
+void CTXmlHandler::setWidget(int id_widget, QWidget *widget, int stimuli,
+                             int actions)
 {
     idWidget = id_widget;
     num_stimuli = stimuli;
     num_actions = actions;
-    if(idWidget == "flower")
-    {
-        CTConfToyFlower *flower = static_cast<CTConfToyFlower*>(widget);
-
-        /*Setting pointers to each ui component of the widget flower*/
-        qte_comment = flower->findChild<QPlainTextEdit*>("qte_comment");
-        qsb_block_repetitions = flower->findChild<CTSpinBox*>("qsb_block_repetitions");
-        qrb_null_event = flower->findChild<QRadioButton*>("qrb_null_event");
-        qrb_force_event = flower->findChild<QRadioButton*>("qrb_force_event");
-        qcb_force = flower->findChild<QComboBox*>("qcb_force");
-        qsb_force = flower->findChild<CTDoubleSpinBox*>("qsb_force");
-        qrb_position_event = flower->findChild<QRadioButton*>("qrb_position_event");
-        qcb_position = flower->findChild<QComboBox*>("qcb_position");
-        qrb_body_event = flower->findChild<QRadioButton*>("qrb_body_event");
-        qcb_body = flower->findChild<QComboBox*>("qcb_body");
-        qcb_head = flower->findChild<QComboBox*>("qcb_head");
-        qrb_head_event = flower->findChild<QRadioButton*>("qrb_head_event");
-
-        qsb_duration_min = flower->findChild<CTDoubleSpinBox*>("qsb_duration_min");
-        qsb_duration_max = flower->findChild<CTDoubleSpinBox*>("qsb_duration_max");
-    }
+    setSubWidgets(idWidget,widget);
 }
 
 void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
-                              QList<CTSpeaker *> &speakerStimuli)
+                              QList<CTSpeaker *> &speakerStimuli, QList<CTLight *> &archLightStimuli)
 {
-    if(idWidget == "flower")
+
+    if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
+            || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
+            || idWidget == CT_BLOCK_U)
     {
         if(!lightStimuli.isEmpty() && !speakerStimuli.isEmpty())
         {
             light_stimuli = lightStimuli;
             speaker_stimuli = speakerStimuli;
-        }else{qDebug() << "An error with the args detected: empty lists!";}
+        }else{
+            qDebug() << "An error with the args detected: empty lists!";
+        }
+    }
+    if(idWidget == CT_BLOCK_ARCH)
+    {
+        if(!archLightStimuli.isEmpty())
+            arch_light_stimuli = archLightStimuli;
+        else
+            qDebug() << "An error with the args detected: empty lists!";
     }
 }
 
 void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
                               QList<CTSpeaker *> &speakerAction)
 {
-    if(idWidget == "flower")
+    if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
+            || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
+            || idWidget == CT_BLOCK_U)
     {
         if(!lightAction.isEmpty() && !speakerAction.isEmpty())
         {
             light_actions = lightAction;
             speaker_actions = speakerAction;
-        }else{qDebug() << "An error with the args detected: empty lists!";}
+        }else{
+            qDebug() << "An error with the args detected: empty lists!";
+        }
     }
 }
 
@@ -86,12 +123,11 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
     const QString & qName, const QXmlAttributes &att)
 {
 
-    if(qName == "block")
-        /*Checking the block consistency*/
-        if(att.value("name") != idWidget)
-            return false;
+//    if(qName == "block")
+//        /*Checking the block consistency*/
+//        if(att.value("name") != idWidget)
+//            return false;
 
-//    qDebug() << "appending to the list: " << qName;
     elementName.append(qName);
     elementIndentation.append(indentationLevel);
 
@@ -229,11 +265,24 @@ bool CTXmlHandler::characters(const QString& ch)
         {
            qrb_null_event->setChecked(true);
         }
+        else if("pressure" == attr["event_name"])
+        {
+            qrb_pressure_event->setChecked(true);
+            qsb_pressure->setValue(ch.toDouble());
+            if(!attr["sensor"].isNull())
+            {
+                qcb_pressure->setCurrentIndex(qcb_pressure->findText(
+                                                  attr["sensor"].toString()));
+            }
+        }
         else if("force" == attr["event_name"])
         {
             qrb_force_event->setChecked(true);
-            qcb_force->setCurrentIndex(qcb_force->findText(
+            if(!attr["sensor"].isNull())
+            {
+                qcb_force->setCurrentIndex(qcb_force->findText(
                                            attr["sensor"].toString()));
+            }
             qsb_force->setValue(ch.toDouble());
         }
         else if("position" == attr["event_name"])
@@ -243,7 +292,7 @@ bool CTXmlHandler::characters(const QString& ch)
         }
         else if("body" == attr["event_name"])
         {
-            qrb_body_event->setChecked(true);\
+            qrb_body_event->setChecked(true);
             qcb_body->setCurrentIndex(qcb_body->findText(ch));
         }
         else if("head" == attr["event_name"])

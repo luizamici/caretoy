@@ -128,8 +128,9 @@ bool CTConfToyFlower::setParameters(QString xml)
      *Passing pointer of the class to the xml parser handler,
      *in order to set the parsed values into it's input fields
      */
-    handler->setWidget("flower", this, num_stimuli, num_actions);
-    handler->setStimuli(light_stimuli, speaker_stimuli);
+    handler->setWidget(3, this, num_stimuli, num_actions);
+    QList<CTLight*> empty;
+    handler->setStimuli(light_stimuli, speaker_stimuli,empty);
     handler->setActions(light_actions, speaker_actions);
 
     xmlReader.setContentHandler(handler);
@@ -154,6 +155,7 @@ bool CTConfToyFlower::setParameters(QString xml)
  *
  * \param root XML tree containing data of all configurable parameters.
  */
+//TOBE deprecated
 bool CTConfToyFlower::setParameters(QDomElement root)
 {
     /* Check if the supplied configuration is applicable */
@@ -445,6 +447,7 @@ QString CTConfToyFlower::getParameters(QString value){
  *
  * \return XML tree containing data of all configurable parameters.
  */
+//TOBE deprecated
 QDomElement CTConfToyFlower::getParameters()
 {
     QDomDocument doc;
@@ -660,7 +663,7 @@ void CTConfToyFlower::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
-        qDebug() << "calculateRequiredTime() < block_duration";
+//        qDebug() << "calculateRequiredTime() < block_duration";
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }

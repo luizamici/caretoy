@@ -37,6 +37,48 @@ CTConfArch::~CTConfArch()
     delete ui;
 }
 
+
+/*!
+ * \brief CTConfArch::setParameters
+ *
+ * Sets values of all configurable block parameters based on the content of the
+ * supplied XML string.
+ *
+ * \param xml containing data of all configurable parameters.
+ */
+bool CTConfArch::setParameters(QString xml)
+{
+    qDebug() << xml;
+
+    int num_stimuli = NUM_LIGHTS;
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource *source = new QXmlInputSource();
+    source->setData(xml);
+
+    CTXmlHandler *handler = new CTXmlHandler;
+    /*
+     *Passing pointer of the class to the xml parser handler,
+     *in order to set the parsed values into it's input fields
+     */
+    handler->setWidget(9, this, num_stimuli, 0);
+    QList<CTConstLight*> empty1;
+    QList<CTSpeaker*> empty2;
+    handler->setStimuli(empty1, empty2, light_stimuli);
+
+    xmlReader.setContentHandler(handler);
+    xmlReader.setErrorHandler(handler);
+
+    bool ok = xmlReader.parse(source);
+    qDebug() << "The parsing went ok? " << ok;
+    block_duration = handler->getBlockDuration();
+    if(ok)
+    {
+        updateBlockRuntime(1.0);
+    }
+    return true;
+}
+
 /*!
  * \brief CTConfArch::setParameters
  *
@@ -90,6 +132,55 @@ bool CTConfArch::setParameters(QDomElement root)
     return true;
 }
 
+
+
+/*!
+ * \brief CTConfArch::getParameters
+ *
+ * Retrieves values of all configurable block parameters and returns them as
+ * an XML string.
+ *
+ * \return XML containing data of all configurable parameters.
+ */
+QString CTConfArch::getParameters(QString value){
+
+    value = "This function uses QXmlStreamWriter";
+
+    QString parameters;
+    QXmlStreamWriter stream(&parameters);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("block");
+    stream.writeAttribute("id", "1");
+    stream.writeAttribute("name", "arch");
+
+    /* Insert block comment */
+    stream.writeStartElement("comment");
+    stream.writeCharacters(ui->qte_comment->toPlainText());
+    stream.writeEndElement(); //end comment
+
+    /* Insert block runtime */
+    stream.writeStartElement("runtime");
+    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
+            + ui->qsb_pause->cleanText().toDouble();
+    stream.writeTextElement("duration",QString::number(duration_calculated));
+    stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
+    stream.writeEndElement(); //end runtime
+
+    /* Insert block stimuli */
+    stream.writeStartElement("stimuli");
+    int num_stimuli = NUM_LIGHTS;
+    stream.writeAttribute("number",QString::number(num_stimuli));
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_stimuli.at(i)->getParameters(stream);
+    }
+    stream.writeEndElement(); // end stimuli
+    stream.writeEndElement(); // end block
+
+    return parameters;
+}
+
 /*!
  * \brief CTConfArch::getParameters
  *
@@ -98,6 +189,7 @@ bool CTConfArch::setParameters(QDomElement root)
  *
  * \return XML tree containing data of all configurable parameters.
  */
+//TOBE deprecated
 QDomElement CTConfArch::getParameters()
 {
     QDomDocument doc;
@@ -191,4 +283,10 @@ void CTConfArch::updateBlockRuntime(double value)
 {
     value = 0;
     ui->qsb_block_duration->setValue(calculateRequiredTime());
+    /*Checks if the overall value of the block duration contains the pause*/
+    if(calculateRequiredTime() < block_duration)
+    {
+//        qDebug() << "calculateRequiredTime() < block_duration";
+        ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
+    }
 }

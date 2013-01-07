@@ -79,9 +79,6 @@ CTConfToyMickey::CTConfToyMickey(QWidget *parent) :
             ui->qcb_force,SLOT(setEnabled(bool)));
     connect(ui->qrb_position_event, SIGNAL(toggled(bool)),
             ui->qcb_position, SLOT(setEnabled(bool)));
-//    connect(ui->qrb_reach_event, SIGNAL(toggled(bool)),
-//            ui->qcb_reach, SLOT(setEnabled(bool)));
-
     connect(ui->qrb_body_event,SIGNAL(toggled(bool)),
             ui->qcb_body,SLOT(setEnabled(bool)));
     connect(ui->qrb_head_event,SIGNAL(toggled(bool)),
@@ -106,6 +103,49 @@ CTConfToyMickey::~CTConfToyMickey()
 {
     delete ui;
 }
+
+/*!
+ * \brief CTConfToyMickey::setParameters
+ *
+ * Sets values of all configurable block parameters based on the content of the
+ * supplied XML string.
+ *
+ * \param xml containing data of all configurable parameters.
+ */
+bool CTConfToyMickey::setParameters(QString xml)
+{
+    qDebug() << xml;
+
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
+    int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource *source = new QXmlInputSource();
+    source->setData(xml);
+
+    CTXmlHandler *handler = new CTXmlHandler;
+    /*
+     *Passing pointer of the class to the xml parser handler,
+     *in order to set the parsed values into it's input fields
+     */
+    handler->setWidget(4, this, num_stimuli, num_actions);
+    QList<CTLight*> empty;
+    handler->setStimuli(light_stimuli, speaker_stimuli,empty);
+    handler->setActions(light_actions, speaker_actions);
+
+    xmlReader.setContentHandler(handler);
+    xmlReader.setErrorHandler(handler);
+
+    bool ok = xmlReader.parse(source);
+    qDebug() << "The parsing went ok? " << ok;
+    block_duration = handler->getBlockDuration();
+    if(ok)
+    {
+        updateBlockRuntime(1.0);
+    }
+    return true;
+}
+
 
 /*!
  * \brief CTConfToyMickey::setParameters
@@ -208,12 +248,6 @@ bool CTConfToyMickey::setParameters(QDomElement root)
         QString value = event.namedItem("condition").toElement().text();
         ui->qcb_head->setCurrentIndex(ui->qcb_head->findText(value));
     }
-//    else if ("reach" == event_name)
-//    {
-//        ui->qrb_reach_event->setChecked(true);
-//        QString value = event.namedItem("condition").toElement().text();
-//        ui->qcb_reach->setCurrentIndex(ui->qcb_reach->findText(value));
-//    }
 
     /* Set block feedback actions */
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
@@ -261,6 +295,159 @@ bool CTConfToyMickey::setParameters(QDomElement root)
     ui->qsb_pause->setValue(duration - calculateRequiredTime());
     return true;
 }
+
+
+/*!
+ * \brief CTConfToyMickey::getParameters
+ *
+ * Retrieves values of all configurable block parameters and returns them as
+ * an XML string.
+ *
+ * \return XML containing data of all configurable parameters.
+ */
+QString CTConfToyMickey::getParameters(QString value){
+
+    value = "This function uses QXmlStreamWriter";
+
+    QString parameters;
+    QXmlStreamWriter stream(&parameters);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("block");
+    stream.writeAttribute("id", "1");
+    stream.writeAttribute("name", "mickey");
+
+    /* Insert block comment */
+    stream.writeStartElement("comment");
+    stream.writeCharacters(ui->qte_comment->toPlainText());
+    stream.writeEndElement(); //end comment
+
+    /* Insert block runtime */
+    stream.writeStartElement("runtime");
+    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
+            + ui->qsb_pause->cleanText().toDouble();
+    stream.writeTextElement("duration",QString::number(duration_calculated));
+    stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
+    stream.writeEndElement(); //end runtime
+
+    /* Insert block stimuli */
+    stream.writeStartElement("stimuli");
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_stimuli));
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_stimuli.at(i)->getParameters(stream);
+    }
+    stream.writeEndElement(); // end stimuli
+
+    /* Insert block feedback events */
+    stream.writeStartElement("feedback");
+    stream.writeStartElement("event");
+    if (ui->qrb_null_event->isChecked())
+    {
+        stream.writeAttribute("id", "0");
+        stream.writeAttribute("name", "none");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","none");
+        stream.writeCharacters("");
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_pressure_event->isChecked())
+    {
+        stream.writeAttribute("id", "1");
+        stream.writeAttribute("name", "pressure");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type", "numerical");
+        stream.writeCharacters(ui->qsb_pressure->cleanText());
+        stream.writeEndElement(); // end condition
+    }
+    else if (ui->qrb_force_event->isChecked())
+    {
+        stream.writeAttribute("id", "2");
+        stream.writeAttribute("name", "force");
+        stream.writeAttribute("sensor", ui->qcb_force->currentText());
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","numerical");
+        stream.writeCharacters(ui->qsb_force->cleanText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_position_event->isChecked())
+    {
+        stream.writeAttribute("id", "3");
+        stream.writeAttribute("name", "position");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_position->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_body_event->isChecked())
+    {
+        stream.writeAttribute("id", "4");
+        stream.writeAttribute("name", "body");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_body->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_head_event->isChecked())
+    {
+        stream.writeAttribute("id", "5");
+        stream.writeAttribute("name", "head");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_head->currentText());
+        stream.writeEndElement();//end condition
+    }
+    stream.writeEndElement(); //end event
+
+    /* Insert block feedback actions */
+    stream.writeStartElement("actions");
+    int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_actions));
+
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+
+    }
+    stream.writeEndElement(); //end actions
+    stream.writeEndElement(); //end feedback
+    stream.writeEndElement(); // end block
+
+    return parameters;
+}
+
 
 /*!
  * \brief CTConfToyMickey::getParameters
@@ -377,15 +564,6 @@ QDomElement CTConfToyMickey::getParameters()
         condition.appendChild(
                     doc.createTextNode(ui->qcb_head->currentText()));
     }
-//    else if (ui->qrb_reach_event->isChecked())
-//    {
-//        event.setAttribute("id", 4);
-//        event.setAttribute("name", "reach");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "textual");
-//        condition.appendChild(doc.createTextNode(ui->qcb_reach->currentText()));
-//    }
 
     /* Insert block feedback actions */
     QDomElement actions = doc.createElement("actions");
@@ -493,6 +671,12 @@ void CTConfToyMickey::updateBlockRuntime(double value)
 {
     value = 0;
     ui->qsb_block_duration->setValue(calculateRequiredTime());
+    /*Checks if the overall value of the block duration contains the pause*/
+    if(calculateRequiredTime() < block_duration)
+    {
+//        qDebug() << "calculateRequiredTime() < block_duration";
+        ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
+    }
 }
 
 

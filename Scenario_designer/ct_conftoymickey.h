@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_customwidgets.h"
+#include "ct_xmlhandler.h"
 
 namespace Ui { class CTConfToyMickey; }
 
@@ -15,13 +16,16 @@ public:
     explicit CTConfToyMickey(QWidget *parent = 0);
     ~CTConfToyMickey();
     bool setParameters(QDomElement root);
+    bool setParameters(QString xml);
     QDomElement getParameters();
+    QString getParameters(QString value);
 
 private:
     Ui::CTConfToyMickey *ui;
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli, speaker_actions;
     double calculateRequiredTime();
+    double block_duration;
 
 private slots:
     void updateBlockRuntime(bool value);

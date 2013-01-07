@@ -35,11 +35,67 @@ void CTBlockConfig::showParameters(int id, QString xml)
         }
         break;
     }
+    case CT_BLOCK_MICKEY:
+    {
+        CTConfToyMickey *config = new CTConfToyMickey();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    case CT_BLOCK_RING:
+    {
+        CTConfToyRing *config = new CTConfToyRing();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    case CT_BLOCK_STICK:
+    {
+        CTConfToyStick *config = new CTConfToyStick();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    case CT_BLOCK_U:
+    {
+        CTConfToyU *config = new CTConfToyU();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    case CT_BLOCK_ARCH:
+    {
+        CTConfArch *config = new CTConfArch();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
     default:
         break;
     }
 }
 
+//TOBE deprecated
 void CTBlockConfig::showParameters(int id, QDomElement root)
 {
     qDebug() << "CTBlockConfig::showParameters check root is NULLs " << root.isNull() << root.text();
@@ -219,13 +275,13 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_STICK:
     {
         CTConfToyStick *config = (CTConfToyStick *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_RING:
     {
         CTConfToyRing *config = (CTConfToyRing *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_FLOWER:
@@ -237,19 +293,19 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_MICKEY:
     {
         CTConfToyMickey *config = (CTConfToyMickey *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_U:
     {
         CTConfToyU *config = (CTConfToyU *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_ARCH:
     {
         CTConfArch *config = (CTConfArch *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_WALL_LEFT:
