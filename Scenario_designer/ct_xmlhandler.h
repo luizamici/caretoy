@@ -41,11 +41,13 @@ public:
     bool enabled;
     double block_duration;
     QHash<QString,QVariant> attr;
+    QString block_name;
 
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli, speaker_actions;
     QList<CTLight *> arch_light_stimuli;
     CTConstLight *light;
+    CTLight *archLight;
     CTSpeaker *speaker;
     CTDoubleSpinBox *qsb_force;
     CTDoubleSpinBox *qsb_duration_min;

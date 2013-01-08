@@ -38,6 +38,7 @@ bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
     {
         qcb_pressure = widget->findChild<QComboBox*>("qcb_pressure");
     }
+    return true;
 
 }
 
@@ -128,6 +129,11 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
 //        if(att.value("name") != idWidget)
 //            return false;
 
+    if(qName == "block")
+    {
+        block_name = att.value("name");
+    }
+
     elementName.append(qName);
     elementIndentation.append(indentationLevel);
 
@@ -147,7 +153,10 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             enabled = false;
         if(att.value("name") == "light")
         {
-            light = light_stimuli[att.value("id").toInt() -1 ];
+            if(block_name != "arch")
+                light = light_stimuli[att.value("id").toInt() -1 ];
+            else
+                archLight = arch_light_stimuli[att.value("id").toInt() - 1];
             attr["type"] = "light_stimulus";
 
         }
@@ -210,32 +219,42 @@ bool CTXmlHandler::characters(const QString& ch)
     if(elementName.contains("comment"))
         qte_comment->setPlainText(ch);
     /* Set block runtime */
-    if(elementName.contains("runtime") && elementName.contains("duration"))
+    else if(elementName.contains("runtime") && elementName.contains("duration"))
     {
         block_duration = ch.toDouble();
         qDebug() << "parsed block duration" << block_duration;}
-    if(elementName.contains("runtime") && elementName.contains("repetitions"))
+    else if(elementName.contains("runtime") && elementName.contains("repetitions"))
         qsb_block_repetitions->setValue(ch.toInt());
 
     /* Set block stimuli/actions attributes*/
 
-    if(elementName.contains("stimulus") && elementName.contains("activation"))
+    else if(elementName.contains("stimulus") && elementName.contains("activation"))
         attr["val_activation"] = ch;
-    if(elementName.contains("volume") && elementName.contains("from"))
+    else if(elementName.contains("volume") && elementName.contains("from"))
     {
         attr["val_volume_min"] = ch;
     }
-    if(elementName.contains("volume") && elementName.contains("to"))
+    else if(elementName.contains("volume") && elementName.contains("to"))
     {
         attr["val_volume_max"] = ch;
     }
-    if(elementName.contains("sound"))
+    else if(elementName.contains("sound"))
     {
         attr["sound"] = ch;
     }
-    if(elementName.contains("duration") && elementName.contains("from"))
+    else if(elementName.contains("intensity") && elementName.contains("from"))
+    {
+        attr["val_intensity_min"] = ch;
+    }
+    else if(elementName.contains("intensity") && elementName.contains("to"))
+    {
+        attr["val_intensity_max"] = ch;
+    }
+    else if(elementName.contains("duration") && elementName.contains("from"))
+    {
         attr["val_duration_min"] = ch;
-    if(elementName.contains("duration") && elementName.contains("to"))
+    }
+    else if(elementName.contains("duration") && elementName.contains("to"))
     {
         attr["val_duration_max"] = ch;
         if(attr["type"] == "light_action" || attr["type"] == "speaker_action")
@@ -244,9 +263,15 @@ bool CTXmlHandler::characters(const QString& ch)
             qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
             qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
         }
-        if(attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+        if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+                && block_name != "arch")
         {
             light->setParameters(enabled, attr);
+            attr.clear();
+        }
+        if(attr["type"] == "light_stimulus" && block_name == "arch")
+        {
+            archLight->setParameters(enabled,attr);
             attr.clear();
         }
         if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
@@ -258,7 +283,7 @@ bool CTXmlHandler::characters(const QString& ch)
 
 
     /* Set block feedback events */
-    if(elementName.contains("feedback") && elementName.contains("event")
+    else if(elementName.contains("feedback") && elementName.contains("event")
             && elementName.contains("condition"))
     {
         if("null" == attr["event_name"])
