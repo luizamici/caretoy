@@ -31,8 +31,10 @@ public:
     QStringList& names();
     QList<int>& indentations();
     void setWidget(int id_widget, QWidget *widget, int stimuli, int actions);
-    void setStimuli(QList<CTConstLight *> &lightStimuli, QList<CTSpeaker *> &speakerStimuli, QList<CTLight*> &archLightStimuli);
-    void setActions(QList<CTConstLight *> &lightAction, QList<CTSpeaker *> &speakerAction);
+    void setStimuli(QList<CTConstLight *> &lightStimuli, QList<CTSpeaker *> &speakerStimuli,
+                    QList<CTLight*> &archLightStimuli, QList<CTScreen*> &screenStimuli);
+    void setActions(QList<CTConstLight *> &lightAction, QList<CTSpeaker *> &speakerAction,
+                    QList<CTScreen*> &screenAction);
     double getBlockDuration();
 
     int idWidget;
@@ -46,9 +48,11 @@ public:
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli, speaker_actions;
     QList<CTLight *> arch_light_stimuli;
+    QList<CTScreen *> screen_stimuli, screen_actions;
     CTConstLight *light;
     CTLight *archLight;
     CTSpeaker *speaker;
+    CTScreen *screen;
     CTDoubleSpinBox *qsb_force;
     CTDoubleSpinBox *qsb_duration_min;
     CTDoubleSpinBox *qsb_duration_max;

@@ -129,9 +129,10 @@ bool CTConfToyFlower::setParameters(QString xml)
      *in order to set the parsed values into it's input fields
      */
     handler->setWidget(3, this, num_stimuli, num_actions);
-    QList<CTLight*> empty;
-    handler->setStimuli(light_stimuli, speaker_stimuli,empty);
-    handler->setActions(light_actions, speaker_actions);
+    QList<CTLight*> empty1;
+    QList<CTScreen*> empty2;
+    handler->setStimuli(light_stimuli, speaker_stimuli,empty1,empty2);
+    handler->setActions(light_actions, speaker_actions, empty2);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);

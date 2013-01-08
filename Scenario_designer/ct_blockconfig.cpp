@@ -90,6 +90,17 @@ void CTBlockConfig::showParameters(int id, QString xml)
         }
         break;
     }
+    case CT_BLOCK_WALL_SCREEN:
+    {
+        CTConfWallScreen *config = new CTConfWallScreen();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
     default:
         break;
     }
@@ -323,7 +334,7 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_WALL_SCREEN:
     {
         CTConfWallScreen *config = (CTConfWallScreen *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     default:

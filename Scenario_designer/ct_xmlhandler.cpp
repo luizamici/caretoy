@@ -52,7 +52,9 @@ void CTXmlHandler::setWidget(int id_widget, QWidget *widget, int stimuli,
 }
 
 void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
-                              QList<CTSpeaker *> &speakerStimuli, QList<CTLight *> &archLightStimuli)
+                              QList<CTSpeaker *> &speakerStimuli,
+                              QList<CTLight *> &archLightStimuli,
+                              QList<CTScreen *> &screenStimuli)
 {
 
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
@@ -74,10 +76,19 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
         else
             qDebug() << "An error with the args detected: empty lists!";
     }
+    if(idWidget == CT_BLOCK_WALL_SCREEN)
+    {
+        if(!screenStimuli.isEmpty())
+            screen_stimuli = screenStimuli;
+        else
+            qDebug() << "An error with the args detected: empty lists!";
+    }
 }
 
+
 void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
-                              QList<CTSpeaker *> &speakerAction)
+                              QList<CTSpeaker *> &speakerAction,
+                              QList<CTScreen *> &screenAction)
 {
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
             || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
@@ -90,6 +101,13 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
         }else{
             qDebug() << "An error with the args detected: empty lists!";
         }
+    }
+    if(idWidget == CT_BLOCK_WALL_SCREEN)
+    {
+        if(!screenAction.isEmpty())
+            screen_actions = screenAction;
+        else
+            qDebug() << "An error with the args detected: empty lists!";
     }
 }
 
@@ -169,6 +187,11 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             attr["right_front"] = att.value("right_front");
             attr["right_rear"] = att.value("right_rear");
         }
+        if(att.value("name") == "screen")
+        {
+            screen = screen_stimuli[att.value("id").toInt() - 1];
+            attr["type"] = "screen_stimulus";
+        }
     /* Actions block processing*/
     }if(qName == "event" && elementName.contains("feedback"))
     {
@@ -206,6 +229,11 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             attr["right_front"] = att.value("right_front");
             attr["right_rear"] = att.value("right_rear");
         }
+        if(att.value("name") == "screen")
+        {
+            screen = screen_actions[att.value("id").toInt() - 1];
+            attr["type"] = "screen_action";
+        }
     }
 
     indentationLevel += 1;
@@ -227,7 +255,6 @@ bool CTXmlHandler::characters(const QString& ch)
         qsb_block_repetitions->setValue(ch.toInt());
 
     /* Set block stimuli/actions attributes*/
-
     else if(elementName.contains("stimulus") && elementName.contains("activation"))
         attr["val_activation"] = ch;
     else if(elementName.contains("volume") && elementName.contains("from"))
@@ -250,6 +277,10 @@ bool CTXmlHandler::characters(const QString& ch)
     {
         attr["val_intensity_max"] = ch;
     }
+    else if(elementName.contains("video"))
+    {
+        attr["val_video"] = ch;
+    }
     else if(elementName.contains("duration") && elementName.contains("from"))
     {
         attr["val_duration_min"] = ch;
@@ -257,7 +288,8 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("duration") && elementName.contains("to"))
     {
         attr["val_duration_max"] = ch;
-        if(attr["type"] == "light_action" || attr["type"] == "speaker_action")
+        if(attr["type"] == "light_action" || attr["type"] == "speaker_action"
+                || attr["type"] == "screen_action")
         {
             qsb_duration_min->setMinimum(attr["val_duration_min"].toDouble());
             qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
@@ -277,6 +309,11 @@ bool CTXmlHandler::characters(const QString& ch)
         if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
         {
             speaker->setParameters(enabled,attr);
+            attr.clear();
+        }
+        if(attr["type"] == "screen_stimulus" || attr["type"] == "screen_action")
+        {
+            screen->setParameters(enabled,attr);
             attr.clear();
         }
     }

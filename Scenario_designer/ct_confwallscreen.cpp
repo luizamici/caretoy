@@ -62,6 +62,51 @@ CTConfWallScreen::~CTConfWallScreen()
     delete ui;
 }
 
+
+/*!
+ * \brief CTConfWallScreen::setParameters
+ *
+ * Sets values of all configurable block parameters based on the content of the
+ * supplied XML string.
+ *
+ * \param xml containing data of all configurable parameters.
+ */
+bool CTConfWallScreen::setParameters(QString xml)
+{
+    qDebug() << xml;
+
+    int num_stimuli = NUM_SCREENS;
+    int num_actions = NUM_SCREENS;
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource *source = new QXmlInputSource();
+    source->setData(xml);
+
+    CTXmlHandler *handler = new CTXmlHandler;
+    /*
+     *Passing pointer of the class to the xml parser handler,
+     *in order to set the parsed values into it's input fields
+     */
+    handler->setWidget(8, this, num_stimuli, num_actions);
+    QList<CTConstLight*> empty1;
+    QList<CTSpeaker*> empty2;
+    QList<CTLight*> empty3;
+    handler->setStimuli(empty1, empty2, empty3, screen_stimuli);
+    handler->setActions(empty1, empty2, screen_action);
+
+    xmlReader.setContentHandler(handler);
+    xmlReader.setErrorHandler(handler);
+
+    bool ok = xmlReader.parse(source);
+    qDebug() << "The parsing went ok? " << ok;
+    block_duration = handler->getBlockDuration();
+    if(ok)
+    {
+        updateBlockRuntime(1.0);
+    }
+    return true;
+}
+
 /*!
  * \brief CTConfWallScreen::setParameters
  *
@@ -177,6 +222,121 @@ bool CTConfWallScreen::setParameters(QDomElement root)
     return true;
 }
 
+
+/*!
+ * \brief CTConfWallScreen::getParameters
+ *
+ * Retrieves values of all configurable block parameters and returns them as
+ * an XML string.
+ *
+ * \return XML containing data of all configurable parameters.
+ */
+QString CTConfWallScreen::getParameters(QString value){
+
+    value = "This function uses QXmlStreamWriter";
+
+    QString parameters;
+    QXmlStreamWriter stream(&parameters);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("block");
+    stream.writeAttribute("id", "1");
+    stream.writeAttribute("name", "wall_screen");
+
+    /* Insert block comment */
+    stream.writeStartElement("comment");
+    stream.writeCharacters(ui->qte_comment->toPlainText());
+    stream.writeEndElement(); //end comment
+
+    /* Insert block runtime */
+    stream.writeStartElement("runtime");
+    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
+            + ui->qsb_pause->cleanText().toDouble();
+    stream.writeTextElement("duration",QString::number(duration_calculated));
+    stream.writeTextElement("repetitions",ui->qsb_block_repetitions->cleanText());
+    stream.writeEndElement(); //end runtime
+
+    /* Insert block stimuli */
+    stream.writeStartElement("stimuli");
+    int num_stimuli = NUM_SCREENS;
+    stream.writeAttribute("number",QString::number(num_stimuli));
+    for (int i = 0; i < NUM_SCREENS; i++)
+    {
+        screen_stimuli.at(i)->getParameters(stream);
+    }
+    stream.writeEndElement(); // end stimuli
+
+    /* Insert block feedback events */
+    stream.writeStartElement("feedback");
+    stream.writeStartElement("event");
+    if (ui->qrb_null_event->isChecked())
+    {
+        stream.writeAttribute("id", "0");
+        stream.writeAttribute("name", "none");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","none");
+        stream.writeCharacters("");
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_position_event->isChecked())
+    {
+        stream.writeAttribute("id", "1");
+        stream.writeAttribute("name", "position");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_position->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_body_event->isChecked())
+    {
+        stream.writeAttribute("id", "2");
+        stream.writeAttribute("name", "body");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_body->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_head_event->isChecked())
+    {
+        stream.writeAttribute("id", "3");
+        stream.writeAttribute("name", "head");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_head->currentText());
+        stream.writeEndElement();//end condition
+    }
+    stream.writeEndElement(); //end event
+
+    /* Insert block feedback actions */
+    stream.writeStartElement("actions");
+    int num_actions = NUM_SCREENS;
+    stream.writeAttribute("number",QString::number(num_actions));
+
+    for (int i = 0; i < NUM_SCREENS; i++)
+    {
+        screen_action.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    stream.writeEndElement(); //end actions
+    stream.writeEndElement(); //end feedback
+    stream.writeEndElement(); // end block
+
+    qDebug() << parameters;
+    return parameters;
+}
+
+
 /*!
  * \brief CTConfWallScreen::getParameters
  *
@@ -185,6 +345,7 @@ bool CTConfWallScreen::setParameters(QDomElement root)
  *
  * \return XML tree containing data of all configurable parameters.
  */
+//TOBE deprecated
 QDomElement CTConfWallScreen::getParameters()
 {
     QDomDocument doc;
@@ -346,6 +507,12 @@ void CTConfWallScreen::updateBlockRuntime(double value)
 {
     value = 0;
     ui->qsb_block_duration->setValue(calculateRequiredTime());
+    /*Checks if the overall value of the block duration contains the pause*/
+    if(calculateRequiredTime() < block_duration)
+    {
+//        qDebug() << "calculateRequiredTime() < block_duration";
+        ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
+    }
 }
 
 void CTConfWallScreen::on_qrb_null_event_toggled(bool checked)

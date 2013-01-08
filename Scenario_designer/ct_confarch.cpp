@@ -64,7 +64,8 @@ bool CTConfArch::setParameters(QString xml)
     handler->setWidget(9, this, num_stimuli, 0);
     QList<CTConstLight*> empty1;
     QList<CTSpeaker*> empty2;
-    handler->setStimuli(empty1, empty2, light_stimuli);
+    QList<CTScreen*> empty3;
+    handler->setStimuli(empty1, empty2, light_stimuli,empty3);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);

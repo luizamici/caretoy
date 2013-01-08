@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_customwidgets.h"
+#include "ct_xmlhandler.h"
 
 namespace Ui { class CTConfWallScreen; }
 
@@ -15,12 +16,15 @@ public:
     explicit CTConfWallScreen(QWidget *parent = 0);
     ~CTConfWallScreen();
     bool setParameters(QDomElement root);
+    bool setParameters(QString xml);
     QDomElement getParameters();
+    QString getParameters(QString value);
 
 private:
     Ui::CTConfWallScreen *ui;
     QList<CTScreen *> screen_stimuli, screen_action;
     double calculateRequiredTime();
+    double block_duration;
 
 private slots:
     void updateBlockRuntime(bool value);
