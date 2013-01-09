@@ -64,7 +64,9 @@ public:
     CTSpinBox *rings_max;
     QComboBox *color;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString,QVariant> attr);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 /* ########################################################################## */
@@ -84,7 +86,9 @@ public:
     CTSpinBox *intensity_min;
     CTSpinBox *intensity_max;
     void setParameters(QDomElement root);
+    void setParameters(bool b, QHash<QString,QVariant> attr);
     QDomElement getParameters();
+    void getParameters(QXmlStreamWriter &stream);
 };
 
 /* ########################################################################## */

@@ -65,7 +65,9 @@ bool CTConfArch::setParameters(QString xml)
     QList<CTConstLight*> empty1;
     QList<CTSpeaker*> empty2;
     QList<CTScreen*> empty3;
-    handler->setStimuli(empty1, empty2, light_stimuli,empty3);
+    QList<CTBigLight*> empty4;
+    QList<CTButton*> empty5;
+    handler->setStimuli(empty1, empty2, light_stimuli,empty3,empty4,empty5);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
@@ -150,7 +152,7 @@ QString CTConfArch::getParameters(QString value){
     QString parameters;
     QXmlStreamWriter stream(&parameters);
     stream.setAutoFormatting(true);
-    stream.writeStartDocument();
+//    stream.writeStartDocument();
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
     stream.writeAttribute("name", "arch");

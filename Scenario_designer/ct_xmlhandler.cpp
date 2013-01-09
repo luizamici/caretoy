@@ -38,6 +38,11 @@ bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
     {
         qcb_pressure = widget->findChild<QComboBox*>("qcb_pressure");
     }
+    if(id_widget == CT_BLOCK_WALL_LEFT || id_widget == CT_BLOCK_WALL_RIGHT)
+    {
+        qrb_button_pressed_event = widget->findChild<QRadioButton*>("qrb_button_pressed_event");
+        qcb_button = widget->findChild<QComboBox*>("qcb_button");
+    }
     return true;
 
 }
@@ -54,7 +59,9 @@ void CTXmlHandler::setWidget(int id_widget, QWidget *widget, int stimuli,
 void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
                               QList<CTSpeaker *> &speakerStimuli,
                               QList<CTLight *> &archLightStimuli,
-                              QList<CTScreen *> &screenStimuli)
+                              QList<CTScreen *> &screenStimuli,
+                              QList<CTBigLight*> &bigLightStimuli,
+                              QList<CTButton *> &buttonStimuli)
 {
 
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
@@ -65,9 +72,9 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
         {
             light_stimuli = lightStimuli;
             speaker_stimuli = speakerStimuli;
-        }else{
+         }else{
             qDebug() << "An error with the args detected: empty lists!";
-        }
+         }
     }
     if(idWidget == CT_BLOCK_ARCH)
     {
@@ -83,12 +90,28 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
         else
             qDebug() << "An error with the args detected: empty lists!";
     }
+    if(idWidget == CT_BLOCK_WALL_LEFT || idWidget == CT_BLOCK_WALL_RIGHT)
+    {
+        if(!bigLightStimuli.isEmpty() && !buttonStimuli.isEmpty()
+                && !archLightStimuli.isEmpty() && !speakerStimuli.isEmpty())
+        {
+            biglight_stimuli = bigLightStimuli;
+            button_stimuli = buttonStimuli;
+            arch_light_stimuli = archLightStimuli;
+            speaker_stimuli = speakerStimuli;
+        }
+        else
+            qDebug() << "An error with the args detected: empty lists!";
+    }
 }
 
 
 void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
                               QList<CTSpeaker *> &speakerAction,
-                              QList<CTScreen *> &screenAction)
+                              QList<CTScreen *> &screenAction,
+                              QList<CTBigLight *> &bigLightAction,
+                              QList<CTButton *> &buttonAction,
+                              QList<CTLight *> &archLightAction)
 {
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
             || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
@@ -106,6 +129,19 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
     {
         if(!screenAction.isEmpty())
             screen_actions = screenAction;
+        else
+            qDebug() << "An error with the args detected: empty lists!";
+    }
+    if(idWidget == CT_BLOCK_WALL_LEFT || idWidget == CT_BLOCK_WALL_RIGHT)
+    {
+        if(!bigLightAction.isEmpty() && !buttonAction.isEmpty()
+                && !archLightAction.isEmpty() && !speakerAction.isEmpty())
+        {
+            biglight_actions = bigLightAction;
+            button_actions = buttonAction;
+            arch_light_actions = archLightAction;
+            speaker_actions = speakerAction;
+        }
         else
             qDebug() << "An error with the args detected: empty lists!";
     }
@@ -171,7 +207,8 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             enabled = false;
         if(att.value("name") == "light")
         {
-            if(block_name != "arch")
+            if(block_name != "arch" && block_name != "wall_left"
+                    && block_name != "wall_right")
                 light = light_stimuli[att.value("id").toInt() -1 ];
             else
                 archLight = arch_light_stimuli[att.value("id").toInt() - 1];
@@ -192,6 +229,17 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             screen = screen_stimuli[att.value("id").toInt() - 1];
             attr["type"] = "screen_stimulus";
         }
+        if(att.value("name") == "light_cluster")
+        {
+            bigLight = biglight_stimuli[att.value("id").toInt() -1];
+            attr["type"] = "biglight_stimulus";
+        }
+        if(att.value("name") == "light_button")
+        {
+            button = button_stimuli[att.value("id").toInt() -1];
+            attr["type"] = "button_stimulus";
+        }
+
     /* Actions block processing*/
     }if(qName == "event" && elementName.contains("feedback"))
     {
@@ -216,7 +264,10 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             enabled = false;
         if(att.value("name") == "light")
         {
-            light = light_actions[att.value("id").toInt() -1 ];
+            if(block_name != "wall_left" && block_name != "wall_right")
+                light = light_actions[att.value("id").toInt() -1 ];
+            else
+                archLight = arch_light_actions[att.value("id").toInt() -1];
             attr["type"] = "light_action";
 
         }
@@ -233,6 +284,16 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
         {
             screen = screen_actions[att.value("id").toInt() - 1];
             attr["type"] = "screen_action";
+        }
+        if(att.value("name") == "light_cluster")
+        {
+            bigLight = biglight_actions[att.value("id").toInt() -1];
+            attr["type"] = "biglight_action";
+        }
+        if(att.value("name") == "light_button")
+        {
+            button = button_actions[att.value("id").toInt() -1];
+            attr["type"] = "button_action";
         }
     }
 
@@ -256,7 +317,9 @@ bool CTXmlHandler::characters(const QString& ch)
 
     /* Set block stimuli/actions attributes*/
     else if(elementName.contains("stimulus") && elementName.contains("activation"))
+    {
         attr["val_activation"] = ch;
+    }
     else if(elementName.contains("volume") && elementName.contains("from"))
     {
         attr["val_volume_min"] = ch;
@@ -277,6 +340,18 @@ bool CTXmlHandler::characters(const QString& ch)
     {
         attr["val_intensity_max"] = ch;
     }
+    else if(elementName.contains("area") && elementName.contains("from"))
+    {
+        attr["val_rings_min"] = ch;
+    }
+    else if(elementName.contains("area") && elementName.contains("to"))
+    {
+        attr["val_rings_max"] = ch;
+    }
+    else if(elementName.contains("color"))
+    {
+        attr["val_color"] = ch;
+    }
     else if(elementName.contains("video"))
     {
         attr["val_video"] = ch;
@@ -296,7 +371,8 @@ bool CTXmlHandler::characters(const QString& ch)
             qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
         }
         if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
-                && block_name != "arch")
+                && block_name != "arch" && block_name != "wall_left"
+                && block_name != "wall_right")
         {
             light->setParameters(enabled, attr);
             attr.clear();
@@ -306,6 +382,11 @@ bool CTXmlHandler::characters(const QString& ch)
             archLight->setParameters(enabled,attr);
             attr.clear();
         }
+        if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+                && ((block_name == "wall_left") || block_name == "wall_right"))
+        {
+            archLight->setParameters(enabled,attr);
+        }
         if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
         {
             speaker->setParameters(enabled,attr);
@@ -314,6 +395,16 @@ bool CTXmlHandler::characters(const QString& ch)
         if(attr["type"] == "screen_stimulus" || attr["type"] == "screen_action")
         {
             screen->setParameters(enabled,attr);
+            attr.clear();
+        }
+        if(attr["type"] == "biglight_stimulus" || attr["type"] == "biglight_action")
+        {
+            bigLight->setParameters(enabled,attr);
+            attr.clear();
+        }
+        if(attr["type"] == "button_stimulus" || attr["type"] == "button_action")
+        {
+            button->setParameters(enabled,attr);
             attr.clear();
         }
     }
@@ -361,6 +452,11 @@ bool CTXmlHandler::characters(const QString& ch)
         {
             qrb_head_event->setChecked(true);
             qcb_head->setCurrentIndex(qcb_head->findText(ch));
+        }
+        else if("button" == attr["event_name"])
+        {
+            qrb_button_pressed_event->setChecked(true);
+            qcb_button->setCurrentIndex(qcb_button->findText(attr["sensor"].toString()));
         }
     }
     return true;

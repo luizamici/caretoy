@@ -127,8 +127,10 @@ bool CTConfToyStick::setParameters(QString xml)
     handler->setWidget(1, this, num_stimuli, num_actions);
     QList<CTLight*> empty1;
     QList<CTScreen*> empty2;
-    handler->setStimuli(light_stimuli, speaker_stimuli, empty1,empty2);
-    handler->setActions(light_actions, speaker_actions, empty2);
+    QList<CTBigLight*> empty3;
+    QList<CTButton*> empty4;
+    handler->setStimuli(light_stimuli, speaker_stimuli, empty1,empty2,empty3,empty4);
+    handler->setActions(light_actions, speaker_actions, empty2,empty3,empty4,empty1);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
@@ -305,7 +307,7 @@ QString CTConfToyStick::getParameters(QString value){
     QString parameters;
     QXmlStreamWriter stream(&parameters);
     stream.setAutoFormatting(true);
-    stream.writeStartDocument();
+//    stream.writeStartDocument();
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
     stream.writeAttribute("name", "stick");

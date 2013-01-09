@@ -101,6 +101,28 @@ void CTBlockConfig::showParameters(int id, QString xml)
         }
         break;
     }
+    case CT_BLOCK_WALL_LEFT:
+    {
+        CTConfWallLeft *config = new CTConfWallLeft();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
+    case CT_BLOCK_WALL_RIGHT:
+    {
+        CTConfWallRight *config = new CTConfWallRight();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                qDebug() << "Parameters not set!";
+        }
+        break;
+    }
     default:
         break;
     }
@@ -322,13 +344,13 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_WALL_LEFT:
     {
         CTConfWallLeft *config = (CTConfWallLeft *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_WALL_RIGHT:
     {
         CTConfWallRight *config = (CTConfWallRight *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters());
+        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
         break;
     }
     case CT_BLOCK_WALL_SCREEN:

@@ -32,9 +32,11 @@ public:
     QList<int>& indentations();
     void setWidget(int id_widget, QWidget *widget, int stimuli, int actions);
     void setStimuli(QList<CTConstLight *> &lightStimuli, QList<CTSpeaker *> &speakerStimuli,
-                    QList<CTLight*> &archLightStimuli, QList<CTScreen*> &screenStimuli);
+                    QList<CTLight*> &archLightStimuli, QList<CTScreen*> &screenStimuli,
+                    QList<CTBigLight*> &bigLightStimuli, QList<CTButton*> &buttonStimuli);
     void setActions(QList<CTConstLight *> &lightAction, QList<CTSpeaker *> &speakerAction,
-                    QList<CTScreen*> &screenAction);
+                    QList<CTScreen*> &screenAction , QList<CTBigLight*> &bigLightAction,
+                    QList<CTButton*> &buttonAction, QList<CTLight*> &archLightAction);
     double getBlockDuration();
 
     int idWidget;
@@ -47,12 +49,17 @@ public:
 
     QList<CTConstLight *> light_stimuli, light_actions;
     QList<CTSpeaker *> speaker_stimuli, speaker_actions;
-    QList<CTLight *> arch_light_stimuli;
+    QList<CTLight *> arch_light_stimuli, arch_light_actions;
     QList<CTScreen *> screen_stimuli, screen_actions;
+    QList<CTBigLight *> biglight_stimuli, biglight_actions;
+    QList<CTButton *> button_stimuli, button_actions;
+
     CTConstLight *light;
     CTLight *archLight;
     CTSpeaker *speaker;
     CTScreen *screen;
+    CTBigLight *bigLight;
+    CTButton *button;
     CTDoubleSpinBox *qsb_force;
     CTDoubleSpinBox *qsb_duration_min;
     CTDoubleSpinBox *qsb_duration_max;
@@ -66,12 +73,14 @@ public:
     QRadioButton *qrb_position_event;
     QRadioButton *qrb_body_event;
     QRadioButton *qrb_head_event;
+    QRadioButton *qrb_button_pressed_event;
 
     QComboBox *qcb_force;
     QComboBox *qcb_position;
     QComboBox *qcb_body;
     QComboBox *qcb_head;
     QComboBox *qcb_pressure;
+    QComboBox *qcb_button;
 private:
     int indentationLevel;
     QStringList elementName;

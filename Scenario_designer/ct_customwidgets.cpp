@@ -168,6 +168,31 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 }
 
+void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ){state->setChecked(true); }
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+    intensity_min->setValue(attr["val_intensity_min"].toInt());
+    intensity_max->setValue(attr["val_intensity_max"].toInt());
+
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMinimum(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+    rings_min->setValue(attr["val_rings_min"].toInt());
+    rings_min->setValue(attr["val_rings_min"].toInt());
+    rings_max->setValue(attr["val_rings_max"].toInt());
+
+    color->setCurrentIndex(color->findText(attr["val_color"].toString()));
+}
+
+//TOBE deprecated
 void CTBigLight::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -189,16 +214,6 @@ void CTBigLight::setParameters(QDomElement root)
         duration_min->setValue(val_duration_min);
         duration_max->setValue(val_duration_max);
     }
-
-//    QDomElement xml_duration = root.namedItem("duration").toElement();
-//    double val_duration_min =
-//            xml_duration.namedItem("from").toElement().text().toDouble();
-//    double val_duration_max =
-//            xml_duration.namedItem("to").toElement().text().toDouble();
-//    duration_min->setMinimum(val_duration_min);
-//    duration_min->setValue(val_duration_min);
-//    duration_max->setValue(val_duration_max);
-
     QDomElement xml_intensity = root.namedItem("intensity").toElement();
     int val_intensity_min =
             xml_intensity.namedItem("from").toElement().text().toInt();
@@ -221,6 +236,50 @@ void CTBigLight::setParameters(QDomElement root)
     color->setCurrentIndex(color->findText(val_color));
 }
 
+
+void CTBigLight::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    stream.writeStartElement("intensity");
+    stream.writeTextElement("from",intensity_min->cleanText());
+    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeEndElement(); // end intensity
+
+    stream.writeStartElement("area");
+    stream.writeTextElement("from" , rings_min->cleanText());
+    stream.writeTextElement("to", rings_max->cleanText());
+    stream.writeEndElement(); //end area
+
+    stream.writeStartElement("color");
+    stream.writeCharacters(color->currentText());
+    stream.writeEndElement();//end color
+
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+
+    if( NULL != activation)
+        stream.writeEndElement(); //end stimulus
+}
+
+
+//TOBE deprecated
 QDomElement CTBigLight::getParameters()
 {
     QDomDocument doc;
@@ -365,6 +424,26 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 }
 
+void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
+{
+    if( b ){state->setChecked(true); }
+    if (NULL != activation)
+    {
+        activation->setValue(attr["val_activation"].toDouble());
+    }
+    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+    intensity_min->setValue(attr["val_intensity_min"].toInt());
+    intensity_max->setValue(attr["val_intensity_max"].toInt());
+
+    if( NULL != duration_min && NULL != duration_max)
+    {
+        duration_min->setMinimum(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_min"].toDouble());
+        duration_max->setValue(attr["val_duration_max"].toDouble());
+    }
+}
+
+//TOBE deprecated
 void CTButton::setParameters(QDomElement root)
 {
     if ("true" == root.attribute("enabled")) { state->setChecked(true); }
@@ -386,16 +465,6 @@ void CTButton::setParameters(QDomElement root)
         duration_min->setValue(val_duration_min);
         duration_max->setValue(val_duration_max);
     }
-
-//    QDomElement xml_duration = root.namedItem("duration").toElement();
-//    double val_duration_min =
-//            xml_duration.namedItem("from").toElement().text().toDouble();
-//    double val_duration_max =
-//            xml_duration.namedItem("to").toElement().text().toDouble();
-//    duration_min->setMinimum(val_duration_min);
-//    duration_min->setValue(val_duration_min);
-//    duration_max->setValue(val_duration_max);
-
     QDomElement xml_intensity = root.namedItem("intensity").toElement();
     int val_intensity_min =
             xml_intensity.namedItem("from").toElement().text().toInt();
@@ -406,6 +475,40 @@ void CTButton::setParameters(QDomElement root)
     intensity_max->setValue(val_intensity_max);
 }
 
+
+void CTButton::getParameters(QXmlStreamWriter &stream){
+
+    if (NULL != activation)
+        stream.writeStartElement("stimulus");
+    else
+        stream.writeStartElement("action");
+    stream.writeAttribute("enabled",state->isChecked() ? "true" : "false");
+    stream.writeAttribute("id",QString::number(id));
+    stream.writeAttribute("name",name);
+    if (NULL != activation)
+    {
+        stream.writeStartElement("activation");
+        stream.writeCharacters(activation->cleanText());
+        stream.writeEndElement(); //end activation
+    }
+    stream.writeStartElement("intensity");
+    stream.writeTextElement("from",intensity_min->cleanText());
+    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeEndElement(); // end intensity
+    if(NULL != duration_min && NULL!= duration_max)
+    {
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from", duration_min->cleanText());
+        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeEndElement(); //end duration
+    }
+
+    if( NULL != activation)
+        stream.writeEndElement(); //end stimulus
+}
+
+
+//TOBE deprecated
 QDomElement CTButton::getParameters()
 {
     QDomDocument doc;
@@ -434,16 +537,6 @@ QDomElement CTButton::getParameters()
         xml_duration.appendChild(xml_duration_max);
         xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
     }
-
-//    QDomElement xml_duration = doc.createElement("duration");
-//    root.appendChild(xml_duration);
-//    QDomElement xml_duration_min = doc.createElement("from");
-//    xml_duration.appendChild(xml_duration_min);
-//    xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-//    QDomElement xml_duration_max = doc.createElement("to");
-//    xml_duration.appendChild(xml_duration_max);
-//    xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
-
     QDomElement xml_intensity = doc.createElement("intensity");
     root.appendChild(xml_intensity);
     QDomElement xml_intensity_min = doc.createElement("from");
@@ -585,15 +678,6 @@ void CTLight::setParameters(QDomElement root)
         duration_min->setValue(val_duration_min);
         duration_max->setValue(val_duration_max);
     }
-
-//    QDomElement xml_duration = root.namedItem("duration").toElement();
-//    double val_duration_min =
-//            xml_duration.namedItem("from").toElement().text().toDouble();
-//    double val_duration_max =
-//            xml_duration.namedItem("to").toElement().text().toDouble();
-//    duration_min->setMinimum(val_duration_min);
-//    duration_min->setValue(val_duration_min);
-//    duration_max->setValue(val_duration_max);
 
     QDomElement xml_intensity = root.namedItem("intensity").toElement();
     int val_intensity_min =

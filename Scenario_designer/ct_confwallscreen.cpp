@@ -91,8 +91,10 @@ bool CTConfWallScreen::setParameters(QString xml)
     QList<CTConstLight*> empty1;
     QList<CTSpeaker*> empty2;
     QList<CTLight*> empty3;
-    handler->setStimuli(empty1, empty2, empty3, screen_stimuli);
-    handler->setActions(empty1, empty2, screen_action);
+    QList<CTBigLight*> empty4;
+    QList<CTButton*> empty5;
+    handler->setStimuli(empty1, empty2, empty3, screen_stimuli,empty4, empty5);
+    handler->setActions(empty1, empty2, screen_action,empty4, empty5, empty3);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
@@ -238,7 +240,7 @@ QString CTConfWallScreen::getParameters(QString value){
     QString parameters;
     QXmlStreamWriter stream(&parameters);
     stream.setAutoFormatting(true);
-    stream.writeStartDocument();
+//    stream.writeStartDocument();
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
     stream.writeAttribute("name", "wall_screen");
@@ -510,7 +512,6 @@ void CTConfWallScreen::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
-//        qDebug() << "calculateRequiredTime() < block_duration";
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }

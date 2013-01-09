@@ -110,10 +110,6 @@ CTConfWallRight::CTConfWallRight(QWidget *parent) :
         connect(st_speaker->duration_max,SIGNAL(valueChanged(double)),
                 this, SLOT(updateBlockRuntime(double)));
 
-//        CTSpeaker *ac_speaker = new CTSpeaker(i+1, true);
-//        speaker_actions.append(ac_speaker);
-//        ui->qgb_actions->layout()->addWidget(ac_speaker);
-
         /* Add separating lines */
         if (i+1 != NUM_STIMULI_SPEAKERS)
         {
@@ -127,8 +123,9 @@ CTConfWallRight::CTConfWallRight(QWidget *parent) :
         }
     }
 
-    speaker_action = new CTSpeaker(1,true);
-    ui->qgb_actions->layout()->addWidget(speaker_action);
+    CTSpeaker *ac_speaker = new CTSpeaker(1, true);
+    speaker_actions.append(ac_speaker);
+    ui->qgb_actions->layout()->addWidget(ac_speaker);
 
     /*
      *Forcing the activation moment of the speakers to be consecutive
@@ -142,17 +139,10 @@ CTConfWallRight::CTConfWallRight(QWidget *parent) :
     }
 
     /* Establish automatic enabling/disabling of related event controls */
-//    connect(ui->qrb_pressure_event, SIGNAL(toggled(bool)),
-//            ui->qsb_pressure, SLOT(setEnabled(bool)));
-//    connect(ui->qrb_force_event, SIGNAL(toggled(bool)),
-//            ui->qsb_force, SLOT(setEnabled(bool)));
     connect(ui->qrb_position_event, SIGNAL(toggled(bool)),
             ui->qcb_position, SLOT(setEnabled(bool)));
-//    connect(ui->qrb_reach_event, SIGNAL(toggled(bool)),
-//            ui->qcb_reach, SLOT(setEnabled(bool)));
     connect(ui->qrb_button_pressed_event,SIGNAL(toggled(bool)),
             ui->qcb_button,SLOT(setEnabled(bool)));
-
     connect(ui->qrb_body_event,SIGNAL(toggled(bool)),
             ui->qcb_body,SLOT(setEnabled(bool)));
     connect(ui->qrb_head_event,SIGNAL(toggled(bool)),
@@ -171,6 +161,52 @@ CTConfWallRight::~CTConfWallRight()
 {
     delete ui;
 }
+
+/*!
+ * \brief CTConfWallRight::setParameters
+ *
+ * Sets values of all configurable block parameters based on the content of the
+ * supplied XML string.
+ *
+ * \param xml containing data of all configurable parameters.
+ */
+bool CTConfWallRight::setParameters(QString xml)
+{
+    qDebug() << xml;
+
+    int num_stimuli = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
+            NUM_STIMULI_SPEAKERS;
+    int num_actions = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
+            NUM_ACTION_SPEAKERS;
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource *source = new QXmlInputSource();
+    source->setData(xml);
+
+    CTXmlHandler *handler = new CTXmlHandler;
+    /*
+     *Passing pointer of the class to the xml parser handler,
+     *in order to set the parsed values into it's input fields
+     */
+    handler->setWidget(6, this, num_stimuli, num_actions);
+    QList<CTConstLight*> empty1;
+    QList<CTScreen*> empty2;
+    handler->setStimuli(empty1, speaker_stimuli,light_stimuli,empty2,biglight_stimuli,button_stimuli);
+    handler->setActions(empty1, speaker_actions,empty2,biglight_actions,button_actions,light_actions);
+
+    xmlReader.setContentHandler(handler);
+    xmlReader.setErrorHandler(handler);
+
+    bool ok = xmlReader.parse(source);
+    qDebug() << "The parsing went ok? " << ok;
+    block_duration = handler->getBlockDuration();
+    if(ok)
+    {
+        updateBlockRuntime(1.0);
+    }
+    return true;
+}
+
 
 /*!
  * \brief CTConfWallRight::setParameters
@@ -351,9 +387,7 @@ bool CTConfWallRight::setParameters(QDomElement root)
         }
         else if (i < (NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS + NUM_ACTION_SPEAKERS))
         {
-//            int j = i - (NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS);
-//            speaker_actions[j]->setParameters(action);
-            speaker_action->setParameters(action);
+            speaker_actions[0]->setParameters(action);
             QDomElement xml_duration = action.namedItem("duration").toElement();
             double val_duration_min =
                     xml_duration.namedItem("from").toElement().text().toDouble();
@@ -366,6 +400,187 @@ bool CTConfWallRight::setParameters(QDomElement root)
     }
     ui->qsb_pause->setValue(duration - calculateRequiredTime());
     return true;
+}
+
+
+/*!
+ * \brief CTConfWallRight::getParameters
+ *
+ * Retrieves values of all configurable block parameters and returns them as
+ * an XML string.
+ *
+ * \return XML containing data of all configurable parameters.
+ */
+QString CTConfWallRight::getParameters(QString value){
+
+    value = "This function uses QXmlStreamWriter";
+
+    QString parameters;
+    QXmlStreamWriter stream(&parameters);
+    stream.setAutoFormatting(true);
+//    stream.writeStartDocument();
+    stream.writeStartElement("block");
+    stream.writeAttribute("id", "1");
+    stream.writeAttribute("name", "wall_right");
+
+    /* Insert block comment */
+    stream.writeStartElement("comment");
+    stream.writeCharacters(ui->qte_comment->toPlainText());
+    stream.writeEndElement(); //end comment
+
+    /* Insert block runtime */
+    stream.writeStartElement("runtime");
+    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
+            + ui->qsb_pause->cleanText().toDouble();
+    stream.writeTextElement("duration",QString::number(duration_calculated));
+    stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
+    stream.writeEndElement(); //end runtime
+
+    /* Insert block stimuli */
+    stream.writeStartElement("stimuli");
+    int num_stimuli = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
+            NUM_STIMULI_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_stimuli));
+
+
+    for (int i = 0; i < NUM_BIGLIGHTS; i++)
+    {
+        biglight_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_BUTTONS; i++)
+    {
+        button_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_STIMULI_SPEAKERS; i++)
+    {
+        speaker_stimuli.at(i)->getParameters(stream);
+    }
+
+    stream.writeEndElement(); // end stimuli
+
+    /* Insert block feedback events */
+    stream.writeStartElement("feedback");
+    stream.writeStartElement("event");
+    if (ui->qrb_null_event->isChecked())
+    {
+        stream.writeAttribute("id", "0");
+        stream.writeAttribute("name", "none");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","none");
+        stream.writeCharacters("");
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_position_event->isChecked())
+    {
+        stream.writeAttribute("id", "2");
+        stream.writeAttribute("name", "position");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_position->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_body_event->isChecked())
+    {
+        stream.writeAttribute("id", "3");
+        stream.writeAttribute("name", "body");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_body->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_head_event->isChecked())
+    {
+        stream.writeAttribute("id", "4");
+        stream.writeAttribute("name", "head");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_head->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if(ui->qrb_button_pressed_event->isChecked())
+    {
+        stream.writeAttribute("id","5");
+        stream.writeAttribute("name", "button");
+        stream.writeAttribute("sensor",ui->qcb_button->currentText());
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type", "numerical");
+        stream.writeCharacters("1");
+        stream.writeEndElement();//end condition
+     }
+
+    stream.writeEndElement(); //end event
+
+    /* Insert block feedback actions */
+    stream.writeStartElement("actions");
+    int num_actions = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS + NUM_ACTION_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_actions));
+
+
+    for (int i = 0; i < NUM_BIGLIGHTS; i++)
+    {
+        biglight_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    for (int i = 0; i < NUM_BUTTONS; i++)
+    {
+        button_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    for (int i = 0; i < NUM_LIGHTS; i++)
+    {
+        light_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+    }
+
+    speaker_actions[0]->getParameters(stream);
+
+    stream.writeStartElement("duration");
+    stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+    stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+    stream.writeEndElement();//end duration
+
+    stream.writeEndElement(); //end action or stimulus
+    stream.writeEndElement(); //end actions
+    stream.writeEndElement(); //end feedback
+    stream.writeEndElement(); // end block
+
+    return parameters;
 }
 
 /*!
@@ -446,25 +661,6 @@ QDomElement CTConfWallRight::getParameters()
         condition.setAttribute("type", "none");
         condition.appendChild(doc.createTextNode("null"));
     }
-//    else if (ui->qrb_pressure_event->isChecked())
-//    {
-//        event.setAttribute("id", 1);
-//        event.setAttribute("name", "pressure");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "numerical");
-//        condition.appendChild(
-//                    doc.createTextNode(ui->qsb_pressure->cleanText()));
-//    }
-//    else if (ui->qrb_force_event->isChecked())
-//    {
-//        event.setAttribute("id", 2);
-//        event.setAttribute("name", "force");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "numerical");
-//        condition.appendChild(doc.createTextNode(ui->qsb_force->cleanText()));
-//    }
     else if (ui->qrb_position_event->isChecked())
     {
         event.setAttribute("id", 3);
@@ -475,15 +671,6 @@ QDomElement CTConfWallRight::getParameters()
         condition.appendChild(
                     doc.createTextNode(ui->qcb_position->currentText()));
     }
-//    else if (ui->qrb_reach_event->isChecked())
-//    {
-//        event.setAttribute("id", 4);
-//        event.setAttribute("name", "reach");
-//        QDomElement condition = doc.createElement("condition");
-//        event.appendChild(condition);
-//        condition.setAttribute("type", "textual");
-//        condition.appendChild(doc.createTextNode(ui->qcb_reach->currentText()));
-//    }
     else if (ui->qrb_body_event->isChecked())
     {
         event.setAttribute("id", 4);
@@ -572,11 +759,7 @@ QDomElement CTConfWallRight::getParameters()
         actions.appendChild(parameters);
     }
 
-//    for (int i = 0; i < NUM_SPEAKERS; i++)
-//    {
-//        QDomElement parameters = speaker_actions.at(i)->getParameters();
-
-        QDomElement parameters = speaker_action->getParameters();
+        QDomElement parameters = speaker_actions[0]->getParameters();
 
         QDomDocument doc2;
         QDomElement xml_duration = doc2.createElement("duration");
@@ -589,7 +772,6 @@ QDomElement CTConfWallRight::getParameters()
         xml_duration_max.appendChild(doc2.createTextNode(ui->qsb_duration_max->cleanText()));
 
         actions.appendChild(parameters);
-//    }
 
     return root;
 }
@@ -679,6 +861,11 @@ void CTConfWallRight::updateBlockRuntime(double value)
 {
     value = 0;
     ui->qsb_block_duration->setValue(calculateRequiredTime());
+    /*Checks if the overall value of the block duration contains the pause*/
+    if(calculateRequiredTime() < block_duration)
+    {
+        ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
+    }
 }
 
 void CTConfWallRight::on_qrb_null_event_toggled(bool checked)
