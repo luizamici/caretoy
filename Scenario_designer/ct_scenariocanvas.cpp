@@ -373,7 +373,7 @@ void CTScenarioCanvas::loadScenario()
     }
 }
 
-
+/*Load selected scenario*/
 void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
 {
     /*clearing the canvas*/
@@ -385,78 +385,99 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     execution_day = scenario["execution_day"];
     execution_order = scenario["execution_order"];
 
-    QDomDocument doc;
-    doc.setContent(scenario["xml_description"]);
-    QDomElement root = doc.documentElement();
-    QDomElement xml_blocks = root.namedItem("blocks").toElement();
-    QDomNodeList scenario_blocks = xml_blocks.childNodes();
 
-    for (int i = 0; i < scenario_blocks.size(); i++)
+    QXmlStreamReader reader(scenario["xml_description"]);
+    qDebug() << "*************";
+    qDebug() << scenario["xml_description"];
+    qDebug() << "*************";
+    QString xml_conf;
+    QXmlStreamWriter stream(&xml_conf);
+    stream.setAutoFormatting(true);
+
+    QString block_name;
+    while(!reader.atEnd())
     {
-        QDomElement xml_conf = scenario_blocks.at(i).toElement();
-        QString block_name = xml_conf.attribute("name");
-        if ("stick" == block_name)
+        reader.readNext();
+        /*Skip start document element*/
+        if(reader.tokenType() == QXmlStreamReader::StartDocument)
+            continue;
+        /*Skip scenario_data and blocks element*/
+        if(reader.name() == "scenario_data" || reader.name() == "blocks")
+            continue;
+        /*When a new block is found*/
+        if(reader.isStartElement() && reader.name() == "block")
         {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
+            xml_conf.clear();
+            block_name = reader.attributes().value("name").toString();
         }
-        else if ("flower" == block_name)
+        stream.writeCurrentToken(reader);
+
+        /*When a block is ending*/
+        if(reader.isEndElement() && reader.name() == "block")
         {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("ring" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("mickey" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("utoy" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_U);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("wall_left" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("wall_right" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("wall_screen" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
-        }
-        else if ("arch" == block_name)
-        {
-            CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
-            new_block->enableConfig(true);
-            new_block->setConfiguration(xml_conf);
-            blocks.append(new_block);
+            if ("stick" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("flower" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("ring" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("mickey" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("utoy" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_U);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("wall_left" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("wall_right" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("wall_screen" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if ("arch" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
         }
     }
     updateBlockSequence();
@@ -501,18 +522,34 @@ void CTScenarioCanvas::getInfoAndSave(QString description,
     QHash<QString,QString> scenario;
     if(!this->blocks.isEmpty())
     {
-        QDomDocument doc("");
-        doc.appendChild(doc.createProcessingInstruction(
-                            "xml","version=\"1.0\" encoding=\"UTF-8\""));
-        QDomElement root = doc.createElement("scenario_data");
-        doc.appendChild(root);
-        QDomElement subroot = doc.createElement("blocks");
-        root.appendChild(subroot);
-        subroot.setAttribute("number", this->blocks.count());
+        QString xml_scenario;
+        QXmlStreamWriter stream(&xml_scenario);
+        stream.setAutoFormatting(true);
+        stream.setAutoFormattingIndent(2);
+        stream.writeStartDocument();
+        stream.writeStartElement("scenario_data");
+        stream.writeStartElement("blocks");
+        stream.writeAttribute("number", QString::number(this->blocks.count()));
+
         for (int i = 0; i < this->blocks.count(); i++)
         {
-            subroot.appendChild(this->blocks.at(i)->getConfiguration());
+            QString xml = this->blocks.at(i)->getConfiguration("Using sax parser");
+            QXmlStreamReader reader(xml);
+            while(!reader.atEnd())
+            {
+                reader.readNext();
+                if(reader.tokenType() != QXmlStreamReader::StartDocument)
+                    stream.writeCurrentToken(reader);
+                if(reader.isEndElement() && reader.name() == "block")
+                {
+                    break;
+                }
+            }
         }
+        stream.writeEndElement();
+        stream.writeEndElement();
+        stream.writeEndDocument();
+
         if(id_scenario.isEmpty()){
             scenario["creation_date"] = QDateTime::currentDateTime().
                     toString("yyyy-MM-dd HH:mm");
@@ -520,42 +557,43 @@ void CTScenarioCanvas::getInfoAndSave(QString description,
         if(!id_scenario.isEmpty()){
             scenario["id"] = id_scenario;
         }
-        scenario["xml_description"] = doc.toString();
+        scenario["xml_description"] = xml_scenario;
         scenario["last_edited"] = QDateTime::currentDateTime().
                 toString("yyyy-MM-dd HH:mm");
         scenario["execution_day"] = execution_day;
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
-        qDebug() << scenario;
+        qDebug() << "******Scenario****";
+        qDebug() << xml_scenario;
 
         emit save(scenario);
     }
 }
 
-void CTScenarioCanvas::getInfoAndSave()
-{
-    QHash<QString,QString> scenario;
-    if(!this->blocks.isEmpty())
-    {
-        QDomDocument doc("");
-        doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
-        QDomElement root = doc.createElement("scenario_data");
-        doc.appendChild(root);
-        QDomElement subroot = doc.createElement("blocks");
-        root.appendChild(subroot);
-        subroot.setAttribute("number", this->blocks.count());
-        for (int i = 0; i < this->blocks.count(); i++)
-        {
-            subroot.appendChild(this->blocks.at(i)->getConfiguration());
-        }
-        scenario["id"] = id_scenario;
-        scenario["xml_description"] = doc.toString();
-        scenario["last_edited"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
+//void CTScenarioCanvas::getInfoAndSave()
+//{
+//    QHash<QString,QString> scenario;
+//    if(!this->blocks.isEmpty())
+//    {
+//        QDomDocument doc("");
+//        doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
+//        QDomElement root = doc.createElement("scenario_data");
+//        doc.appendChild(root);
+//        QDomElement subroot = doc.createElement("blocks");
+//        root.appendChild(subroot);
+//        subroot.setAttribute("number", this->blocks.count());
+//        for (int i = 0; i < this->blocks.count(); i++)
+//        {
+//            subroot.appendChild(this->blocks.at(i)->getConfiguration());
+//        }
+//        scenario["id"] = id_scenario;
+//        scenario["xml_description"] = doc.toString();
+//        scenario["last_edited"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
 
-        qDebug() << doc.toString();
-        emit save(scenario);
-    }
-}
+//        qDebug() << "WRONG" <<doc.toString();
+//        emit save(scenario);
+//    }
+//}
 
 
 bool CTScenarioCanvas::isNewScenario()

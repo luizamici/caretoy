@@ -172,7 +172,7 @@ CTConfWallRight::~CTConfWallRight()
  */
 bool CTConfWallRight::setParameters(QString xml)
 {
-    qDebug() << xml;
+//    qDebug() << xml;
 
     int num_stimuli = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
             NUM_STIMULI_SPEAKERS;
@@ -418,7 +418,8 @@ QString CTConfWallRight::getParameters(QString value){
     QString parameters;
     QXmlStreamWriter stream(&parameters);
     stream.setAutoFormatting(true);
-//    stream.writeStartDocument();
+    stream.setAutoFormattingIndent(4);
+
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
     stream.writeAttribute("name", "wall_right");

@@ -110,7 +110,7 @@ CTConfToyStick::~CTConfToyStick()
  */
 bool CTConfToyStick::setParameters(QString xml)
 {
-    qDebug() << xml;
+//    qDebug() << xml;
 
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
@@ -307,7 +307,8 @@ QString CTConfToyStick::getParameters(QString value){
     QString parameters;
     QXmlStreamWriter stream(&parameters);
     stream.setAutoFormatting(true);
-//    stream.writeStartDocument();
+    stream.setAutoFormattingIndent(4);
+
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
     stream.writeAttribute("name", "stick");

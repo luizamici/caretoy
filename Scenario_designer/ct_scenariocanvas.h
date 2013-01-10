@@ -49,7 +49,7 @@ public slots:
 
 private slots:
     void getInfoAndSave(QString description, QString execution_day, QString execution_order);
-    void getInfoAndSave();
+//    void getInfoAndSave();
 
 signals:
     void save(QHash<QString,QString> scenario);

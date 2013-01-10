@@ -158,7 +158,6 @@ bool CTXmlHandler::startDocument()
 {
     elementName.clear();
     elementIndentation.clear();
-    indentationLevel = 0;
 
     return true;
 }
@@ -177,19 +176,12 @@ bool CTXmlHandler::startDocument()
 bool CTXmlHandler::startElement(const QString &, const QString &,
     const QString & qName, const QXmlAttributes &att)
 {
-
-//    if(qName == "block")
-//        /*Checking the block consistency*/
-//        if(att.value("name") != idWidget)
-//            return false;
-
     if(qName == "block")
     {
         block_name = att.value("name");
     }
 
     elementName.append(qName);
-    elementIndentation.append(indentationLevel);
 
     /* Stimuli block processing*/
     if(qName == "stimuli")
@@ -243,7 +235,7 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
     /* Actions block processing*/
     }if(qName == "event" && elementName.contains("feedback"))
     {
-        attr["event_name"] = att.value("name");
+        event_name = att.value("name");
         if(!att.value("sensor").isNull())
         {
             attr["sensor"] = att.value("sensor");
@@ -255,7 +247,8 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
         if(num_actions != att.value("number").toInt())
             return false;
     }
-    if(qName == "action" && elementName.contains("actions"))
+    if(qName == "action" && elementName.contains("actions") &&
+            event_name != "null")
     {
         /*Processing of one action*/
         if(att.value("enabled") != "false" )
@@ -296,8 +289,6 @@ bool CTXmlHandler::startElement(const QString &, const QString &,
             attr["type"] = "button_action";
         }
     }
-
-    indentationLevel += 1;
     return true;
 }
 
@@ -363,49 +354,51 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("duration") && elementName.contains("to"))
     {
         attr["val_duration_max"] = ch;
-        if(attr["type"] == "light_action" || attr["type"] == "speaker_action"
-                || attr["type"] == "screen_action")
-        {
-            qsb_duration_min->setMinimum(attr["val_duration_min"].toDouble());
-            qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
-            qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
-        }
-        if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
-                && block_name != "arch" && block_name != "wall_left"
-                && block_name != "wall_right")
-        {
-            light->setParameters(enabled, attr);
-            attr.clear();
-        }
-        if(attr["type"] == "light_stimulus" && block_name == "arch")
-        {
-            archLight->setParameters(enabled,attr);
-            attr.clear();
-        }
-        if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
-                && ((block_name == "wall_left") || block_name == "wall_right"))
-        {
-            archLight->setParameters(enabled,attr);
-        }
-        if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
-        {
-            speaker->setParameters(enabled,attr);
-            attr.clear();
-        }
-        if(attr["type"] == "screen_stimulus" || attr["type"] == "screen_action")
-        {
-            screen->setParameters(enabled,attr);
-            attr.clear();
-        }
-        if(attr["type"] == "biglight_stimulus" || attr["type"] == "biglight_action")
-        {
-            bigLight->setParameters(enabled,attr);
-            attr.clear();
-        }
-        if(attr["type"] == "button_stimulus" || attr["type"] == "button_action")
-        {
-            button->setParameters(enabled,attr);
-            attr.clear();
+        if(event_name.isNull() || event_name != "none"){
+            if(attr["type"] == "light_action" || attr["type"] == "speaker_action"
+                    || attr["type"] == "screen_action")
+            {
+                qsb_duration_min->setMinimum(attr["val_duration_min"].toDouble());
+                qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
+                qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
+            }
+            if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+                    && block_name != "arch" && block_name != "wall_left"
+                    && block_name != "wall_right")
+            {
+                light->setParameters(enabled, attr);
+                attr.clear();
+            }
+            if(attr["type"] == "light_stimulus" && block_name == "arch")
+            {
+                archLight->setParameters(enabled,attr);
+                attr.clear();
+            }
+            if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
+                    && ((block_name == "wall_left") || block_name == "wall_right"))
+            {
+                archLight->setParameters(enabled,attr);
+            }
+            if(attr["type"] == "speaker_stimulus" || attr["type"] == "speaker_action")
+            {
+                speaker->setParameters(enabled,attr);
+                attr.clear();
+            }
+            if(attr["type"] == "screen_stimulus" || attr["type"] == "screen_action")
+            {
+                screen->setParameters(enabled,attr);
+                attr.clear();
+            }
+            if(attr["type"] == "biglight_stimulus" || attr["type"] == "biglight_action")
+            {
+                bigLight->setParameters(enabled,attr);
+                attr.clear();
+            }
+            if(attr["type"] == "button_stimulus" || attr["type"] == "button_action")
+            {
+                button->setParameters(enabled,attr);
+                attr.clear();
+            }
         }
     }
 
@@ -414,11 +407,11 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("feedback") && elementName.contains("event")
             && elementName.contains("condition"))
     {
-        if("null" == attr["event_name"])
+        if("null" == event_name)
         {
            qrb_null_event->setChecked(true);
         }
-        else if("pressure" == attr["event_name"])
+        else if("pressure" == event_name)
         {
             qrb_pressure_event->setChecked(true);
             qsb_pressure->setValue(ch.toDouble());
@@ -428,7 +421,7 @@ bool CTXmlHandler::characters(const QString& ch)
                                                   attr["sensor"].toString()));
             }
         }
-        else if("force" == attr["event_name"])
+        else if("force" == event_name)
         {
             qrb_force_event->setChecked(true);
             if(!attr["sensor"].isNull())
@@ -438,22 +431,22 @@ bool CTXmlHandler::characters(const QString& ch)
             }
             qsb_force->setValue(ch.toDouble());
         }
-        else if("position" == attr["event_name"])
+        else if("position" == event_name)
         {
             qrb_position_event->setChecked(true);
             qcb_position->setCurrentIndex(qcb_position->findText(ch));
         }
-        else if("body" == attr["event_name"])
+        else if("body" == event_name)
         {
             qrb_body_event->setChecked(true);
             qcb_body->setCurrentIndex(qcb_body->findText(ch));
         }
-        else if("head" == attr["event_name"])
+        else if("head" == event_name)
         {
             qrb_head_event->setChecked(true);
             qcb_head->setCurrentIndex(qcb_head->findText(ch));
         }
-        else if("button" == attr["event_name"])
+        else if("button" == event_name)
         {
             qrb_button_pressed_event->setChecked(true);
             qcb_button->setCurrentIndex(qcb_button->findText(attr["sensor"].toString()));
@@ -471,9 +464,7 @@ bool CTXmlHandler::characters(const QString& ch)
 bool CTXmlHandler::endElement(const QString &, const QString &,
     const QString &)
 {
-//    qDebug() << "removing from the list: " << elementName.last();
     elementName.removeLast();
-    indentationLevel -= 1;
 
     return true;
 }
@@ -492,23 +483,6 @@ bool CTXmlHandler::fatalError (const QXmlParseException & exception)
     return false;
 }
 
-/*!
-    Return the list of element names found.
-*/
-
-QStringList& CTXmlHandler::names ()
-{
-    return elementName;
-}
-
-/*!
-    Return the list of indentations used for each element found.
-*/
-
-QList<int>& CTXmlHandler::indentations ()
-{
-    return elementIndentation;
-}
 
 double CTXmlHandler::getBlockDuration()
 {

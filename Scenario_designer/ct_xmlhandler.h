@@ -28,8 +28,6 @@ public:
     bool fatalError(const QXmlParseException &exception);
     bool characters(const QString& ch);
 
-    QStringList& names();
-    QList<int>& indentations();
     void setWidget(int id_widget, QWidget *widget, int stimuli, int actions);
     void setStimuli(QList<CTConstLight *> &lightStimuli, QList<CTSpeaker *> &speakerStimuli,
                     QList<CTLight*> &archLightStimuli, QList<CTScreen*> &screenStimuli,
@@ -44,6 +42,7 @@ public:
     int num_actions;
     bool enabled;
     double block_duration;
+    QString event_name;
     QHash<QString,QVariant> attr;
     QString block_name;
 
@@ -82,7 +81,6 @@ public:
     QComboBox *qcb_pressure;
     QComboBox *qcb_button;
 private:
-    int indentationLevel;
     QStringList elementName;
     QList<int> elementIndentation;
 

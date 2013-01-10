@@ -170,26 +170,29 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
 
 void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ){state->setChecked(true); }
-    if (NULL != activation)
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
-    }
-    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
-    intensity_min->setValue(attr["val_intensity_min"].toInt());
-    intensity_max->setValue(attr["val_intensity_max"].toInt());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+        intensity_min->setValue(attr["val_intensity_min"].toInt());
+        intensity_max->setValue(attr["val_intensity_max"].toInt());
 
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMinimum(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
-    }
-    rings_min->setValue(attr["val_rings_min"].toInt());
-    rings_min->setValue(attr["val_rings_min"].toInt());
-    rings_max->setValue(attr["val_rings_max"].toInt());
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
+        rings_min->setMinimum(attr["val_rings_min"].toInt());
+        rings_min->setValue(attr["val_rings_min"].toInt());
+        rings_max->setValue(attr["val_rings_max"].toInt());
 
-    color->setCurrentIndex(color->findText(attr["val_color"].toString()));
+        color->setCurrentIndex(color->findText(attr["val_color"].toString()));
+    }
 }
 
 //TOBE deprecated
@@ -426,20 +429,23 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
 
 void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ){state->setChecked(true); }
-    if (NULL != activation)
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
-    }
-    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
-    intensity_min->setValue(attr["val_intensity_min"].toInt());
-    intensity_max->setValue(attr["val_intensity_max"].toInt());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+        intensity_min->setValue(attr["val_intensity_min"].toInt());
+        intensity_max->setValue(attr["val_intensity_max"].toInt());
 
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMinimum(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
     }
 }
 
@@ -640,20 +646,23 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
 
 void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ){state->setChecked(true); }
-    if (NULL != activation)
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
+        intensity_min->setMinimum(attr["val_intensity_min"].toInt());
+        intensity_min->setValue(attr["val_intensity_min"].toInt());
+        intensity_max->setValue(attr["val_intensity_max"].toInt());
     }
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMinimum(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
-    }
-    intensity_min->setMinimum(attr["val_intensity_min"].toInt());
-    intensity_min->setValue(attr["val_intensity_min"].toInt());
-    intensity_max->setValue(attr["val_intensity_max"].toInt());
 }
 
 //TOBE deprecated
@@ -842,16 +851,20 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
 
 void CTConstLight::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ){state->setChecked(true); }
-    if (NULL != activation)
+    /*proccess if enabled*/
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
-    }
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMinimum(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
     }
 }
 
@@ -1088,27 +1101,30 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
 
 void CTSpeaker::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ) {state->setChecked(true);}
-    if (NULL != activation)
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
-    }
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMaximum(attr["val_duration_min"].toDouble());
-        duration_min->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
-    }
-    volume_min->setMinimum(attr["val_volume_min"].toDouble());
-    volume_min->setValue(attr["val_volume_min"].toDouble());
-    volume_max->setValue(attr["val_volume_max"].toDouble());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMaximum(attr["val_duration_min"].toDouble());
+            duration_min->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
+        volume_min->setMinimum(attr["val_volume_min"].toDouble());
+        volume_min->setValue(attr["val_volume_min"].toDouble());
+        volume_max->setValue(attr["val_volume_max"].toDouble());
 
-    if(attr["left_rear"].toString() == "true"){ left_rear->setChecked(true);}
-    if(attr["left_front"].toString() == "true"){ left_front->setChecked(true);}
-    if(attr["right_front"].toString() == "true"){ right_front->setChecked(true);}
-    if(attr["right_rear"].toString() == "true") { right_rear->setChecked(true);}
+        if(attr["left_rear"].toString() == "true"){ left_rear->setChecked(true);}
+        if(attr["left_front"].toString() == "true"){ left_front->setChecked(true);}
+        if(attr["right_front"].toString() == "true"){ right_front->setChecked(true);}
+        if(attr["right_rear"].toString() == "true") { right_rear->setChecked(true);}
 
-    sound->setCurrentIndex(sound->findText(attr["sound"].toString()));
+        sound->setCurrentIndex(sound->findText(attr["sound"].toString()));
+    }
 }
 
 //TOBE deprecated
@@ -1342,18 +1358,21 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
 
 void CTScreen::setParameters(bool b, QHash<QString,QVariant> attr)
 {
-    if( b ){state->setChecked(true); }
-    if (NULL != activation)
+    if( b )
     {
-        activation->setValue(attr["val_activation"].toDouble());
+        state->setChecked(true);
+        if (NULL != activation)
+        {
+            activation->setValue(attr["val_activation"].toDouble());
+        }
+        if( NULL != duration_min && NULL != duration_max)
+        {
+            duration_min->setMinimum(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_min"].toDouble());
+            duration_max->setValue(attr["val_duration_max"].toDouble());
+        }
+        video->setCurrentIndex(video->findText(attr["val_video"].toString()));
     }
-    if( NULL != duration_min && NULL != duration_max)
-    {
-        duration_min->setMinimum(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_min"].toDouble());
-        duration_max->setValue(attr["val_duration_max"].toDouble());
-    }
-    video->setCurrentIndex(video->findText(attr["val_video"].toString()));
 }
 
 
@@ -1390,15 +1409,6 @@ void CTScreen::setParameters(QDomElement root)
         duration_max->setValue(val_duaration_max);
     }
 
-//    QDomElement xml_duration = root.namedItem("duration").toElement();
-//    double val_duration_min =
-//            xml_duration.namedItem("from").toElement().text().toDouble();
-//    double val_duration_max =
-//            xml_duration.namedItem("to").toElement().text().toDouble();
-//    duration_min->setMinimum(val_duration_min);
-//    duration_min->setValue(val_duration_min);
-//    duration_max->setValue(val_duration_max);
-
     QString val_video = root.namedItem("video").toElement().text();
     video->setCurrentIndex(video->findText(val_video));
 }
@@ -1429,7 +1439,6 @@ void CTScreen::getParameters(QXmlStreamWriter &stream){
         stream.writeTextElement("to", duration_max->cleanText());
         stream.writeEndElement(); //end duration
     }
-
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus
 }
