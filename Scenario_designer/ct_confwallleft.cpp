@@ -174,8 +174,6 @@ CTConfWallLeft::~CTConfWallLeft()
  */
 bool CTConfWallLeft::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
             NUM_STIMULI_SPEAKERS;
     int num_actions = NUM_BIGLIGHTS + NUM_BUTTONS + NUM_LIGHTS +
@@ -200,7 +198,6 @@ bool CTConfWallLeft::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {

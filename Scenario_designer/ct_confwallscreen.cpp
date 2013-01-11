@@ -73,8 +73,6 @@ CTConfWallScreen::~CTConfWallScreen()
  */
 bool CTConfWallScreen::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_SCREENS;
     int num_actions = NUM_SCREENS;
 
@@ -100,7 +98,6 @@ bool CTConfWallScreen::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {
@@ -335,7 +332,6 @@ QString CTConfWallScreen::getParameters(QString value){
     stream.writeEndElement(); //end feedback
     stream.writeEndElement(); // end block
 
-    qDebug() << parameters;
     return parameters;
 }
 

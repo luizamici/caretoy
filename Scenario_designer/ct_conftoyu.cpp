@@ -99,8 +99,6 @@ CTConfToyU::~CTConfToyU()
 
 bool CTConfToyU::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
 
@@ -125,7 +123,6 @@ bool CTConfToyU::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {

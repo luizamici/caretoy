@@ -4,7 +4,6 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_simpleblock.h"
-#include "TableOfScenarios/ct_dialog.h"
 
 //temporary
 #include "ct_dbconn.h"
@@ -29,10 +28,6 @@ private:
     int getPositionIndex(QPoint eventPos, bool dropIndex);
     void updateBlockSequence();
 
-    QString id_scenario;
-    QString description;
-    QString execution_day;
-    QString execution_order;
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -44,11 +39,9 @@ protected:
 public slots:
     void resetScenario();
     void loadScenario();
-    void saveScenario();
-    void loadScenario(QHash<QString,QString> scenario);
 
 private slots:
-    void getInfoAndSave(QString description, QString execution_day, QString execution_order);
+    void getInfoAndSave();
 
 signals:
     void save(QHash<QString,QString> scenario);

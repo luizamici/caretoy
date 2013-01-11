@@ -14,10 +14,6 @@ public:
     explicit CTScenarioConfig(QWidget *parent = 0);
 
     CTScenarioCanvas *scenarioCanvas;
-
-private slots:
-    void saveScenarioToDB();
-
 };
 
 #endif // CT_SCENARIOCONFIG_H

@@ -24,11 +24,6 @@ SOURCES += main.cpp \
     ct_scenarioconfig.cpp \
     ct_scenariocanvas.cpp \
     ct_blocksource.cpp \
-    ct_dbconn.cpp \
-    TableOfScenarios/ct_tableofscenarios.cpp \
-    TableOfScenarios/ct_sqltable.cpp \
-    TableOfScenarios/ct_sqlmodel.cpp \
-    TableOfScenarios/ct_dialog.cpp \
     ct_xmlhandler.cpp
 
 HEADERS += \
@@ -48,11 +43,6 @@ HEADERS += \
     ct_scenarioconfig.h \
     ct_scenariocanvas.h \
     ct_blocksource.h \
-    ct_dbconn.h \
-    TableOfScenarios/ct_tableofscenarios.h \
-    TableOfScenarios/ct_sqltable.h \
-    TableOfScenarios/ct_sqlmodel.h \
-    TableOfScenarios/ct_dialog.h \
     ct_xmlhandler.h
 
 FORMS += \
@@ -67,8 +57,6 @@ FORMS += \
     ct_confwallscreen.ui \
     ct_blockconfig.ui \
     ct_simpleblock.ui \
-    TableOfScenarios/ct_tableofscenarios.ui \
-    TableOfScenarios/ct_dialog.ui
 
 RESOURCES += \
     ct_resources.qrc

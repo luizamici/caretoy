@@ -110,8 +110,6 @@ CTConfToyStick::~CTConfToyStick()
  */
 bool CTConfToyStick::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
 
@@ -136,7 +134,6 @@ bool CTConfToyStick::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {
@@ -179,7 +176,6 @@ bool CTConfToyStick::setParameters(QDomElement root)
     /* Set block stimuli */
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     QDomElement stimuli_block = root.namedItem("stimuli").toElement();
-    qDebug() << "stimuli block " << stimuli_block.text();
 
     int stimuli_count = stimuli_block.attribute("number").toInt();
     QDomNodeList stimuli = stimuli_block.childNodes();
@@ -431,7 +427,6 @@ QString CTConfToyStick::getParameters(QString value){
     stream.writeEndElement(); //end feedback
     stream.writeEndElement(); // end block
 
-    qDebug() << parameters;
     return parameters;
 }
 

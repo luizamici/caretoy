@@ -55,43 +55,22 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     buttonLayout->addStretch();
     QPushButton *qpbLoad = new QPushButton("Load");
     buttonLayout->addWidget(qpbLoad);
-//    QPushButton *qpbSave = new QPushButton("Save");
-//    buttonLayout->addWidget(qpbSave);
-    QPushButton *qpbSaveToDB = new QPushButton("Save");
-    buttonLayout->addWidget(qpbSaveToDB);
+    QPushButton *qpbSave = new QPushButton("Save");
+    buttonLayout->addWidget(qpbSave);
     QPushButton *qpbCancel = new QPushButton("Cancel");
     buttonLayout->addWidget(qpbCancel);
 
     // Establish connections
     connect(qpbReset, SIGNAL(clicked()), scenarioCanvas, SLOT(resetScenario()));
     connect(qpbLoad, SIGNAL(clicked()), scenarioCanvas, SLOT(loadScenario()));
-//    connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(saveScenario()));
-    connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
+    connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(getInfoAndSave()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
+
 
     connect(this, SIGNAL(destroyed()),scenarioCanvas,SIGNAL(destroyed()));
 
     // Center the widget on the screen
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
-}
-
-void CTScenarioConfig::saveScenarioToDB()
-{
-    CTDialog *dialog = new CTDialog();
-    connect(dialog,SIGNAL(accepted(QString,QString,QString)),scenarioCanvas,
-            SLOT(getInfoAndSave(QString,QString,QString)));
-
-    if(!scenarioCanvas->isNewScenario())
-    {
-        dialog->setData(scenarioCanvas->getDescription(),
-                        scenarioCanvas->getExecutionDay(),
-                        scenarioCanvas->getExecutionOrder());
-    }
-    Qt::WindowFlags flags = dialog->windowFlags();
-    flags ^= Qt::WindowStaysOnTopHint;
-    dialog->setWindowFlags( flags );
-    dialog->show();
-    dialog->activateWindow();
 }
 
