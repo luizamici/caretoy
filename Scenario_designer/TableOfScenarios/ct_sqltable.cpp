@@ -66,6 +66,7 @@ bool CTSqlTable::save(QHash<QString, QString> scenario)
              */
             tableModel->setData(indexOfCell,scenario[key],Qt::EditRole);
         }
+        submitAll();
         return true;
     }
     return false;
@@ -81,6 +82,7 @@ void CTSqlTable::insertIntoTable(QSqlRecord scenarioRecord)
 
     /*Putting attention on the inserted record*/
     selectRow(tableModel->rowCount(QModelIndex()) - 1);
+    submitAll();
 }
 
 
@@ -98,6 +100,7 @@ void CTSqlTable::deleteFromTable(QString id_scenario)
     int row = index.row();
     if(tableModel->index(row,0).isValid())
         tableModel->removeRows(row,1);
+    submitAll();
 }
 
 /*retreives the selected as hashmap, comfortable as input for other windows*/
@@ -156,11 +159,11 @@ bool CTSqlTable::submitAll()
 
     if(tableModel->submitAll()){
         tableModel->database().commit();
-        qDebug() << "SUCCESS";
+        emit success();
         return true;}
     else{
         tableModel->database().rollback();
-        qDebug() << "there was an error " << tableModel->lastError().text();
+        emit error("An error occurred: " + tableModel->lastError().text());
         return false;
     }
 }

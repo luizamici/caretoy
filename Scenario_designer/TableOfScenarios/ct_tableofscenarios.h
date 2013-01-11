@@ -25,7 +25,9 @@ private slots:
     void on_qbt_edit_clicked();
     void on_qbt_copy_clicked();
     void on_qbt_delete_clicked();
-    void on_qbt_submit_clicked();
+
+    void showOkMessage();
+    void showErrMessage(QString errMessage);
 
 public slots:
     void save(QHash<QString,QString> scenario);

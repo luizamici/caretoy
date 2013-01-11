@@ -23,6 +23,27 @@ CTTableOfScenarios::CTTableOfScenarios(QWidget *parent) :
     /*alternative way for editing a scenario*/
     connect(tableOfScenarios,SIGNAL(doubleClicked(QModelIndex)),this,
             SLOT(on_qbt_edit_clicked()));
+
+    connect(tableOfScenarios, SIGNAL(success()),
+            this, SLOT(showOkMessage()));
+    connect(tableOfScenarios,SIGNAL(error(QString)),
+            this, SLOT(showErrMessage(QString)));
+}
+
+void CTTableOfScenarios::showOkMessage()
+{
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "green" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage("Changes submitted successfully!",5000);
+}
+
+void CTTableOfScenarios::showErrMessage(QString errMessage)
+{
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "red" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage(errMessage, 5000);
 }
 
 
@@ -53,40 +74,9 @@ void CTTableOfScenarios::on_qbt_delete_clicked()
 }
 
 
-void CTTableOfScenarios::on_qbt_submit_clicked()
-{
-    if(tableOfScenarios->submitAll()){
-        QPalette palette;
-        palette.setColor( QPalette::WindowText, "green" );
-        statusBar->setPalette( palette );
-        statusBar->showMessage("Changes submitted to the DB successfully!",
-                               5000);
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor( QPalette::WindowText, "red" );
-        statusBar->setPalette( palette );
-        statusBar->showMessage("An error occurred while saving changes to the DB!"
-                               +tableOfScenarios->tableModel->lastError().text(),
-                               5000);
-    }
-}
-
 void CTTableOfScenarios::save(QHash<QString, QString> scenario)
 {
-    if(tableOfScenarios->save(scenario))
-    {
-        QPalette palette;
-        palette.setColor( QPalette::WindowText, "green" );
-        statusBar->setPalette( palette );
-        statusBar->showMessage("Scenario saved locally!",5000);
-    }else{
-        QPalette palette;
-        palette.setColor( QPalette::WindowText, "red" );
-        statusBar->setPalette( palette );
-        statusBar->showMessage("An error occurred!",5000);
-    }
+    tableOfScenarios->save(scenario);
 }
 
 CTTableOfScenarios::~CTTableOfScenarios()

@@ -27,6 +27,9 @@ public:
 
 private:
     QModelIndex getIndex(QString id_scenario);
+signals:
+    void success();
+    void error(QString errMessage);
     
 };
 
