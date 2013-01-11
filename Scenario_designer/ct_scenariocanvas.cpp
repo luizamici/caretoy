@@ -570,32 +570,6 @@ void CTScenarioCanvas::getInfoAndSave(QString description,
     }
 }
 
-//void CTScenarioCanvas::getInfoAndSave()
-//{
-//    QHash<QString,QString> scenario;
-//    if(!this->blocks.isEmpty())
-//    {
-//        QDomDocument doc("");
-//        doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
-//        QDomElement root = doc.createElement("scenario_data");
-//        doc.appendChild(root);
-//        QDomElement subroot = doc.createElement("blocks");
-//        root.appendChild(subroot);
-//        subroot.setAttribute("number", this->blocks.count());
-//        for (int i = 0; i < this->blocks.count(); i++)
-//        {
-//            subroot.appendChild(this->blocks.at(i)->getConfiguration());
-//        }
-//        scenario["id"] = id_scenario;
-//        scenario["xml_description"] = doc.toString();
-//        scenario["last_edited"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
-
-//        qDebug() << "WRONG" <<doc.toString();
-//        emit save(scenario);
-//    }
-//}
-
-
 bool CTScenarioCanvas::isNewScenario()
 {
     if(id_scenario.isEmpty())

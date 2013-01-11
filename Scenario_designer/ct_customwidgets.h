@@ -54,6 +54,7 @@ public:
     explicit CTBigLight(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
@@ -63,10 +64,15 @@ public:
     CTSpinBox *rings_min;
     CTSpinBox *rings_max;
     QComboBox *color;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 /* ########################################################################## */
@@ -79,16 +85,22 @@ public:
     explicit CTButton(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
     CTSpinBox *intensity_min;
     CTSpinBox *intensity_max;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 /* ########################################################################## */
@@ -101,16 +113,22 @@ public:
     explicit CTLight(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
     CTSpinBox *intensity_min;
     CTSpinBox *intensity_max;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 /* ########################################################################## */
@@ -123,14 +141,20 @@ public:
     explicit CTConstLight(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 /* ########################################################################## */
@@ -143,6 +167,7 @@ public:
     explicit CTSpeaker(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     QCheckBox *left_front;
     QCheckBox *left_rear;
@@ -154,10 +179,15 @@ public:
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
     QComboBox *sound;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString, QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 /* ########################################################################## */
@@ -170,15 +200,21 @@ public:
     explicit CTScreen(int id, bool action, QWidget *parent = 0);
     int id;
     QString name;
+    bool isAction;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
     QComboBox *video;
-    void setParameters(QDomElement root);
+    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters();
+    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
+
+private:
+    void setDefault();
+private slots:
+    void stateChecked(bool b);
 };
 
 #endif // CT_CUSTOMWIDGETS_H

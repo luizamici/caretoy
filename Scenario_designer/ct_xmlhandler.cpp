@@ -302,7 +302,7 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("runtime") && elementName.contains("duration"))
     {
         block_duration = ch.toDouble();
-        qDebug() << "parsed block duration" << block_duration;}
+    }
     else if(elementName.contains("runtime") && elementName.contains("repetitions"))
         qsb_block_repetitions->setValue(ch.toInt());
 

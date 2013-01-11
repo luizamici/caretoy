@@ -53,6 +53,7 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
 {
     this->id = id;
     name = "light_cluster"; // TODO: change this to biglight
+    isAction = action;
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -65,7 +66,7 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -81,7 +82,8 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval ********************/
-    if(!action){
+    if(!isAction)
+    {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
         duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
@@ -166,6 +168,33 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
     connect(state, SIGNAL(toggled(bool)),
             color, SLOT(setEnabled(bool)));
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
+}
+
+void CTBigLight::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTBigLight::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+    intensity_min->setup(" %", 0, 100, 1, 0);
+    intensity_max->setup(" %", 0, 100, 1, 100);
+    rings_min->setup(QString(), 1, 1, 1, 1);
+    rings_max->setup(QString(), 1, 3, 1, 1);
+    color->setCurrentIndex(color->findText("Red"));
 }
 
 void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
@@ -345,8 +374,8 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
     QWidget(parent)
 {
     this->id = id;
-    name = "light_button"; // TODO: change this to button
-
+    name = "light_button";
+    isAction = action;
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
     layout->setMargin(0);
@@ -358,7 +387,7 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -374,7 +403,7 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval ********************/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
@@ -424,8 +453,35 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
             intensity_max, SLOT(setMinimumValue(int)));
     connect(intensity_max, SIGNAL(valueChanged(int)),
             intensity_min, SLOT(setMaximumValue(int)));
+
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
 }
+
+
+void CTButton::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTButton::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+    intensity_min->setup(" %", 0, 100, 1, 0);
+    intensity_max->setup(" %", 0, 100, 1, 100);
+}
+
 
 void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
 {
@@ -564,6 +620,7 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
 {
     this->id = id;
     name = "light";
+    isAction = action;
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -576,7 +633,7 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -592,7 +649,7 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval ********************/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
@@ -642,6 +699,31 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
     connect(intensity_max, SIGNAL(valueChanged(int)),
             intensity_min, SLOT(setMaximumValue(int)));
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
+}
+
+
+void CTLight::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTLight::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+    intensity_min->setup(" %", 0, 100, 1, 0);
+    intensity_max->setup(" %", 0, 100, 1, 100);
 }
 
 void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
@@ -761,15 +843,6 @@ QDomElement CTLight::getParameters()
         xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
     }
 
-//    QDomElement xml_duration = doc.createElement("duration");
-//    root.appendChild(xml_duration);
-//    QDomElement xml_duration_min = doc.createElement("from");
-//    xml_duration.appendChild(xml_duration_min);
-//    xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-//    QDomElement xml_duration_max = doc.createElement("to");
-//    xml_duration.appendChild(xml_duration_max);
-//    xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
-
     QDomElement xml_intensity = doc.createElement("intensity");
     root.appendChild(xml_intensity);
     QDomElement xml_intensity_min = doc.createElement("from");
@@ -791,6 +864,7 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
 {
     this->id = id;
     name = "light";
+    isAction = action;
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -803,7 +877,7 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -819,7 +893,7 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval ********************/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
@@ -847,7 +921,30 @@ CTConstLight::CTConstLight(int id, bool action, QWidget *parent) :
         duration_max = NULL;
     }
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
 }
+
+void CTConstLight::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTConstLight::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+}
+
 
 void CTConstLight::setParameters(bool b, QHash<QString,QVariant> attr)
 {
@@ -890,14 +987,6 @@ void CTConstLight::setParameters(QDomElement root)
         duration_max->setValue(val_duration_max);
     }
 
-//    QDomElement xml_duration = root.namedItem("duration").toElement();
-//    double val_duration_min =
-//            xml_duration.namedItem("from").toElement().text().toDouble();
-//    double val_duration_max =
-//            xml_duration.namedItem("to").toElement().text().toDouble();
-//    duration_min->setMinimum(val_duration_min);
-//    duration_min->setValue(val_duration_min);
-//    duration_max->setValue(val_duration_max);
 }
 
 
@@ -976,6 +1065,7 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
 {
     this->id = id;
     name = "speaker";
+    isAction = action;
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -988,7 +1078,7 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -1027,7 +1117,7 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval **********************/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
@@ -1097,6 +1187,35 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
             right_rear,SLOT(setEnabled(bool)));
 
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
+}
+
+void CTSpeaker::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTSpeaker::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+    volume_min->setup(" %", 0,100, 1, 0);
+    volume_max->setup(" %", 0, 100, 1,100);
+    sound->setCurrentIndex(sound->findText("Hello.wav"));
+    right_front->setChecked(false);
+    right_rear->setChecked(false);
+    left_front->setChecked(false);
+    left_rear->setChecked(false);
 }
 
 void CTSpeaker::setParameters(bool b, QHash<QString,QVariant> attr)
@@ -1263,15 +1382,6 @@ QDomElement CTSpeaker::getParameters()
     xml_volume.appendChild(xml_volume_max);
     xml_volume_max.appendChild(doc.createTextNode(volume_max->cleanText()));
 
-//    QDomElement xml_duration = doc.createElement("duration");
-//    root.appendChild(xml_duration);
-//    QDomElement xml_duaration_min = doc.createElement("from");
-//    xml_duration.appendChild(xml_duaration_min);
-//    xml_duaration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-//    QDomElement xml_duaration_max = doc.createElement("to");
-//    xml_duration.appendChild(xml_duaration_max);
-//    xml_duaration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
-
     QDomElement xml_sound = doc.createElement("sound");
     root.appendChild(xml_sound);
     xml_sound.appendChild(doc.createTextNode(sound->currentText()));
@@ -1286,6 +1396,7 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
 {
     this->id = id;
     name = "screen";
+    isAction = action;
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -1298,7 +1409,7 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     layout->addWidget(state, row_index, 0);
 
     /* Add elements for control over the activation time of a stimulus ********/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
@@ -1314,7 +1425,7 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the duration interval ********************/
-    if (!action)
+    if (!isAction)
     {
         layout->addWidget(new QLabel("Duration interval"), row_index, 1);
         duration_min = new CTDoubleSpinBox();
@@ -1353,8 +1464,31 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     connect(state, SIGNAL(toggled(bool)),
             video, SLOT(setEnabled(bool)));
     /**************************************************************************/
+
+    connect(state, SIGNAL(toggled(bool)),
+            this, SLOT(stateChecked(bool)));
 }
 
+
+void CTScreen::stateChecked(bool b)
+{
+    if(!b)
+    {
+        /*Set default values*/
+        setDefault();
+    }
+}
+
+void CTScreen::setDefault()
+{
+    if(!isAction)
+    {
+        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
+        duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
+    }
+    video->setCurrentIndex(video->findText("Tiger.avi"));
+}
 
 void CTScreen::setParameters(bool b, QHash<QString,QVariant> attr)
 {
@@ -1480,15 +1614,6 @@ QDomElement CTScreen::getParameters()
         xml_duration.appendChild(xml_duration_max);
         xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
     }
-
-//    QDomElement xml_duration = doc.createElement("duration");
-//    root.appendChild(xml_duration);
-//    QDomElement xml_duration_min = doc.createElement("from");
-//    xml_duration.appendChild(xml_duration_min);
-//    xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-//    QDomElement xml_duration_max = doc.createElement("to");
-//    xml_duration.appendChild(xml_duration_max);
-//    xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
 
     QDomElement xml_video = doc.createElement("video");
     root.appendChild(xml_video);
