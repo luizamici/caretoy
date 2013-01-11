@@ -15,9 +15,7 @@ class CTConfToyU : public QWidget
 public:
     explicit CTConfToyU(QWidget *parent = 0);
     ~CTConfToyU();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:

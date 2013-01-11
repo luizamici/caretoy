@@ -24,7 +24,7 @@ SOURCES += main.cpp \
     ct_scenarioconfig.cpp \
     ct_scenariocanvas.cpp \
     ct_blocksource.cpp \
-    ct_dbconn.cpp \
+    TableOfScenarios/ct_dbconn.cpp \
     TableOfScenarios/ct_tableofscenarios.cpp \
     TableOfScenarios/ct_sqltable.cpp \
     TableOfScenarios/ct_sqlmodel.cpp \
@@ -48,7 +48,7 @@ HEADERS += \
     ct_scenarioconfig.h \
     ct_scenariocanvas.h \
     ct_blocksource.h \
-    ct_dbconn.h \
+    TableOfScenarios/ct_dbconn.h \
     TableOfScenarios/ct_tableofscenarios.h \
     TableOfScenarios/ct_sqltable.h \
     TableOfScenarios/ct_sqlmodel.h \

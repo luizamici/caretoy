@@ -281,97 +281,6 @@ void CTScenarioCanvas::resetScenario()
     execution_order.clear();
 }
 
-/*Loads scenario from file*/
-void CTScenarioCanvas::loadScenario()
-{
-    QString name = QFileDialog::getOpenFileName(this, "Load scenario", QDir::currentPath());
-    if (!name.isNull())
-    {
-        QFile file(name);
-        if (file.open(QIODevice::ReadOnly))
-        {
-            if (!this->blocks.isEmpty()) { resetScenario(); }
-
-            QDomDocument doc;
-            doc.setContent(&file);
-            QDomElement root = doc.documentElement();
-            QDomElement xml_blocks = root.namedItem("blocks").toElement();
-            QDomNodeList scenario_blocks = xml_blocks.childNodes();
-
-            for (int i = 0; i < scenario_blocks.size(); i++)
-            {
-                QDomElement xml_conf = scenario_blocks.at(i).toElement();
-                QString block_name = xml_conf.attribute("name");
-                if ("stick" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("flower" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(" ");
-                    blocks.append(new_block);
-                }
-                else if ("ring" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("mickey" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("utoy" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_U);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("wall_left" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("wall_right" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("wall_screen" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-                else if ("arch" == block_name)
-                {
-                    CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
-                    new_block->enableConfig(true);
-                    new_block->setConfiguration(xml_conf);
-                    blocks.append(new_block);
-                }
-            }
-
-            file.close();
-            updateBlockSequence();
-        }
-    }
-}
 
 /*Load selected scenario*/
 void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
@@ -483,39 +392,9 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     updateBlockSequence();
 }
 
-// Save the scenario data into file
-void CTScenarioCanvas::saveScenario()
-{
-    if (!this->blocks.isEmpty())
-    {
-        QDomDocument doc("");
-        doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
-        QDomElement root = doc.createElement("scenario_data");
-        doc.appendChild(root);
-        QDomElement subroot = doc.createElement("blocks");
-        root.appendChild(subroot);
-        subroot.setAttribute("number", this->blocks.count());
-        for (int i = 0; i < this->blocks.count(); i++)
-        {
-            subroot.appendChild(this->blocks.at(i)->getConfiguration());
-        }
-
-        QString name = QFileDialog::getSaveFileName(this, "Save scenario", QDir::currentPath());
-        if (!name.isNull())
-        {
-            QFile file(name);
-            if (file.open(QFile::WriteOnly))
-            {
-                QTextStream fileStream(&file);
-                fileStream << doc.toString(4);
-                file.close();
-            }
-        }
-    }
-}
 
 
-void CTScenarioCanvas::getInfoAndSave(QString description,
+void CTScenarioCanvas::saveScenario(QString description,
                                       QString execution_day,
                                       QString execution_order)
 {

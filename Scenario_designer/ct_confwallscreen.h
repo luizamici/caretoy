@@ -15,9 +15,7 @@ class CTConfWallScreen : public QWidget
 public:
     explicit CTConfWallScreen(QWidget *parent = 0);
     ~CTConfWallScreen();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:

@@ -15,9 +15,7 @@ class CTConfToyRing : public QWidget
 public:
     explicit CTConfToyRing(QWidget *parent = 0);
     ~CTConfToyRing();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:

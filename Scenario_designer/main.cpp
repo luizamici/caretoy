@@ -12,8 +12,6 @@ int main(int argc, char *argv[])
     tableOfScenarios->show();
 
     CTScenarioConfig *config = new CTScenarioConfig();
-//    config->setAttribute(Qt::WA_DeleteOnClose);
-//    config->show();
 
     app.connect(tableOfScenarios,SIGNAL(newScenario()), config ,SLOT(show()));
     app.connect(tableOfScenarios,SIGNAL(newScenario()),config->scenarioCanvas,

@@ -15,9 +15,7 @@ class CTConfToyStick : public QWidget
 public:
     explicit CTConfToyStick(QWidget *parent = 0);
     ~CTConfToyStick();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:

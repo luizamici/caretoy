@@ -7,7 +7,7 @@
 #include "TableOfScenarios/ct_dialog.h"
 
 //temporary
-#include "ct_dbconn.h"
+#include "TableOfScenarios/ct_dbconn.h"
 
 class CTScenarioCanvas : public QWidget
 {
@@ -43,12 +43,8 @@ protected:
 
 public slots:
     void resetScenario();
-    void loadScenario();
-    void saveScenario();
     void loadScenario(QHash<QString,QString> scenario);
-
-private slots:
-    void getInfoAndSave(QString description, QString execution_day, QString execution_order);
+    void saveScenario(QString description, QString execution_day, QString execution_order);
 
 signals:
     void save(QHash<QString,QString> scenario);

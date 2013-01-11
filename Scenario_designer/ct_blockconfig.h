@@ -32,7 +32,6 @@ class CTBlockConfig : public QDialog
 public:
     explicit CTBlockConfig(QWidget *parent = 0);
     ~CTBlockConfig();
-    void showParameters(int id, QDomElement root);
     void showParameters(int id, QString xml);
 
 private:
@@ -40,7 +39,6 @@ private:
     int id;
 
 signals:
-    void finishedConfig(QDomElement root);
     void finishedConfig(QString xml);
 
 private slots:

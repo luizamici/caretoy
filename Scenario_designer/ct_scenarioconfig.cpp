@@ -53,10 +53,6 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     QPushButton *qpbReset = new QPushButton("Reset");
     buttonLayout->addWidget(qpbReset);
     buttonLayout->addStretch();
-    QPushButton *qpbLoad = new QPushButton("Load");
-    buttonLayout->addWidget(qpbLoad);
-//    QPushButton *qpbSave = new QPushButton("Save");
-//    buttonLayout->addWidget(qpbSave);
     QPushButton *qpbSaveToDB = new QPushButton("Save");
     buttonLayout->addWidget(qpbSaveToDB);
     QPushButton *qpbCancel = new QPushButton("Cancel");
@@ -64,8 +60,6 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
 
     // Establish connections
     connect(qpbReset, SIGNAL(clicked()), scenarioCanvas, SLOT(resetScenario()));
-    connect(qpbLoad, SIGNAL(clicked()), scenarioCanvas, SLOT(loadScenario()));
-//    connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(saveScenario()));
     connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -80,7 +74,7 @@ void CTScenarioConfig::saveScenarioToDB()
 {
     CTDialog *dialog = new CTDialog();
     connect(dialog,SIGNAL(accepted(QString,QString,QString)),scenarioCanvas,
-            SLOT(getInfoAndSave(QString,QString,QString)));
+            SLOT(saveScenario(QString,QString,QString)));
 
     if(!scenarioCanvas->isNewScenario())
     {

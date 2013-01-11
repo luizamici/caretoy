@@ -15,9 +15,7 @@ class CTConfToyFlower : public QWidget
 public:
     explicit CTConfToyFlower(QWidget *parent = 0);
     ~CTConfToyFlower();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:
