@@ -358,7 +358,7 @@ bool CTXmlHandler::characters(const QString& ch)
             if(attr["type"] == "light_action" || attr["type"] == "speaker_action"
                     || attr["type"] == "screen_action")
             {
-                qsb_duration_min->setMinimum(attr["val_duration_min"].toDouble());
+                qsb_duration_max->setMinimum(attr["val_duration_min"].toDouble());
                 qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
                 qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
             }
