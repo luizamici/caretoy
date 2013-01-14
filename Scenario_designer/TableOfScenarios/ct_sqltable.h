@@ -27,6 +27,7 @@ public:
 
 private:
     QModelIndex getIndex(QString id_scenario);
+    Log4Qt::Logger *p_logger;
 signals:
     void success();
     void error(QString errMessage);

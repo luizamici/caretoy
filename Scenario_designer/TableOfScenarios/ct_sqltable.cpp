@@ -4,6 +4,9 @@
 CTSqlTable::CTSqlTable(QWidget *parent) :
     QTableView(parent)
 {
+    p_logger = Log4Qt::Logger::logger("CTSqlTable");
+    p_logger->info("Table model of scenarios being created...");
+
     db = new CTDBConn();
     tableModel = new CTSqlModel(this->parentWidget(),db->getConnection());
     tableModel->setTable("test_scenario");
@@ -43,6 +46,7 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
 
     /*initialize sorting by execution day*/
     this->sortByColumn(1,Qt::AscendingOrder);
+    p_logger->info("Table model of scenarios ready!");
 }
 
 bool CTSqlTable::save(QHash<QString, QString> scenario)

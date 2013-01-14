@@ -2,10 +2,16 @@
 #include "ct_scenarioconfig.h"
 
 #include "TableOfScenarios/ct_tableofscenarios.h"
+#include "TableOfScenarios/ct_logger.h"
+
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    app.setApplicationName("CaretoyAdmin");
+
+    CTLogger logger;
+    logger.initialize();
 
     CTTableOfScenarios *tableOfScenarios = new CTTableOfScenarios();
     tableOfScenarios->setAttribute(Qt::WA_DeleteOnClose);
@@ -13,6 +19,7 @@ int main(int argc, char *argv[])
 
     CTScenarioConfig *config = new CTScenarioConfig();
 
+    /*Temporary connections*/
     app.connect(tableOfScenarios,SIGNAL(newScenario()), config ,SLOT(show()));
     app.connect(tableOfScenarios,SIGNAL(newScenario()),config->scenarioCanvas,
                 SLOT(resetScenario()));
@@ -27,6 +34,8 @@ int main(int argc, char *argv[])
                 config,SLOT(close()));
 
     app.connect(tableOfScenarios,SIGNAL(destroyed()),config,SLOT(close()));
+
+    Log4Qt::Logger::logger(QLatin1String("main"))->info("CaretoAdmin application started!");
 
     return app.exec();
 }

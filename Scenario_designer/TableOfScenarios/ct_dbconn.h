@@ -8,6 +8,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include "ct_logger.h"
+
 class CTDBConn : public QObject
 {
     Q_OBJECT

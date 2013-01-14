@@ -33,6 +33,7 @@ protected:
 public slots:
     void setConfiguration(QDomElement root);
     void setConfiguration(QString xml);
+
 };
 
 #endif // CT_SIMPLEBLOCK_H

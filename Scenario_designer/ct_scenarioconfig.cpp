@@ -3,7 +3,7 @@
 CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
 {
     // Initialize/configure visual appearance
-    this->setWindowTitle("Scenario configuration");
+    this->setWindowTitle(tr("Scenario configuration[*]"));
     this->setFixedSize(1100, 700);
 
     QVBoxLayout *layout = new QVBoxLayout();

@@ -7,6 +7,8 @@ TEMPLATE = app
 CONFIG -= app_bundle
 CONFIG += DEBUG
 
+include(/informatik/home/mici/git_caretoy/caretoy/log4qt/src/log4qt/log4qt.pri)
+
 SOURCES += main.cpp \
     ct_customwidgets.cpp \
     ct_conftoystick.cpp \
@@ -29,7 +31,8 @@ SOURCES += main.cpp \
     TableOfScenarios/ct_sqltable.cpp \
     TableOfScenarios/ct_sqlmodel.cpp \
     TableOfScenarios/ct_dialog.cpp \
-    ct_xmlhandler.cpp
+    ct_xmlhandler.cpp \
+    TableOfScenarios/ct_logger.cpp
 
 HEADERS += \
     ct_customwidgets.h \
@@ -53,7 +56,8 @@ HEADERS += \
     TableOfScenarios/ct_sqltable.h \
     TableOfScenarios/ct_sqlmodel.h \
     TableOfScenarios/ct_dialog.h \
-    ct_xmlhandler.h
+    ct_xmlhandler.h \
+    TableOfScenarios/ct_logger.h
 
 FORMS += \
     ct_conftoystick.ui \

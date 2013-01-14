@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QSqlRecord>
 #include "ct_sqltable.h"
+#include "ct_logger.h"
 
 namespace Ui {
 class CTTableOfScenarios;

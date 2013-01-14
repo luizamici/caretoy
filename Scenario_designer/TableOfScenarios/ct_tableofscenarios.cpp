@@ -5,6 +5,8 @@ CTTableOfScenarios::CTTableOfScenarios(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CTTableOfScenarios)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTTableOfScenarios"))->info(
+                "Table view of scenarios being created...");
     ui->setupUi(this);
     this->setWindowTitle("Scenarios");
 
