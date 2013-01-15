@@ -1066,6 +1066,19 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
     this->id = id;
     name = "speaker";
     isAction = action;
+    soundList = QStringList() << "Audio2_10sec.wma" << "Audio2_17sec.wma"
+                              << "Audio2_2sec.mp3" << "Audio2_4sec.wma"
+                              << "Audio2_7sec.wma" << "Audio3_4sec.mp3"
+                              << "Audio3_7sec.wma" << "Audio4_4sec.mp3"
+                              << "Audio4_7sec.wma" << "Audio5_7sec.wma"
+                              << "Audio_10sec.wma" << "Audio_12sec.wma"
+                              << "Audio_14sec.mp3" << "Audio_15sec.wma"
+                              << "Audio_17sec.wma" << "Audio_20sec.wma"
+                              << "Audio_21sec.wma" << "Audio_2sec.wma"
+                              << "Audio_3sec.mp3" << "Audio_45sec.wma"
+                              << "Audio_4sec.wma" << "Audio_60sec.wma"
+                              << "Audio_7sec.wma" << "Audio_8sec.wma"
+                              << "Audio_9sec.wma";
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -1149,7 +1162,7 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
     /* Add elements for control over the sound file ***************************/
     layout->addWidget(new QLabel("Sound file"), row_index, 1);
     sound = new QComboBox();
-    sound->addItems(QStringList() << "Hello.wav" << "Bravo.wav" << "Beep.wav");
+    sound->addItems(soundList);
     sound->setEnabled(false);
     layout->addWidget(sound, row_index, 2, 1, 2);
     row_index++;
