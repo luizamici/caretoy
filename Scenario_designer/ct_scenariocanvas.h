@@ -8,6 +8,7 @@
 
 //temporary
 #include "TableOfScenarios/ct_dbconn.h"
+#include "TableOfScenarios/ct_logger.h"
 
 class CTScenarioCanvas : public QWidget
 {
@@ -29,6 +30,7 @@ private:
     int getPositionIndex(QPoint eventPos, bool dropIndex);
     void updateBlockSequence();
 
+    Log4Qt::Logger *p_logger;
     QString id_scenario;
     QString description;
     QString execution_day;

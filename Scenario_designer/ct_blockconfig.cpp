@@ -12,6 +12,8 @@ CTBlockConfig::CTBlockConfig(QWidget *parent) :
     connect(ui->qpb_reset, SIGNAL(clicked()), this, SLOT(resetConfig()));
     connect(ui->qpb_save, SIGNAL(clicked()), this, SLOT(saveConfiguration()));
     connect(ui->qpb_cancel, SIGNAL(clicked()), this, SLOT(close()));
+
+    p_logger = Log4Qt::Logger::logger("CTBlockConfig");
 }
 
 CTBlockConfig::~CTBlockConfig()
@@ -22,6 +24,7 @@ CTBlockConfig::~CTBlockConfig()
 
 void CTBlockConfig::showParameters(int id, QString xml)
 {
+    p_logger->info("CTBlockConfig::showParameters begin...");
     this->id = id;
 
     switch (id) {
@@ -31,7 +34,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         ui->qsa_config->setWidget(config);
         if (!xml.isEmpty()) {
             if(!config->setParameters(xml))
-               qDebug() << "Parameters not set!";
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Flower' not set!");
+                qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -42,7 +49,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Mickey' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -53,7 +64,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Ring' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -64,7 +79,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Stick' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -75,7 +94,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'UToy' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -86,7 +109,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Arch' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -97,7 +124,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Screen' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -108,7 +139,11 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Wall left' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
@@ -119,17 +154,23 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
+            {
+                p_logger->warn("CTBlockconfig::showParameter ;"
+                               "parameters for block 'Wall right' not set!");
                 qDebug() << "Parameters not set!";
+            }
         }
         break;
     }
     default:
         break;
     }
+    p_logger->info("CTBlockConfig::showParameters end");
 }
 
 void CTBlockConfig::resetConfig()
 {
+    p_logger->info("CTBlockConfig::resetConfig begin...");
     switch (id) {
     case CT_BLOCK_STICK:
     {
@@ -197,10 +238,12 @@ void CTBlockConfig::resetConfig()
     default:
         break;
     }
+    p_logger->info("CTBlockConfig::resetConfig end");
 }
 
 void CTBlockConfig::saveConfiguration()
 {
+    p_logger->info("CTBlockConfig::saveConfiguration begin...");
     switch (id) {
     case CT_BLOCK_STICK:
     {
@@ -259,6 +302,6 @@ void CTBlockConfig::saveConfiguration()
     default:
         break;
     }
-
+    p_logger->info("CTBlockConfig::saveConfiguration end");
     close();
 }

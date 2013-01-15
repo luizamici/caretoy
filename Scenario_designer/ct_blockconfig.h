@@ -23,6 +23,9 @@
 #include "ct_confwallright.h"
 #include "ct_confwallscreen.h"
 
+//Temporary
+#include "TableOfScenarios/ct_logger.h"
+
 namespace Ui { class CTBlockConfig; }
 
 class CTBlockConfig : public QDialog
@@ -37,6 +40,7 @@ public:
 private:
     Ui::CTBlockConfig *ui;
     int id;
+    Log4Qt::Logger *p_logger;
 
 signals:
     void finishedConfig(QString xml);

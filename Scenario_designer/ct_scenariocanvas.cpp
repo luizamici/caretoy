@@ -4,6 +4,7 @@
 
 CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
 {
+    p_logger = Log4Qt::Logger::logger("CTScenarioCanvas");
     // Initialize member variables
     this->dragStartPosition = QPoint();
     this->contentLayout = 0;
@@ -13,6 +14,7 @@ CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
 // Initialize the widget.
 void CTScenarioCanvas::initialize()
 {
+    p_logger->info( "CTScenarioCanvas::initialize() begin...");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
 
@@ -32,11 +34,14 @@ void CTScenarioCanvas::initialize()
     this->contentLayout->setSpacing(10);
     helpLayout->addLayout(this->contentLayout);
     helpLayout->addStretch();
+    p_logger->info("CTScenarioCanvas::initialize() end");
 }
 
 // Determine linear position index on the grid layout.
 int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
 {
+
+    p_logger->info( "CTScenarioCanvas::getPositionIndex() begin...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
 
@@ -48,12 +53,14 @@ int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
     else { columnIndex = eventPos.x() / cellEdge; }
 
     int rowIndex = eventPos.y() / cellEdge;
+    p_logger->info( "CTScenarioCanvas::getPositionIndex() end");
     return (numberOfColumns * rowIndex) + columnIndex;
 }
 
 // Update the scenario canvas with the current sequence of blocks.
 void CTScenarioCanvas::updateBlockSequence()
 {
+    p_logger->info( "CTScenarioCanvas::updateBlockSequence() begin...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
     for (int i = 0; i < this->blocks.count(); i++)
@@ -65,6 +72,7 @@ void CTScenarioCanvas::updateBlockSequence()
     {
         qDebug() << i << ": " << this->blocks.at(i)->getName();
     }
+    p_logger->info( "CTScenarioCanvas::updateBlockSequence() end");
 }
 
 // Record initial position for a drag operation.
@@ -270,6 +278,7 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
 // Clear the scenario sequence.
 void CTScenarioCanvas::resetScenario()
 {
+    p_logger->info( "CTScenarioCanvas::resetScenario() begin...");
     while (!this->blocks.isEmpty())
     {
         CTSimpleBlock *tmp = this->blocks.takeFirst();
@@ -279,12 +288,14 @@ void CTScenarioCanvas::resetScenario()
     description.clear();
     execution_day.clear();
     execution_order.clear();
+    p_logger->info( "CTScenarioCanvas::resetScenario() end");
 }
 
 
 /*Load selected scenario*/
 void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
 {
+    p_logger->info( "CTScenarioCanvas::loadScenario() begin...");
     /*clearing the canvas*/
     resetScenario();
 
@@ -390,6 +401,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
         }
     }
     updateBlockSequence();
+    p_logger->info( "CTScenarioCanvas::loadScenario() end");
 }
 
 
@@ -398,6 +410,7 @@ void CTScenarioCanvas::saveScenario(QString description,
                                       QString execution_day,
                                       QString execution_order)
 {
+    p_logger->info( "CTScenarioCanvas::saveScenario() begin...");
     QHash<QString,QString> scenario;
     if(!this->blocks.isEmpty())
     {
@@ -413,6 +426,10 @@ void CTScenarioCanvas::saveScenario(QString description,
         for (int i = 0; i < this->blocks.count(); i++)
         {
             QString xml = this->blocks.at(i)->getConfiguration("Using sax parser");
+            if(xml.isEmpty())
+                p_logger->warn("CTScenarioCanvas::saveScenario() "
+                              " Found configuration empty for block :"
+                              + this->blocks.at(i)->getName());
             QXmlStreamReader reader(xml);
             while(!reader.atEnd())
             {
@@ -447,6 +464,7 @@ void CTScenarioCanvas::saveScenario(QString description,
 
         emit save(scenario);
     }
+    p_logger->info( "CTScenarioCanvas::saveScenario() end");
 }
 
 bool CTScenarioCanvas::isNewScenario()

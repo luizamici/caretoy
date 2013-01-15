@@ -160,6 +160,7 @@ public:
     int id;
     QString name;
     bool isAction;
+    QStringList soundList;
     QCheckBox *state;
     QCheckBox *left_front;
     QCheckBox *left_rear;

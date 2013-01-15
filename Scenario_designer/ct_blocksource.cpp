@@ -4,11 +4,13 @@ CTBlockSource::CTBlockSource(QWidget *parent) : QWidget(parent)
 {
     // Initialize member variables
     this->dragStartPosition = QPoint();
+    p_logger = Log4Qt::Logger::logger("CTBlockSource");
 }
 
 // Initialize the widget based on the defined/supplied block names.
 void CTBlockSource::initialize()
 {
+    p_logger->info("CTBlockSource::initialize begin...");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
 
@@ -35,6 +37,8 @@ void CTBlockSource::initialize()
     layout->addWidget(block_wall_screen);
     CTSimpleBlock *block_arch = new CTSimpleBlock(CT_BLOCK_ARCH);
     layout->addWidget(block_arch);
+
+    p_logger->info("CTBlockSource::initialize end");
 }
 
 // Record initial position for a drag operation.

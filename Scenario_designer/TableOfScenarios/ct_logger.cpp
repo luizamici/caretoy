@@ -14,8 +14,12 @@ void CTLogger::initialize()
     p_layout->setName(QLatin1String("My Layout"));
     p_layout->activateOptions();
 
+    //TODO add a function for checking if the file exists,
+    //in case it doesnt' it creates it
+    //TODO add a function to check the file size
+    //in case it's too big it creates a new one without canceling the old file
     Log4Qt::FileAppender *f_appender = new Log4Qt::FileAppender(
-                p_layout,"/informatik/home/mici/git_caretoy/caretoy/log4qt/prova.log");
+                p_layout,"/informatik/home/mici/git_caretoy/caretoy/log4qt/caretoy.log");
     f_appender->setName(QLatin1String("File appender"));
     f_appender->setAppendFile(true);
     f_appender->activateOptions();
