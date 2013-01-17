@@ -202,6 +202,7 @@ public:
     int id;
     QString name;
     bool isAction;
+    QStringList moviesList;
     QCheckBox *state;
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;

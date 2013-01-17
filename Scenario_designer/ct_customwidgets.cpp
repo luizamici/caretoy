@@ -1410,7 +1410,16 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     this->id = id;
     name = "screen";
     isAction = action;
-
+    moviesList = QStringList() << "shipfrombottomthanleft.wmv"
+                               << "animalsinthecentre.wmv"
+                               << "animalsinthecentre_2.wmv"
+                               << "ballfromleft_rotating.wmv"
+                               << "catfromright_middle.wmv"
+                               << "ducksfromthebottom.wmv"
+                               << "frogformleft_high.wmv"
+                               << "jumpingtiger.wmv"
+                               << "mickey_mouse_cucu.wmv"
+                               << "monkeyfromleft_low.wmv";
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
     layout->setMargin(0);
@@ -1470,7 +1479,7 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
     /* Add elements for control over the video file ***************************/
     layout->addWidget(new QLabel("Video file"), row_index, 1);
     video = new QComboBox();
-    video->addItems(QStringList() << "Tiger.avi" << "Sheep.avi" << "Ducks.avi");
+    video->addItems(moviesList);
     video->setEnabled(false);
     layout->addWidget(video, row_index, 2, 1, 2);
 
