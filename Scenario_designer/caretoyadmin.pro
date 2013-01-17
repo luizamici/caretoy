@@ -7,7 +7,7 @@ TEMPLATE = app
 CONFIG -= app_bundle
 CONFIG += DEBUG
 
-include(/informatik/home/mici/git_caretoy/caretoy/log4qt/src/log4qt/log4qt.pri)
+include(/informatik/home/mici/git_caretoy/log4qt/src/log4qt/log4qt.pri)
 
 SOURCES += main.cpp \
     ct_customwidgets.cpp \
