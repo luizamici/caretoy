@@ -5,6 +5,8 @@
 #include <QtXml>
 #include "ct_simpleblock.h"
 
+#include "ct_logger.h"
+
 class CTBlockSource : public QWidget
 {
     Q_OBJECT

@@ -23,6 +23,8 @@
 #include "ct_confwallright.h"
 #include "ct_confwallscreen.h"
 
+#include "ct_logger.h"
+
 namespace Ui { class CTBlockConfig; }
 
 class CTBlockConfig : public QDialog

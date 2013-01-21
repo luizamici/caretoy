@@ -70,48 +70,53 @@ QPixmap CTSimpleBlock::getImage()
 
 void CTSimpleBlock::setConfiguration(QString xml)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Entering CTSimpleBlock::setConfiguration ... ");
+    if(xml.isEmpty())
+        Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
+                    "CTSimpleBlock::setConfiguration -> setting empty configuration!");
     xml_config = xml;
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Exit CTSimpleBlock::setConfiguration . ");
 }
 
 QString CTSimpleBlock::getConfiguration(QString str)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Entering CTSimpleBlock::getConfiguration ... ");
     str = "Using Sax Parser";
+    if(xml_config.isEmpty())
+        Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
+                    "CTSimpleBlock::getConfiguration -> configuration empty!");
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Exit CTSimpleBlock::getConfiguration . ");
     return xml_config;
 }
 
-void CTSimpleBlock::setConfiguration(QDomElement root)
-{
-    config = root;
-    QString comment = config.namedItem("comment").toElement().text();
-    if (comment.isEmpty())
-    {
-        ui->qlb_block_info->setToolTip("No additional description available.");
-    }
-    else { ui->qlb_block_info->setToolTip("<font color=black>" + comment + "</font>"); }
-}
-
-QDomElement CTSimpleBlock::getConfiguration()
-{
-    return config;
-}
 
 void CTSimpleBlock::enableConfig(bool value) { configurable = value; }
 
+
 void CTSimpleBlock::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Entering CTSimpleBlock::mouseDoubleClickEvent ... ");
     if ((Qt::LeftButton & event->buttons()) && configurable)
     {
         event->accept();
         CTBlockConfig block_config;
         block_config.setWindowTitle("Block configuration: " +
                                     ui->qlb_block_name->text());
-//        block_config.showParameters(id, config);
         block_config.showParameters(id, xml_config);
         connect(&block_config,SIGNAL(finishedConfig(QString)),
                 this, SLOT(setConfiguration(QString)));
-//        connect(&block_config, SIGNAL(finishedConfig(QDomElement)),
-//                this, SLOT(setConfiguration(QDomElement)));
         block_config.exec();
     }
-    else { event->ignore(); }
+    else {
+        Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
+                    "CTSimpleBlock::mouseDoubleClickEvent -> RightButton clicked!");
+        event->ignore();
+    }
+    Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
+                "Exit CTSimpleBlock::mouseDoubleClickEvent . ");
 }

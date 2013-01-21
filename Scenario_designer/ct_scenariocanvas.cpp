@@ -126,13 +126,14 @@ void CTScenarioCanvas::mouseMoveEvent(QMouseEvent *event)
     QString name = block->getName();
     QPixmap image = block->getImage();
     QString config;
-    QTextStream stream(&config);
-    block->getConfiguration().save(stream, 4);
+//    QTextStream stream(&config);
+    config = block->getConfiguration("Using Sax Parser");
     int positionIndex = this->getPositionIndex(this->dragStartPosition, false);
 
     // Pack block related data
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+
     dataStream << name << image << config << positionIndex;
 
     QMimeData *mimeData = new QMimeData();
@@ -236,7 +237,8 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         QDomDocument doc("");
         doc.setContent(config);
         //block->initialize(doc.firstChild().toElement());
-        block->setConfiguration(doc.firstChild().toElement());
+//        block->setConfiguration(doc.firstChild().toElement());
+        block->setConfiguration(config);
         block->enableConfig(true);
 
         // Insert the block into the sequence
@@ -420,6 +422,7 @@ void CTScenarioCanvas::getInfoAndSave()
 {
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Entering CTScenarioCanvas::getInfoAndSave ...");
+    QString name;
     if(!this->blocks.isEmpty())
     {
         QString xml_scenario;
@@ -451,7 +454,7 @@ void CTScenarioCanvas::getInfoAndSave()
         stream.writeEndDocument();
 
         /*Save to file*/
-        QString name = QFileDialog::getSaveFileName(this, "Save scenario", QDir::currentPath());
+        name = QFileDialog::getSaveFileName(this, "Save scenario", QDir::currentPath());
         if (!name.isNull())
         {
             QFile file(name);
@@ -463,6 +466,8 @@ void CTScenarioCanvas::getInfoAndSave()
             }
         }
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Saving scenario to file: " + name);
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::getInfoAndSave .");
 }

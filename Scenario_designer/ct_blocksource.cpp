@@ -9,6 +9,8 @@ CTBlockSource::CTBlockSource(QWidget *parent) : QWidget(parent)
 // Initialize the widget based on the defined/supplied block names.
 void CTBlockSource::initialize()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Entering CTBlockSource::initialize ... ");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
 
@@ -19,22 +21,44 @@ void CTBlockSource::initialize()
 
     CTSimpleBlock *block_stick = new CTSimpleBlock(CT_BLOCK_STICK);
     layout->addWidget(block_stick);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Stick added ...");
     CTSimpleBlock *block_flower = new CTSimpleBlock(CT_BLOCK_FLOWER);
     layout->addWidget(block_flower);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Flower added ...");
     CTSimpleBlock *block_ring = new CTSimpleBlock(CT_BLOCK_RING);
     layout->addWidget(block_ring);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Ring added ...");
     CTSimpleBlock *block_mickey = new CTSimpleBlock(CT_BLOCK_MICKEY);
     layout->addWidget(block_mickey);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Mickey added ...");
     CTSimpleBlock *block_u = new CTSimpleBlock(CT_BLOCK_U);
     layout->addWidget(block_u);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Utoy added ...");
     CTSimpleBlock *block_wall_left = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
     layout->addWidget(block_wall_left);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Wall_left added ...");
     CTSimpleBlock *block_wall_right = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
     layout->addWidget(block_wall_right);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Wall_right added ...");
     CTSimpleBlock *block_wall_screen = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
     layout->addWidget(block_wall_screen);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Screen added ...");
     CTSimpleBlock *block_arch = new CTSimpleBlock(CT_BLOCK_ARCH);
     layout->addWidget(block_arch);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Arch added ...");
+
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Exit CTBlockSource::initialize . ");
+
 }
 
 // Record initial position for a drag operation.
@@ -74,8 +98,9 @@ void CTBlockSource::mouseMoveEvent(QMouseEvent *event)
     QString name = block->getName();
     QPixmap image = block->getImage();
     QString config;
-    QTextStream stream(&config);
-    block->getConfiguration().save(stream, 4);
+//    QTextStream stream(&config);
+//    block->getConfiguration().save(stream, 4);
+    config = block->getConfiguration("Using Sax Parser");
     int positionIndex = -1;
 
     // Pack block related data

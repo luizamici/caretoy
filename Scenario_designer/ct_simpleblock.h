@@ -5,6 +5,8 @@
 #include <QtXml>
 #include "ct_blockconfig.h"
 
+#include "ct_logger.h"
+
 namespace Ui { class CTSimpleBlock; }
 
 class CTSimpleBlock : public QFrame
@@ -16,7 +18,6 @@ public:
     ~CTSimpleBlock();
     QString getName();
     QPixmap getImage();
-    QDomElement getConfiguration();
     QString getConfiguration(QString str);
     void enableConfig(bool value);
 
@@ -31,7 +32,6 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
 
 public slots:
-    void setConfiguration(QDomElement root);
     void setConfiguration(QString xml);
 };
 
