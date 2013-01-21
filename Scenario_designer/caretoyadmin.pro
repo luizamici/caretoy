@@ -7,6 +7,8 @@ TEMPLATE = app
 CONFIG -= app_bundle
 CONFIG += DEBUG
 
+include(./include/log4qt/src/log4qt/log4qt.pri)
+
 SOURCES += main.cpp \
     ct_customwidgets.cpp \
     ct_conftoystick.cpp \
@@ -24,7 +26,8 @@ SOURCES += main.cpp \
     ct_scenarioconfig.cpp \
     ct_scenariocanvas.cpp \
     ct_blocksource.cpp \
-    ct_xmlhandler.cpp
+    ct_xmlhandler.cpp \
+    ct_logger.cpp
 
 HEADERS += \
     ct_customwidgets.h \
@@ -43,7 +46,8 @@ HEADERS += \
     ct_scenarioconfig.h \
     ct_scenariocanvas.h \
     ct_blocksource.h \
-    ct_xmlhandler.h
+    ct_xmlhandler.h \
+    ct_logger.h
 
 FORMS += \
     ct_conftoystick.ui \
