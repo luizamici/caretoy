@@ -6,6 +6,8 @@
 #include "ct_blocksource.h"
 #include "ct_trashcan.h"
 
+#include "ct_logger.h"
+
 class CTScenarioConfig : public QWidget
 {
     Q_OBJECT

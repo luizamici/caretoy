@@ -7,6 +7,7 @@
 
 //temporary
 #include "ct_dbconn.h"
+#include "ct_logger.h"
 
 class CTScenarioCanvas : public QWidget
 {

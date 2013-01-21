@@ -4,15 +4,21 @@
 
 CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas's constructor... ");
     // Initialize member variables
     this->dragStartPosition = QPoint();
     this->contentLayout = 0;
     this->blocks.clear();
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas's constructor. ");
 }
 
 // Initialize the widget.
 void CTScenarioCanvas::initialize()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::initialize ...");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
 
@@ -32,11 +38,15 @@ void CTScenarioCanvas::initialize()
     this->contentLayout->setSpacing(10);
     helpLayout->addLayout(this->contentLayout);
     helpLayout->addStretch();
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::initialize . ");
 }
 
 // Determine linear position index on the grid layout.
 int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::getPositionIndex ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
 
@@ -48,23 +58,35 @@ int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
     else { columnIndex = eventPos.x() / cellEdge; }
 
     int rowIndex = eventPos.y() / cellEdge;
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::getPositionIndex .");
     return (numberOfColumns * rowIndex) + columnIndex;
 }
 
 // Update the scenario canvas with the current sequence of blocks.
 void CTScenarioCanvas::updateBlockSequence()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::updateBlockSequence ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
     for (int i = 0; i < this->blocks.count(); i++)
     {
         this->contentLayout->addWidget(this->blocks.at(i), i/numberOfColumns, i%numberOfColumns);
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "CTScenarioCanvas::updateBlockSequence -> UPDATE: Number of blocks: "
+                + this->blocks.count());
     qDebug() << "UPDATE: Number of blocks: " << this->blocks.count();
     for (int i = 0; i < this->blocks.count(); i++)
     {
+        Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                    "CTScenarioCanvas::updateBlockSequence -> " + QString::number(i) + ": "
+                    + this->blocks.at(i)->getName());
         qDebug() << i << ": " << this->blocks.at(i)->getName();
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::updateBlockSequence .");
 }
 
 // Record initial position for a drag operation.
@@ -270,16 +292,22 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
 // Clear the scenario sequence.
 void CTScenarioCanvas::resetScenario()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::resetScenario ...");
     while (!this->blocks.isEmpty())
     {
         CTSimpleBlock *tmp = this->blocks.takeFirst();
         delete tmp;
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::resetScenario .");
 }
 
 /*Load scenario from file*/
 void CTScenarioCanvas::loadScenario()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::loadScenario ...");
     QString name = QFileDialog::getOpenFileName(this, "Load scenario", QDir::currentPath());
     if (!name.isNull())
     {
@@ -383,11 +411,15 @@ void CTScenarioCanvas::loadScenario()
             file->close();
         }
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::loadScenario .");
 }
 
 
 void CTScenarioCanvas::getInfoAndSave()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::getInfoAndSave ...");
     if(!this->blocks.isEmpty())
     {
         QString xml_scenario;
@@ -431,5 +463,7 @@ void CTScenarioCanvas::getInfoAndSave()
             }
         }
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::getInfoAndSave .");
 }
 

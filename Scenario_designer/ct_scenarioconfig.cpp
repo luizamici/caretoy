@@ -2,6 +2,8 @@
 
 CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioConfig"))->info(
+                "Starting to create the scenario configuration widget... ");
     // Initialize/configure visual appearance
     this->setWindowTitle("Scenario configuration");
     this->setFixedSize(1100, 700);
@@ -72,5 +74,8 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     // Center the widget on the screen
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
+
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioConfig"))->info(
+                "Scenario configuration widget created! ");
 }
 
