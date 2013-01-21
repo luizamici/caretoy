@@ -4,10 +4,12 @@ CTLogger::CTLogger()
 {
 }
 
-void CTLogger::initialize()
+void CTLogger::initialize(QString filePath)
 {
     // Create a layout
 //    Log4Qt::LogManager::rootLogger();
+
+    qDebug() <<filePath;
     Log4Qt::TTCCLayout *p_layout = new Log4Qt::TTCCLayout();
 
     p_layout->setDateFormat("ISO8601");
@@ -19,7 +21,7 @@ void CTLogger::initialize()
     //TODO add a function to check the file size
     //in case it's too big it creates a new one without canceling the old file
     Log4Qt::FileAppender *f_appender = new Log4Qt::FileAppender(
-                p_layout,"/informatik/home/mici/git_caretoy/caretoy/log4qt/caretoy.log");
+                p_layout,filePath + "/log4qt/caretoy.log");
     f_appender->setName(QLatin1String("File appender"));
     f_appender->setAppendFile(true);
     f_appender->activateOptions();

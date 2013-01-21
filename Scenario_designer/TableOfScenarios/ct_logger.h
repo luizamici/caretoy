@@ -16,7 +16,7 @@ class CTLogger
 public:
     CTLogger();
 
-    void initialize();
+    void initialize(QString filePath);
 };
 
 #endif // CT_LOGGER_H

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("CaretoyAdmin");
 
     CTLogger logger;
-    logger.initialize();
+    logger.initialize(app.applicationDirPath());
 
     CTTableOfScenarios *tableOfScenarios = new CTTableOfScenarios();
     tableOfScenarios->setAttribute(Qt::WA_DeleteOnClose);
