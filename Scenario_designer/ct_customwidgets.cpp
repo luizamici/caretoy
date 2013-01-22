@@ -225,48 +225,48 @@ void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
 }
 
 //TOBE deprecated
-void CTBigLight::setParameters(QDomElement root)
-{
-    if ("true" == root.attribute("enabled")) { state->setChecked(true); }
+//void CTBigLight::setParameters(QDomElement root)
+//{
+//    if ("true" == root.attribute("enabled")) { state->setChecked(true); }
 
-    if (NULL != activation)
-    {
-        double val_activation =
-                root.namedItem("activation").toElement().text().toDouble();
-        activation->setValue(val_activation);
-    }
-    if(NULL != duration_min && NULL != duration_max)
-    {
-        QDomElement xml_duration = root.namedItem("duration").toElement();
-        double val_duration_min =
-                xml_duration.namedItem("from").toElement().text().toDouble();
-        double val_duration_max =
-                xml_duration.namedItem("to").toElement().text().toDouble();
-        duration_min->setMinimum(val_duration_min);
-        duration_min->setValue(val_duration_min);
-        duration_max->setValue(val_duration_max);
-    }
-    QDomElement xml_intensity = root.namedItem("intensity").toElement();
-    int val_intensity_min =
-            xml_intensity.namedItem("from").toElement().text().toInt();
-    int val_intensity_max =
-            xml_intensity.namedItem("to").toElement().text().toInt();
-    intensity_min->setMinimum(val_intensity_min);
-    intensity_min->setValue(val_intensity_min);
-    intensity_max->setValue(val_intensity_max);
+//    if (NULL != activation)
+//    {
+//        double val_activation =
+//                root.namedItem("activation").toElement().text().toDouble();
+//        activation->setValue(val_activation);
+//    }
+//    if(NULL != duration_min && NULL != duration_max)
+//    {
+//        QDomElement xml_duration = root.namedItem("duration").toElement();
+//        double val_duration_min =
+//                xml_duration.namedItem("from").toElement().text().toDouble();
+//        double val_duration_max =
+//                xml_duration.namedItem("to").toElement().text().toDouble();
+//        duration_min->setMinimum(val_duration_min);
+//        duration_min->setValue(val_duration_min);
+//        duration_max->setValue(val_duration_max);
+//    }
+//    QDomElement xml_intensity = root.namedItem("intensity").toElement();
+//    int val_intensity_min =
+//            xml_intensity.namedItem("from").toElement().text().toInt();
+//    int val_intensity_max =
+//            xml_intensity.namedItem("to").toElement().text().toInt();
+//    intensity_min->setMinimum(val_intensity_min);
+//    intensity_min->setValue(val_intensity_min);
+//    intensity_max->setValue(val_intensity_max);
 
-    QDomElement xml_rings = root.namedItem("area").toElement();
-    int val_rings_min =
-            xml_rings.namedItem("from").toElement().text().toInt();
-    int val_rings_max =
-            xml_rings.namedItem("to").toElement().text().toInt();
-    rings_min->setValue(val_rings_min);
-    rings_min->setValue(val_rings_min);
-    rings_max->setValue(val_rings_max);
+//    QDomElement xml_rings = root.namedItem("area").toElement();
+//    int val_rings_min =
+//            xml_rings.namedItem("from").toElement().text().toInt();
+//    int val_rings_max =
+//            xml_rings.namedItem("to").toElement().text().toInt();
+//    rings_min->setValue(val_rings_min);
+//    rings_min->setValue(val_rings_min);
+//    rings_max->setValue(val_rings_max);
 
-    QString val_color = root.namedItem("color").toElement().text();
-    color->setCurrentIndex(color->findText(val_color));
-}
+//    QString val_color = root.namedItem("color").toElement().text();
+//    color->setCurrentIndex(color->findText(val_color));
+//}
 
 
 void CTBigLight::getParameters(QXmlStreamWriter &stream){
@@ -312,61 +312,61 @@ void CTBigLight::getParameters(QXmlStreamWriter &stream){
 
 
 //TOBE deprecated
-QDomElement CTBigLight::getParameters()
-{
-    QDomDocument doc;
-    QDomElement root;
+//QDomElement CTBigLight::getParameters()
+//{
+//    QDomDocument doc;
+//    QDomElement root;
 
-    if (NULL != activation) { root = doc.createElement("stimulus"); }
-    else { root = doc.createElement("action"); }
-    root.setAttribute("enabled", state->isChecked() ? "true" : "false");
-    root.setAttribute("id", id);
-    root.setAttribute("name", name);
+//    if (NULL != activation) { root = doc.createElement("stimulus"); }
+//    else { root = doc.createElement("action"); }
+//    root.setAttribute("enabled", state->isChecked() ? "true" : "false");
+//    root.setAttribute("id", id);
+//    root.setAttribute("name", name);
 
-    if (NULL != activation)
-    {
-        QDomElement xml_activation = doc.createElement("activation");
-        root.appendChild(xml_activation);
-        xml_activation.appendChild(doc.createTextNode(activation->cleanText()));
-    }
-    if(NULL != duration_min && NULL!= duration_max)
-    {
-        QDomElement xml_duration = doc.createElement("duration");
-        root.appendChild(xml_duration);
-        QDomElement xml_duration_min = doc.createElement("from");
-        xml_duration.appendChild(xml_duration_min);
-        xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-        QDomElement xml_duration_max = doc.createElement("to");
-        xml_duration.appendChild(xml_duration_max);
-        xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
-    }
+//    if (NULL != activation)
+//    {
+//        QDomElement xml_activation = doc.createElement("activation");
+//        root.appendChild(xml_activation);
+//        xml_activation.appendChild(doc.createTextNode(activation->cleanText()));
+//    }
+//    if(NULL != duration_min && NULL!= duration_max)
+//    {
+//        QDomElement xml_duration = doc.createElement("duration");
+//        root.appendChild(xml_duration);
+//        QDomElement xml_duration_min = doc.createElement("from");
+//        xml_duration.appendChild(xml_duration_min);
+//        xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
+//        QDomElement xml_duration_max = doc.createElement("to");
+//        xml_duration.appendChild(xml_duration_max);
+//        xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
+//    }
 
-    QDomElement xml_intensity = doc.createElement("intensity");
-    root.appendChild(xml_intensity);
-    QDomElement xml_intensity_min = doc.createElement("from");
-    xml_intensity.appendChild(xml_intensity_min);
-    xml_intensity_min.appendChild(
-                doc.createTextNode(intensity_min->cleanText()));
-    QDomElement xml_intensity_max = doc.createElement("to");
-    xml_intensity.appendChild(xml_intensity_max);
-    xml_intensity_max.appendChild(
-                doc.createTextNode(intensity_max->cleanText()));
+//    QDomElement xml_intensity = doc.createElement("intensity");
+//    root.appendChild(xml_intensity);
+//    QDomElement xml_intensity_min = doc.createElement("from");
+//    xml_intensity.appendChild(xml_intensity_min);
+//    xml_intensity_min.appendChild(
+//                doc.createTextNode(intensity_min->cleanText()));
+//    QDomElement xml_intensity_max = doc.createElement("to");
+//    xml_intensity.appendChild(xml_intensity_max);
+//    xml_intensity_max.appendChild(
+//                doc.createTextNode(intensity_max->cleanText()));
 
-    QDomElement xml_rings = doc.createElement("area");
-    root.appendChild(xml_rings);
-    QDomElement xml_rings_min = doc.createElement("from");
-    xml_rings.appendChild(xml_rings_min);
-    xml_rings_min.appendChild(doc.createTextNode(rings_min->cleanText()));
-    QDomElement xml_rings_max = doc.createElement("to");
-    xml_rings.appendChild(xml_rings_max);
-    xml_rings_max.appendChild(doc.createTextNode(rings_max->cleanText()));
+//    QDomElement xml_rings = doc.createElement("area");
+//    root.appendChild(xml_rings);
+//    QDomElement xml_rings_min = doc.createElement("from");
+//    xml_rings.appendChild(xml_rings_min);
+//    xml_rings_min.appendChild(doc.createTextNode(rings_min->cleanText()));
+//    QDomElement xml_rings_max = doc.createElement("to");
+//    xml_rings.appendChild(xml_rings_max);
+//    xml_rings_max.appendChild(doc.createTextNode(rings_max->cleanText()));
 
-    QDomElement xml_color = doc.createElement("color");
-    root.appendChild(xml_color);
-    xml_color.appendChild(doc.createTextNode(color->currentText()));
+//    QDomElement xml_color = doc.createElement("color");
+//    root.appendChild(xml_color);
+//    xml_color.appendChild(doc.createTextNode(color->currentText()));
 
-    return root;
-}
+//    return root;
+//}
 
 /* ########################################################################## */
 
@@ -506,36 +506,36 @@ void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
 }
 
 //TOBE deprecated
-void CTButton::setParameters(QDomElement root)
-{
-    if ("true" == root.attribute("enabled")) { state->setChecked(true); }
+//void CTButton::setParameters(QDomElement root)
+//{
+//    if ("true" == root.attribute("enabled")) { state->setChecked(true); }
 
-    if (NULL != activation)
-    {
-        double val_activation =
-                root.namedItem("activation").toElement().text().toDouble();
-        activation->setValue(val_activation);
-    }
-    if(NULL != duration_min && NULL != duration_max)
-    {
-        QDomElement xml_duration = root.namedItem("duration").toElement();
-        double val_duration_min =
-                xml_duration.namedItem("from").toElement().text().toDouble();
-        double val_duration_max =
-                xml_duration.namedItem("to").toElement().text().toDouble();
-        duration_min->setMinimum(val_duration_min);
-        duration_min->setValue(val_duration_min);
-        duration_max->setValue(val_duration_max);
-    }
-    QDomElement xml_intensity = root.namedItem("intensity").toElement();
-    int val_intensity_min =
-            xml_intensity.namedItem("from").toElement().text().toInt();
-    int val_intensity_max =
-            xml_intensity.namedItem("to").toElement().text().toInt();
-    intensity_min->setMinimum(val_intensity_min);
-    intensity_min->setValue(val_intensity_min);
-    intensity_max->setValue(val_intensity_max);
-}
+//    if (NULL != activation)
+//    {
+//        double val_activation =
+//                root.namedItem("activation").toElement().text().toDouble();
+//        activation->setValue(val_activation);
+//    }
+//    if(NULL != duration_min && NULL != duration_max)
+//    {
+//        QDomElement xml_duration = root.namedItem("duration").toElement();
+//        double val_duration_min =
+//                xml_duration.namedItem("from").toElement().text().toDouble();
+//        double val_duration_max =
+//                xml_duration.namedItem("to").toElement().text().toDouble();
+//        duration_min->setMinimum(val_duration_min);
+//        duration_min->setValue(val_duration_min);
+//        duration_max->setValue(val_duration_max);
+//    }
+//    QDomElement xml_intensity = root.namedItem("intensity").toElement();
+//    int val_intensity_min =
+//            xml_intensity.namedItem("from").toElement().text().toInt();
+//    int val_intensity_max =
+//            xml_intensity.namedItem("to").toElement().text().toInt();
+//    intensity_min->setMinimum(val_intensity_min);
+//    intensity_min->setValue(val_intensity_min);
+//    intensity_max->setValue(val_intensity_max);
+//}
 
 
 void CTButton::getParameters(QXmlStreamWriter &stream){
@@ -571,47 +571,47 @@ void CTButton::getParameters(QXmlStreamWriter &stream){
 
 
 //TOBE deprecated
-QDomElement CTButton::getParameters()
-{
-    QDomDocument doc;
-    QDomElement root;
+//QDomElement CTButton::getParameters()
+//{
+//    QDomDocument doc;
+//    QDomElement root;
 
-    if (NULL != activation) { root = doc.createElement("stimulus"); }
-    else { root = doc.createElement("action"); }
-    root.setAttribute("enabled", state->isChecked() ? "true" : "false");
-    root.setAttribute("id", id);
-    root.setAttribute("name", name);
+//    if (NULL != activation) { root = doc.createElement("stimulus"); }
+//    else { root = doc.createElement("action"); }
+//    root.setAttribute("enabled", state->isChecked() ? "true" : "false");
+//    root.setAttribute("id", id);
+//    root.setAttribute("name", name);
 
-    if (NULL != activation)
-    {
-        QDomElement xml_activation = doc.createElement("activation");
-        root.appendChild(xml_activation);
-        xml_activation.appendChild(doc.createTextNode(activation->cleanText()));
-    }
-    if(NULL != duration_min && NULL!= duration_max)
-    {
-        QDomElement xml_duration = doc.createElement("duration");
-        root.appendChild(xml_duration);
-        QDomElement xml_duration_min = doc.createElement("from");
-        xml_duration.appendChild(xml_duration_min);
-        xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
-        QDomElement xml_duration_max = doc.createElement("to");
-        xml_duration.appendChild(xml_duration_max);
-        xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
-    }
-    QDomElement xml_intensity = doc.createElement("intensity");
-    root.appendChild(xml_intensity);
-    QDomElement xml_intensity_min = doc.createElement("from");
-    xml_intensity.appendChild(xml_intensity_min);
-    xml_intensity_min.appendChild(
-                doc.createTextNode(intensity_min->cleanText()));
-    QDomElement xml_intensity_max = doc.createElement("to");
-    xml_intensity.appendChild(xml_intensity_max);
-    xml_intensity_max.appendChild(
-                doc.createTextNode(intensity_max->cleanText()));
+//    if (NULL != activation)
+//    {
+//        QDomElement xml_activation = doc.createElement("activation");
+//        root.appendChild(xml_activation);
+//        xml_activation.appendChild(doc.createTextNode(activation->cleanText()));
+//    }
+//    if(NULL != duration_min && NULL!= duration_max)
+//    {
+//        QDomElement xml_duration = doc.createElement("duration");
+//        root.appendChild(xml_duration);
+//        QDomElement xml_duration_min = doc.createElement("from");
+//        xml_duration.appendChild(xml_duration_min);
+//        xml_duration_min.appendChild(doc.createTextNode(duration_min->cleanText()));
+//        QDomElement xml_duration_max = doc.createElement("to");
+//        xml_duration.appendChild(xml_duration_max);
+//        xml_duration_max.appendChild(doc.createTextNode(duration_max->cleanText()));
+//    }
+//    QDomElement xml_intensity = doc.createElement("intensity");
+//    root.appendChild(xml_intensity);
+//    QDomElement xml_intensity_min = doc.createElement("from");
+//    xml_intensity.appendChild(xml_intensity_min);
+//    xml_intensity_min.appendChild(
+//                doc.createTextNode(intensity_min->cleanText()));
+//    QDomElement xml_intensity_max = doc.createElement("to");
+//    xml_intensity.appendChild(xml_intensity_max);
+//    xml_intensity_max.appendChild(
+//                doc.createTextNode(intensity_max->cleanText()));
 
-    return root;
-}
+//    return root;
+//}
 
 /* ########################################################################## */
 

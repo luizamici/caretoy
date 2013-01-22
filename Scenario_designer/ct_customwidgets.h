@@ -64,9 +64,9 @@ public:
     CTSpinBox *rings_min;
     CTSpinBox *rings_max;
     QComboBox *color;
-    void setParameters(QDomElement root); //TOBE deprecated
+//    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters(); //TOBE deprecated
+//    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
 
 private:
@@ -92,9 +92,9 @@ public:
     CTDoubleSpinBox *duration_max;
     CTSpinBox *intensity_min;
     CTSpinBox *intensity_max;
-    void setParameters(QDomElement root); //TOBE deprecated
+//    void setParameters(QDomElement root); //TOBE deprecated
     void setParameters(bool b, QHash<QString,QVariant> attr);
-    QDomElement getParameters(); //TOBE deprecated
+//    QDomElement getParameters(); //TOBE deprecated
     void getParameters(QXmlStreamWriter &stream);
 
 private:

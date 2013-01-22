@@ -15,9 +15,9 @@ class CTConfWallLeft : public QWidget
 public:
     explicit CTConfWallLeft(QWidget *parent = 0);
     ~CTConfWallLeft();
-    bool setParameters(QDomElement root);
+//    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
+//    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:
