@@ -7,6 +7,9 @@
 #include "ct_sqltable.h"
 #include "ct_logger.h"
 
+//#include "ct_xmlparser.h"
+//#include "ct_xmltableofscenarios.h"
+
 namespace Ui {
 class CTTableOfScenarios;
 }

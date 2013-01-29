@@ -8,6 +8,8 @@
 #include "ct_dbconn.h"
 #include "ct_sqlmodel.h"
 
+//#include "ct_xmltableofscenarios.h"
+
 class CTSqlTable : public QTableView
 {
     Q_OBJECT
@@ -16,6 +18,7 @@ public:
 
     CTDBConn *db;
     CTSqlModel *tableModel;
+//    CTXMLTableOfScenarios *xmlTableModel;
 
     void insertIntoTable(QSqlRecord scenarioRecord);
     void copyIntoTable(QSqlRecord scenarioRecord);

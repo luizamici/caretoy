@@ -33,7 +33,7 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
     /*enablig the sorting of the table by clicked column*/
     this->setSortingEnabled(true);
 
-    this->horizontalHeader()->resizeSections(QHeaderView :: ResizeToContents);
+//    this->horizontalHeader()->resizeSections(QHeaderView :: ResizeToContents);
     this->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     this->verticalHeader()->hide();
 
@@ -51,29 +51,29 @@ CTSqlTable::CTSqlTable(QWidget *parent) :
 
 bool CTSqlTable::save(QHash<QString, QString> scenario)
 {
-    if(scenario["id"] == ""){
-        QSqlRecord newScenario = tableModel->record();
+        if(scenario["id"] == ""){
+            QSqlRecord newScenario = tableModel->record();
 
-        foreach(QString key,scenario.keys()){
-            newScenario.setValue(key,scenario[key]);
+            foreach(QString key,scenario.keys()){
+                newScenario.setValue(key,scenario[key]);
+            }
+            insertIntoTable(newScenario);
+            return true;
+        }else{
+            QModelIndex index = getIndex(scenario["id"]);
+            int row = index.row();
+            foreach(QString key, scenario.keys()){
+                int fieldIndex = tableModel->fieldIndex(key);
+                QModelIndex indexOfCell = tableModel->index(row, fieldIndex);
+                /*
+                 *The changes are saved locally in the SQL model
+                 */
+                tableModel->setData(indexOfCell,scenario[key],Qt::EditRole);
+            }
+            submitAll();
+            return true;
         }
-        insertIntoTable(newScenario);
-        return true;
-    }else{
-        QModelIndex index = getIndex(scenario["id"]);
-        int row = index.row();
-        foreach(QString key, scenario.keys()){
-            int fieldIndex = tableModel->fieldIndex(key);
-            QModelIndex indexOfCell = tableModel->index(row, fieldIndex);
-            /*
-             *The changes are saved locally in the SQL model
-             */
-            tableModel->setData(indexOfCell,scenario[key],Qt::EditRole);
-        }
-        submitAll();
-        return true;
-    }
-    return false;
+        return false;
 }
 
 /*Inserts a new record in the table*/
@@ -144,30 +144,30 @@ QSqlRecord CTSqlTable::getSelectedRecord()
 
 QModelIndex CTSqlTable::getIndex(QString id_scenario)
 {
-    QModelIndex index;
-    for(int i = 0; i < tableModel->rowCount(); i++)
-    {
-        if(tableModel->data(tableModel->index(i,0)).toString() == id_scenario)
+        QModelIndex index;
+        for(int i = 0; i < tableModel->rowCount(); i++)
         {
-            index = tableModel->index(i,0);
+            if(tableModel->data(tableModel->index(i,0)).toString() == id_scenario)
+            {
+                index = tableModel->index(i,0);
+            }
         }
-    }
-    return index;
+        return index;
 }
 
 
 /*submits all cached changes*/
 bool CTSqlTable::submitAll()
 {
-    tableModel->database().transaction();
+        tableModel->database().transaction();
 
-    if(tableModel->submitAll()){
-        tableModel->database().commit();
-        emit success();
-        return true;}
-    else{
-        tableModel->database().rollback();
-        emit error("An error occurred: " + tableModel->lastError().text());
-        return false;
-    }
+        if(tableModel->submitAll()){
+            tableModel->database().commit();
+            emit success();
+            return true;}
+        else{
+            tableModel->database().rollback();
+            emit error("An error occurred: " + tableModel->lastError().text());
+            return false;
+        }
 }
