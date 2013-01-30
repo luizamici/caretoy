@@ -51,12 +51,27 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
 
     /*Alternative way for editing a scenario*/
     connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_edit_clicked()));
+
+    /*
+     *Signals are emitted if valid rows are selected from the table
+     */
+    connect(table->selectionModel(),SIGNAL(
+                selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(tableSelectionChanged(QItemSelection,QItemSelection)));
 }
 
+void CTViewOfScenarios::tableSelectionChanged(const QItemSelection &selected,
+                                              const QItemSelection &deselected)
+{
+    /*Checks if any rows on the table have been selected*/
+    if(!selected.indexes().isEmpty()){tableSelected = true;}
+    else{tableSelected = false;}
+}
 
 void CTViewOfScenarios::on_edit_clicked()
 {
-     editScenario(getSelected());
+    if(tableSelected)
+        editScenario(getSelected());
 }
 
 void CTViewOfScenarios::on_add_clicked()
@@ -65,10 +80,22 @@ void CTViewOfScenarios::on_add_clicked()
 }
 
 void CTViewOfScenarios::on_copy_clicked()
-{}
+{
+    if(tableSelected)
+    {
+        QModelIndex index = table->currentIndex();
+        xmlTable->copyRecord(index);
+    }
+}
 
 void CTViewOfScenarios::on_remove_clicked()
-{}
+{
+    if(tableSelected)
+    {
+        QModelIndex index = table->currentIndex();
+        xmlTable->deleteRecord(index);
+    }
+}
 
 
 QHash<QString,QString> CTViewOfScenarios::getSelected()
@@ -81,7 +108,14 @@ QHash<QString,QString> CTViewOfScenarios::getSelected()
     scenario["id"] = record.at(0);
     scenario["execution_day"] = record.at(1);
     scenario["execution_order"] = record.at(2);
+    scenario["creation_date"] = record.at(3);
     scenario["description"] = record.at(5);
     scenario["xml_description"] = record.at(6);
     return scenario;
+}
+
+
+void CTViewOfScenarios::save(QHash<QString, QString> scenario)
+{
+    xmlTable->save(scenario);
 }

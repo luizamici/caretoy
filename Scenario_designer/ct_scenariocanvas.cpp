@@ -286,6 +286,7 @@ void CTScenarioCanvas::resetScenario()
     }
     id_scenario.clear();
     description.clear();
+    creation_date.clear();
     execution_day.clear();
     execution_order.clear();
     p_logger->info( "CTScenarioCanvas::resetScenario() end");
@@ -302,6 +303,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     /*getting the id_scenario for editing*/
     id_scenario = scenario["id"];
     description = scenario["description"];
+    creation_date = scenario["creation_date"];
     execution_day = scenario["execution_day"];
     execution_order = scenario["execution_order"];
 
@@ -450,6 +452,9 @@ void CTScenarioCanvas::saveScenario(QString description,
             scenario["creation_date"] = QDateTime::currentDateTime().
                     toString("yyyy-MM-dd HH:mm");
         }
+        else
+            scenario["creation_date"] = creation_date;
+
         if(!id_scenario.isEmpty()){
             scenario["id"] = id_scenario;
         }
@@ -460,7 +465,8 @@ void CTScenarioCanvas::saveScenario(QString description,
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
         qDebug() << "******Scenario****";
-        qDebug() << xml_scenario;
+        qDebug() << scenario;
+//        qDebug() << xml_scenario;
 
         emit save(scenario);
     }

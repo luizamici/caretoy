@@ -33,6 +33,7 @@ private:
     Log4Qt::Logger *p_logger;
     QString id_scenario;
     QString description;
+    QString creation_date;
     QString execution_day;
     QString execution_order;
 

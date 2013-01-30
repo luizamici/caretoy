@@ -18,13 +18,26 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role) const;
+    bool insertRows(int position, int rows,
+                    const QModelIndex &index=QModelIndex());
+    bool removeRows(int position, int rows,
+                    const QModelIndex &index=QModelIndex());
+    bool setData(const QModelIndex &index, const QVariant &value,
+                 int role=Qt::EditRole);
 
     QVariant record(const QModelIndex &index) const;
+    void copyRecord(const QModelIndex &i);
+
+    void deleteRecord(const QModelIndex &index);
+    void save(QHash<QString, QString> scenario);
     
 private:
     int m_numRows;
     int m_numColumns;
     QList<QStringList> m_data;
+
+    QStringList map(QHash<QString,QString> scenario);
+    QModelIndex getIndex(QString id_scenario);
 
 signals:
     

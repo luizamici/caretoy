@@ -48,6 +48,11 @@ QList<QStringList> CTXmlParser::parseTable()
             }
 
         }
+        /*
+         *The characters in the xml are read in the following sequence:
+         *id,execution_day,execution_order,creation_date,last_edited,
+         *description, xml_description
+         */
         if(reader.isCharacters())
         {
             if(!reader.text().toString().trimmed().isEmpty())

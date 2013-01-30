@@ -22,7 +22,8 @@ CTDialog::~CTDialog()
 /*If save button was clicked*/
 void CTDialog::on_pushButton_clicked()
 {
-    emit accepted(ui->qle_description->text(),ui->qde_execution->text(),
+    emit accepted(ui->qle_description->text(),
+                  ui->qde_execution->date().toString("yyyy-MM-dd"),
                   ui->qsb_execution->text());
     this->close();
 }

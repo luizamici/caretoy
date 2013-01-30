@@ -32,11 +32,14 @@ int main(int argc, char *argv[])
     app.connect(view, SIGNAL(newScenario()), config->scenarioCanvas,
                 SLOT(resetScenario()));
 
+    app.connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
+                    view,SLOT(save(QHash<QString,QString>)));
+    app.connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
+                    config,SLOT(close()));
 
-
-    //    CTTableOfScenarios *tableOfScenarios = new CTTableOfScenarios();
-    //    tableOfScenarios->setAttribute(Qt::WA_DeleteOnClose);
-    //    tableOfScenarios->show();
+//    CTTableOfScenarios *tableOfScenarios = new CTTableOfScenarios();
+//    tableOfScenarios->setAttribute(Qt::WA_DeleteOnClose);
+//    tableOfScenarios->show();
 
 //    /*Temporary connections*/
 //    app.connect(tableOfScenarios,SIGNAL(newScenario()), config ,SLOT(show()));
