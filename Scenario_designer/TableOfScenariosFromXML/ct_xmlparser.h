@@ -20,6 +20,7 @@ public:
 
     int getNumRows(){return numRows;}
     int getNumColumns(){return numColumns;}
+    static void execParsedQuery(const QString &parsedQuery);
 
 private:
     QFile* file;

@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QAbstractTableModel>
 
+#include "ct_queryparser.h"
+#include "ct_xmlparser.h"
+
 class CTXMLTableOfScenarios : public QAbstractTableModel
 {
     Q_OBJECT
@@ -36,7 +39,10 @@ private:
     int m_numColumns;
     QList<QStringList> m_data;
 
+    bool insertRowIntoTable(const QVariant &values);
+
     QStringList map(QHash<QString,QString> scenario);
+    QHash<QString,QString> mapToHash(QStringList scenario);
     QModelIndex getIndex(QString id_scenario);
 
 signals:

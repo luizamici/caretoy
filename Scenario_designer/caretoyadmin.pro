@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     TableOfScenarios/ct_logger.cpp \
     TableOfScenariosFromXML/ct_xmltableofscenarios.cpp \
     TableOfScenariosFromXML/ct_xmlparser.cpp \
-    TableOfScenariosFromXML/ct_viewofscenarios.cpp
+    TableOfScenariosFromXML/ct_viewofscenarios.cpp \
+    TableOfScenariosFromXML/ct_queryparser.cpp
 
 HEADERS += \
     ct_customwidgets.h \
@@ -63,7 +64,8 @@ HEADERS += \
     TableOfScenarios/ct_logger.h \
     TableOfScenariosFromXML/ct_xmltableofscenarios.h \
     TableOfScenariosFromXML/ct_xmlparser.h \
-    TableOfScenariosFromXML/ct_viewofscenarios.h
+    TableOfScenariosFromXML/ct_viewofscenarios.h \
+    TableOfScenariosFromXML/ct_queryparser.h
 
 FORMS += \
     ct_conftoystick.ui \

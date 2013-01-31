@@ -465,7 +465,6 @@ void CTScenarioCanvas::saveScenario(QString description,
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
         qDebug() << "******Scenario****";
-        qDebug() << scenario;
 //        qDebug() << xml_scenario;
 
         emit save(scenario);

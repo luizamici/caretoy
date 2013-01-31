@@ -73,5 +73,10 @@ QList<QStringList> CTXmlParser::parseTable()
     return table;
 }
 
+void CTXmlParser::execParsedQuery(const QString &parsedQuery)
+{
+    qDebug() << parsedQuery;
+}
+
 
 

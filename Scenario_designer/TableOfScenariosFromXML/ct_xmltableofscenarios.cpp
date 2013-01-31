@@ -1,4 +1,6 @@
 #include "ct_xmltableofscenarios.h"
+#include "ct_queryparser.h"
+
 
 CTXMLTableOfScenarios::CTXMLTableOfScenarios(int numRows, int numColumns,
                                 QList<QStringList> data, QObject *parent)
@@ -109,6 +111,15 @@ bool CTXMLTableOfScenarios::setData(const QModelIndex &index,
     return false;
 }
 
+bool CTXMLTableOfScenarios::insertRowIntoTable(const QVariant &values)
+{
+    CTQueryParser queryParser;
+    QString initial_statement = queryParser.statement(
+                CTQueryParser::InsertStatement, "test_scenario", mapToHash(values.toStringList()));
+    CTXmlParser::execParsedQuery(initial_statement);
+    return true;
+}
+
 QVariant CTXMLTableOfScenarios::record(const QModelIndex &index) const
 {
     //TODO implement this using data()
@@ -162,6 +173,7 @@ void CTXMLTableOfScenarios::save(QHash<QString, QString> scenario)
                 qDebug() << "CTXMLTableOfScenarios::save invalid index!";
         }
         //Prepare INSERT query for the db in xml
+        insertRowIntoTable(this->record(newRowIndex));
     }
     else
     {
@@ -206,4 +218,17 @@ QStringList CTXMLTableOfScenarios::map(QHash<QString, QString> scenario)
     record.append(scenario["description"]);
     record.append(scenario["xml_description"]);
     return record;
+}
+
+QHash<QString,QString> CTXMLTableOfScenarios::mapToHash(QStringList scenario)
+{
+    QHash<QString,QString> scenario_hash;
+    scenario_hash["id"] = scenario.at(0);
+    scenario_hash["execution_day"] = scenario.at(1);
+    scenario_hash["execution_order"] = scenario.at(2);
+    scenario_hash["creation_date"] = scenario.at(3);
+    scenario_hash["last_edited"] = scenario.at(4);
+    scenario_hash["description"] = scenario.at(5);
+    scenario_hash["xml_description"] = scenario.at(6);
+    return scenario_hash;
 }
