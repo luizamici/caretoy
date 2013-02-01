@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QVariant>
 
+
 class CTQueryParser
 {
 public:
@@ -16,7 +17,7 @@ public:
 
 
     QString statement(StatementType type, const QString &tableName,
-                                 const QHash<QString, QString> &rec) const;
+                      const QHash<QString, QString> &rec) const;
 };
 
 #endif // CT_QUERYPARSER_H

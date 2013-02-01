@@ -2,8 +2,7 @@
 #include "ct_scenarioconfig.h"
 
 #include "TableOfScenariosFromXML/ct_viewofscenarios.h"
-#include "TableOfScenariosFromXML/ct_xmlparser.h"
-#include "TableOfScenariosFromXML/ct_xmltableofscenarios.h"
+#include "TableOfScenariosFromXML/ct_xmldataparser.h"
 
 #include "TableOfScenarios/ct_tableofscenarios.h"
 #include "TableOfScenarios/ct_logger.h"

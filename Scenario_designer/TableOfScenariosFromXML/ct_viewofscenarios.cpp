@@ -8,12 +8,10 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     this->setLayout(mainLayout);
     this->setFixedSize(1000, 400);
 
-    CTXmlParser *parser = new CTXmlParser();
+    CTXmlDataParser *parser = new CTXmlDataParser();
     parser->initialize();
-    QList<QStringList> data = parser->parseTable();
-    xmlTable = new CTXMLTableOfScenarios(parser->getNumRows(),
-                                          parser->getNumColumns(),
-                                          data);
+    CTTableData *table_data = parser->parseTable("test_scenario");
+    xmlTable = new CTTableModel(table_data, this->parentWidget());
     table = new QTableView();
     table->setModel(xmlTable);
 
@@ -101,17 +99,7 @@ void CTViewOfScenarios::on_remove_clicked()
 QHash<QString,QString> CTViewOfScenarios::getSelected()
 {
     QModelIndex index = table->currentIndex();
-    QStringList record = xmlTable->record(index).toStringList();
-
-    QHash<QString,QString> scenario;
-
-    scenario["id"] = record.at(0);
-    scenario["execution_day"] = record.at(1);
-    scenario["execution_order"] = record.at(2);
-    scenario["creation_date"] = record.at(3);
-    scenario["description"] = record.at(5);
-    scenario["xml_description"] = record.at(6);
-    return scenario;
+    return xmlTable->record(index);
 }
 
 

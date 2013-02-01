@@ -448,14 +448,14 @@ void CTScenarioCanvas::saveScenario(QString description,
         stream.writeEndElement();
         stream.writeEndDocument();
 
-        if(id_scenario.isEmpty()){
+        if(isNewScenario()){
             scenario["creation_date"] = QDateTime::currentDateTime().
                     toString("yyyy-MM-dd HH:mm");
         }
         else
             scenario["creation_date"] = creation_date;
 
-        if(!id_scenario.isEmpty()){
+        if(!isNewScenario()){
             scenario["id"] = id_scenario;
         }
         scenario["xml_description"] = xml_scenario;
@@ -465,7 +465,6 @@ void CTScenarioCanvas::saveScenario(QString description,
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
         qDebug() << "******Scenario****";
-//        qDebug() << xml_scenario;
 
         emit save(scenario);
     }

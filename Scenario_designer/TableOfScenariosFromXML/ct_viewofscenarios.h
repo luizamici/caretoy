@@ -5,8 +5,8 @@
 #include <QTableView>
 #include <QtGui>
 
-#include "ct_xmlparser.h"
-#include "ct_xmltableofscenarios.h"
+#include "ct_xmldataparser.h"
+#include "ct_tablemodel.h"
 
 class CTViewOfScenarios : public QWidget
 {
@@ -15,7 +15,7 @@ public:
     explicit CTViewOfScenarios(QWidget *parent = 0);
 
     QTableView *table;
-    CTXMLTableOfScenarios *xmlTable;
+    CTTableModel *xmlTable;
 
 private:
     QHash<QString,QString> getSelected();

@@ -21,14 +21,14 @@ QString CTQueryParser::statement(StatementType type, const QString &tableName,
         stream.writeAttribute("name", tableName);
         stream.writeStartElement("fields");
         stream.writeAttribute("number", QString::number(rec.size()));
-        foreach(QString key, rec.keys())
+        foreach(QString field_name, rec.keys())
         {
             stream.writeStartElement("field");
-            stream.writeAttribute("name",key);
-            if(key == "xml_description")
-                stream.writeCDATA(rec[key]);
+            stream.writeAttribute("name",field_name);
+            if(field_name.contains("xml"))
+                stream.writeCDATA(rec[field_name]);
             else
-                stream.writeCharacters(rec[key]);
+                stream.writeCharacters(rec[field_name]);
             stream.writeEndElement(); // end field
         }
         stream.writeEndElement();// end fields
