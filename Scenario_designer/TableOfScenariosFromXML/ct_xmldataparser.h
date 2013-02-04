@@ -10,6 +10,7 @@
 #include <QDebug>
 
 class CTTableData;
+class CTRowData;
 
 class CTXmlDataParser
 {
@@ -36,6 +37,13 @@ public:
     QList<QStringList> data;
     QList <QPair<QString,QString> > field_names;
     QHash<QString,QString> constraints;
+};
+
+//TOBE implemented for a better local structure of the DB table
+class CTRowData
+{
+public:
+    CTRowData();
 };
 
 #endif // CT_XMLPARSER_H

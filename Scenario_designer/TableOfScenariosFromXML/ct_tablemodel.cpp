@@ -72,8 +72,10 @@ bool CTTableModel::removeRows(int position, int rows, const QModelIndex &index)
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row=0; row < rows; ++row) {
+        QStringList record = p_table_data->data.at(position);
         p_table_data->data.removeAt(position);
         p_table_data->numRows--;
+        removeRowFromTable(mapToHash(record));
     }
 
     endRemoveRows();
@@ -95,13 +97,68 @@ bool CTTableModel::setData(const QModelIndex &index,
     return false;
 }
 
+bool CTTableModel::removeRowFromTable(const QHash<QString,QString> &values)
+{
+    QString initial_statement = CTQueryParser::xmlStatement(CTQueryParser::DeleteStatement,
+                                                         p_table_data->table_name,
+                                                         QHash<QString,QString>());
+    /*Getting only the primary keys for the where statement*/
+    QStringList primaryKeys;
+    foreach(QString fieldName, p_table_data->constraints.keys())
+    {
+        if(p_table_data->constraints[fieldName] == "primary_key")
+        {
+            primaryKeys.append(fieldName);
+        }
+    }
+    QHash<QString,QString> whereValues;
+    foreach(QString primaryKey, primaryKeys)
+    {
+        whereValues[primaryKey] = values[primaryKey];
+    }
+
+    QString where_statement = CTQueryParser::xmlStatement(CTQueryParser::WhereStatement,
+                                                       p_table_data->table_name,
+                                                       whereValues);
+    CTXmlDataParser::execParsedQuery(initial_statement + where_statement);
+    return true;
+}
+
 bool CTTableModel::insertRowIntoTable(const QHash<QString,QString> &values)
 {
-    CTQueryParser queryParser;
-    QString initial_statement = queryParser.statement(
+    QString initial_statement = CTQueryParser::xmlStatement(
                 CTQueryParser::InsertStatement, p_table_data->table_name,
                 values);
     CTXmlDataParser::execParsedQuery(initial_statement);
+    return true;
+}
+
+bool CTTableModel::updateRowInTable(const QHash<QString, QString> &values)
+{
+
+    QString initial_statement = CTQueryParser::xmlStatement(
+                CTQueryParser::UpdateStatement, p_table_data->table_name,
+                values);
+
+    /*Getting only the primary keys for the where statement*/
+    QStringList primaryKeys;
+    foreach(QString fieldName, p_table_data->constraints.keys())
+    {
+        if(p_table_data->constraints[fieldName] == "primary_key")
+        {
+            primaryKeys.append(fieldName);
+        }
+    }
+    QHash<QString,QString> whereValues;
+    foreach(QString primaryKey, primaryKeys)
+    {
+        whereValues[primaryKey] = values[primaryKey];
+    }
+
+    QString where_statement = CTQueryParser::xmlStatement(
+                CTQueryParser::WhereStatement, p_table_data->table_name,
+                whereValues);
+    CTXmlDataParser::execParsedQuery(initial_statement + where_statement);
     return true;
 }
 
@@ -173,6 +230,7 @@ void CTTableModel::save(QHash<QString, QString> record_hash)
             else
                 qDebug() << "CTableModel::save invalid index!";
         }
+        updateRowInTable(this->record(_index));
         //Prepare UPDATE query for the db in xml
     }
 }

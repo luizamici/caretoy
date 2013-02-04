@@ -62,6 +62,7 @@ CTTableData* CTXmlDataParser::parseTable(const QString &tableName)
 
         if(reader.isStartElement() && reader.name() == "constraint")
         {
+            /*_constraints['fieldname'] = type_of_constraint*/
             _constraints[reader.attributes().value("name").toString()] =
                     reader.attributes().value("type").toString();
         }
@@ -109,5 +110,9 @@ void CTXmlDataParser::execParsedQuery(const QString &parsedQuery)
 
 CTTableData::CTTableData(const QString &tableName)
     :table_name(tableName)
+{
+}
+
+CTRowData::CTRowData()
 {
 }

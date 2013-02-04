@@ -37,6 +37,8 @@ private:
     CTTableData *p_table_data;
 
     bool insertRowIntoTable(const QHash<QString, QString> &values);
+    bool updateRowInTable(const QHash<QString, QString> &values);
+    bool removeRowFromTable(const QHash<QString,QString> &values);
 
     QStringList map(QHash<QString,QString> record_hash);
     QHash<QString,QString> mapToHash(QStringList record);

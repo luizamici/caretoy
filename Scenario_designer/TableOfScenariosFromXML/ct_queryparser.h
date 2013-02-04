@@ -13,11 +13,10 @@ public:
     CTQueryParser();
 
     enum StatementType { WhereStatement, SelectStatement, UpdateStatement,
-                         InsertStatement, DeleteStatement };
+                         InsertStatement, DeleteStatement , InsertOrUpdateStatement};
 
-
-    QString statement(StatementType type, const QString &tableName,
-                      const QHash<QString, QString> &rec) const;
+    static QString xmlStatement(StatementType type, const QString &tableName,
+                      const QHash<QString, QString> &rec);
 };
 
 #endif // CT_QUERYPARSER_H
