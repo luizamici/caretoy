@@ -1,44 +1,19 @@
 #include "ct_xmldataparser.h"
+#include "ct_tabledata.h"
 
 CTXmlDataParser::CTXmlDataParser()
 {
-
 }
 
-/*
- *Open xml file containing the table of scenarios
- */
-void CTXmlDataParser::initialize()
+CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
 {
-
-    QString name = QFileDialog::getOpenFileName(0, "Load table of scenarios",
-                                                QDir::currentPath());
-    if (!name.isNull())
-    {
-        file = new QFile(name);
-        if (!file->open(QIODevice::ReadWrite | QIODevice::Text)) {
-            QMessageBox::critical(0,"CTXmlParser::initialize",
-                                     "Couldn't open " + name,
-                                     QMessageBox::Ok);
-            return;
-        }
-    }
-}
-
-/*
- *Binding the file containing the table of scenarios to the xml reader
- */
-CTTableData* CTXmlDataParser::parseTable(const QString &tableName)
-{
-    CTTableData *tableData = new CTTableData(tableName);
-
-    QXmlStreamReader reader(file);
-    QList<QStringList> _table;
-    QList <QPair<QString,QString> > _fields;
-    QPair<QString,QString> _field;
-    QHash<QString, QString> _constraints;
-    QStringList _record;
-    int num_row = 0;
+    QXmlStreamReader reader(table_data);
+    CTTableData *tableData;
+    CTTableRecord rec;
+    CTTableRecord _rec;
+    QList<CTTableField> fields;
+    QList< QPair< QString, CTTableField> > _constraints;
+    int i;
 
     while(!reader.atEnd())
     {
@@ -47,72 +22,69 @@ CTTableData* CTXmlDataParser::parseTable(const QString &tableName)
         /*When a new block is found*/
         if(reader.isStartElement() && reader.name() == "table")
         {
-            if(tableName != reader.attributes().value("name").toString())
-            {
-                qDebug() << "Table not recognized!";
-                return new CTTableData("");
-            }
+            tableData = new CTTableData(reader.attributes().value("name").toString());
         }
         if(reader.isStartElement() && reader.name() == "field")
         {
-            _field.first = reader.attributes().value("name").toString();
-            _field.second = reader.attributes().value("type").toString();
-            _fields.append(_field);
-        }
+            CTTableField field;
+            field.setName(reader.attributes().value("name").toString());
+            field.setType(reader.attributes().value("type").toString());
 
-        if(reader.isStartElement() && reader.name() == "constraint")
-        {
-            /*_constraints['fieldname'] = type_of_constraint*/
-            _constraints[reader.attributes().value("name").toString()] =
-                    reader.attributes().value("type").toString();
-        }
+            if(reader.attributes().value("is_nullable").toString() == "YES")
+                field.setRequiredStatus(CTTableField::Required);
+            else
+                field.setRequiredStatus(CTTableField::Optional);
 
+            field.setLength(reader.attributes().value("char_max_length").
+                            toString().toInt());
+            field.setPrecision(reader.attributes().value("numeric_precision").
+                               toString().toInt());
+
+            reader.attributes().value("auto").toString() == "true"?
+                        field.setAutoValue(true): field.setAutoValue(false);
+
+            if(!reader.attributes().value("constraint_type").toString().isEmpty())
+            {
+                QPair<QString, CTTableField> p;
+                p.first = reader.attributes().value("constraint_type").toString();
+                p.second = field;
+                _constraints.append(p);
+            }
+            fields.append(field);
+        }
         if(reader.isEndElement() && reader.name() == "fields")
         {
-            tableData->field_names = _fields;
+            /*
+             *When finished reading fields from the xml a record is created
+             *with default values
+             */
+            rec = CTTableRecord();
+            for(int i = 0; i< fields.size(); i++)
+                rec.append(fields.at(i));
         }
-        if(reader.isEndElement() && reader.name() == "constraints")
+        if(reader.isStartElement() && reader.name() == "row")
         {
-            tableData->constraints= _constraints;
+            _rec = rec;
+            i = 0;
         }
-        /*
-         *The characters in the xml are read in the following sequence:
-         *id,execution_day,execution_order,creation_date,last_edited,
-         *description, xml_description
-         */
+
         if(reader.isCharacters())
         {
             if(!reader.text().toString().trimmed().isEmpty())
             {
-                _record.append(reader.text().toString());
+                _rec.setValue(i,reader.text().toString());
+                i++;
             }
         }
-
         if(reader.isEndElement() && reader.name() == "row")
         {
-            _table.append(_record);
-            _record.clear();
-            num_row ++;
+            tableData->insertRecord(-1,_rec);
+        }
+
+        if(reader.isEndElement() && reader.name() == "table")
+        {
+            tableData->constraints = _constraints;
         }
     }
-    tableData->numRows = num_row;
-    tableData->numColumns = 7;
-    tableData->data = _table;
     return tableData;
-}
-
-
-void CTXmlDataParser::execParsedQuery(const QString &parsedQuery)
-{
-    qDebug() << parsedQuery;
-}
-
-
-CTTableData::CTTableData(const QString &tableName)
-    :table_name(tableName)
-{
-}
-
-CTRowData::CTRowData()
-{
 }

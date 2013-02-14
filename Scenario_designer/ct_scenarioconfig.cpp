@@ -58,7 +58,7 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     buttonLayout->addStretch();
     QPushButton *qpbSaveToDB = new QPushButton("Save");
     buttonLayout->addWidget(qpbSaveToDB);
-    QPushButton *qpbCancel = new QPushButton("Cancel");
+    qpbCancel = new QPushButton("Cancel");
     buttonLayout->addWidget(qpbCancel);
 
     // Establish connections
@@ -78,7 +78,9 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
 
 void CTScenarioConfig::saveScenarioToDB()
 {
-    CTDialog *dialog = new CTDialog();
+    dialog = new CTDialog();
+    connect(qpbCancel, SIGNAL(clicked()),dialog, SLOT(close()));
+
     connect(dialog,SIGNAL(accepted(QString,QString,QString)),scenarioCanvas,
             SLOT(saveScenario(QString,QString,QString)));
 

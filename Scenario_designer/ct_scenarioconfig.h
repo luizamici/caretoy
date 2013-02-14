@@ -15,6 +15,9 @@ public:
     explicit CTScenarioConfig(QWidget *parent = 0);
 
     CTScenarioCanvas *scenarioCanvas;
+private:
+    CTDialog *dialog;
+    QPushButton *qpbCancel;
 
 private slots:
     void saveScenarioToDB();

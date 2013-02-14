@@ -4,16 +4,16 @@
 #include <QWidget>
 #include <QDebug>
 #include <QAbstractTableModel>
+#include <QtCore>
 
 #include "ct_queryparser.h"
-#include "ct_xmldataparser.h"
 
 class CTTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
 
-    CTTableModel(CTTableData* table_data, QObject *parent);
+    CTTableModel(CTTableData *table_data, QObject *parent);
 
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
@@ -27,22 +27,29 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role=Qt::EditRole);
 
-    QHash<QString, QString> record(const QModelIndex &index);
-    void copyRecord(const QModelIndex &i);
 
+    QHash<QString,QString> record(const QModelIndex &index);
+
+    void setHeader(int section,const QVariant &value);
+    void copyRecord(const QModelIndex &i);
     void deleteRecord(const QModelIndex &index);
-    void save(QHash<QString, QString> record_hash);
+    void save(QHash<QString, QString> record);
     
 private:
     CTTableData *p_table_data;
 
-    bool insertRowIntoTable(const QHash<QString, QString> &values);
-    bool updateRowInTable(const QHash<QString, QString> &values);
-    bool removeRowFromTable(const QHash<QString,QString> &values);
+    bool insertRowIntoTable(const CTTableRecord &rec);
+    bool updateRowInTable(const CTTableRecord &rec);
+    bool deleteRowFromTable(const CTTableRecord &rec);
 
-    QStringList map(QHash<QString,QString> record_hash);
-    QHash<QString,QString> mapToHash(QStringList record);
+
+    QHash<QString,QString> map_to_hash(const CTTableRecord &rec);
+    CTTableRecord map_from_hash(QHash<QString,QString> &scenario);
     QModelIndex getIndex(QString id);
+    QVector<QVariant> *headerDt;
+
+signals:
+    void execParsedQuery(QString query_type,QString init_stmt, QString where_stmt);
 
 
 };

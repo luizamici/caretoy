@@ -48,8 +48,6 @@ CTConfArch::~CTConfArch()
  */
 bool CTConfArch::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_LIGHTS;
 
     QXmlSimpleReader xmlReader;
@@ -188,7 +186,6 @@ void CTConfArch::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
-//        qDebug() << "calculateRequiredTime() < block_duration";
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }

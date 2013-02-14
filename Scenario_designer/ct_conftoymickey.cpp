@@ -114,8 +114,6 @@ CTConfToyMickey::~CTConfToyMickey()
  */
 bool CTConfToyMickey::setParameters(QString xml)
 {
-//    qDebug() << xml;
-
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
 

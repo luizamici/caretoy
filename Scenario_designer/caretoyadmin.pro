@@ -1,4 +1,4 @@
-QT += core gui xml sql
+QT += core gui xml sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +36,13 @@ SOURCES += main.cpp \
     TableOfScenariosFromXML/ct_viewofscenarios.cpp \
     TableOfScenariosFromXML/ct_queryparser.cpp \
     TableOfScenariosFromXML/ct_xmldataparser.cpp \
-    TableOfScenariosFromXML/ct_tablemodel.cpp
+    TableOfScenariosFromXML/ct_tablemodel.cpp \
+    SecureSocketClient/ct_sslclient.cpp \
+    TableOfScenariosFromXML/ct_tabledata.cpp \
+    TableOfScenariosFromXML/ct_tablefield.cpp \
+    TableOfScenariosFromXML/ct_tablerecord.cpp \
+    TableOfScenariosFromXML/ct_admin.cpp \
+    SecureSocketClient/ct_sslclientthread.cpp
 
 HEADERS += \
     ct_customwidgets.h \
@@ -65,7 +71,13 @@ HEADERS += \
     TableOfScenariosFromXML/ct_viewofscenarios.h \
     TableOfScenariosFromXML/ct_queryparser.h \
     TableOfScenariosFromXML/ct_xmldataparser.h \
-    TableOfScenariosFromXML/ct_tablemodel.h
+    TableOfScenariosFromXML/ct_tablemodel.h \
+    SecureSocketClient/ct_sslclient.h \
+    TableOfScenariosFromXML/ct_tabledata.h \
+    TableOfScenariosFromXML/ct_tablefield.h \
+    TableOfScenariosFromXML/ct_tablerecord.h \
+    TableOfScenariosFromXML/ct_admin.h \
+    SecureSocketClient/ct_sslclientthread.h
 
 FORMS += \
     ct_conftoystick.ui \

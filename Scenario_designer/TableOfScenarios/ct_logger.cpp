@@ -9,7 +9,6 @@ void CTLogger::initialize(QString filePath)
     // Create a layout
 //    Log4Qt::LogManager::rootLogger();
 
-    qDebug() <<filePath;
     Log4Qt::TTCCLayout *p_layout = new Log4Qt::TTCCLayout();
 
     p_layout->setDateFormat("ISO8601");

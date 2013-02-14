@@ -309,9 +309,6 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
 
 
     QXmlStreamReader reader(scenario["xml_description"]);
-    qDebug() << "*************";
-    qDebug() << scenario["xml_description"];
-    qDebug() << "*************";
     QString xml_conf;
     QXmlStreamWriter stream(&xml_conf);
     stream.setAutoFormatting(true);
@@ -464,8 +461,6 @@ void CTScenarioCanvas::saveScenario(QString description,
         scenario["execution_day"] = execution_day;
         scenario["execution_order"] = execution_order;
         scenario["description"] = description;
-        qDebug() << "******Scenario****";
-
         emit save(scenario);
     }
     p_logger->info( "CTScenarioCanvas::saveScenario() end");

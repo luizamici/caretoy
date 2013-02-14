@@ -4,16 +4,11 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QWidget(parent)
 {
 
-    QHBoxLayout *mainLayout = new QHBoxLayout();
+    QVBoxLayout *mainLayout = new QVBoxLayout();
     this->setLayout(mainLayout);
     this->setFixedSize(1000, 400);
 
-    CTXmlDataParser *parser = new CTXmlDataParser();
-    parser->initialize();
-    CTTableData *table_data = parser->parseTable("test_scenario");
-    xmlTable = new CTTableModel(table_data, this->parentWidget());
     table = new QTableView();
-    table->setModel(xmlTable);
 
     /*disabling the editing through the table view*/
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -24,23 +19,21 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     /*activates selection of whole row*/
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    /*columns which are not wished to be viewd */
-    table->setColumnHidden(6, true); // xml_description hidden
-
-    mainLayout->addWidget(table);
-
-    QVBoxLayout *buttonLayout = new QVBoxLayout();
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
     mainLayout->addLayout(buttonLayout);
+    mainLayout->addWidget(table);
+    statusBar = new QStatusBar();
+    mainLayout->addWidget(statusBar);
 
     QPushButton *edit = new QPushButton(tr("Edit"));
     QPushButton *add = new QPushButton(tr("Add"));
     QPushButton *copy = new QPushButton(tr("Copy"));
     QPushButton *remove = new QPushButton(tr("Remove"));
+    buttonLayout->addStretch(1);
     buttonLayout->addWidget(edit);
     buttonLayout->addWidget(add);
     buttonLayout->addWidget(copy);
     buttonLayout->addWidget(remove);
-    buttonLayout->addStretch(1);
 
     connect(edit, SIGNAL(clicked()),this, SLOT(on_edit_clicked()));
     connect(add, SIGNAL(clicked()),this, SLOT(on_add_clicked()));
@@ -48,7 +41,28 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     connect(remove, SIGNAL(clicked()),this, SLOT(on_remove_clicked()));
 
     /*Alternative way for editing a scenario*/
-    connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_edit_clicked()));
+    connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(
+                on_edit_clicked()));
+
+    show();
+}
+
+void CTViewOfScenarios::init(CTTableData *table_data)
+{
+    xmlTable = new CTTableModel(table_data,this->parentWidget());
+    connect(xmlTable, SIGNAL(execParsedQuery(QString,QString,QString)),this,
+            SIGNAL(execParsedQuery(QString,QString,QString)));
+    table->setModel(xmlTable);
+
+    xmlTable->setHeader(0, "ID");
+    xmlTable->setHeader(1,"Execution day");
+    xmlTable->setHeader(2,"Execution order");
+    xmlTable->setHeader(3,"Creation date");
+    xmlTable->setHeader(4, "Last edited");
+    xmlTable->setHeader(5, "Description");
+
+    /*columns which are not wished to be viewd */
+    table->setColumnHidden(6, true); // xml_description hidden
 
     /*
      *Signals are emitted if valid rows are selected from the table
@@ -103,7 +117,7 @@ QHash<QString,QString> CTViewOfScenarios::getSelected()
 }
 
 
-void CTViewOfScenarios::save(QHash<QString, QString> scenario)
+void CTViewOfScenarios::save(QHash<QString,QString> scenario)
 {
     xmlTable->save(scenario);
 }

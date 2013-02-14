@@ -5,7 +5,10 @@
 #include <QXmlStreamWriter>
 #include <QStringList>
 #include <QVariant>
+#include <QtDebug>
 
+class CTTableData;
+class CTTableRecord;
 
 class CTQueryParser
 {
@@ -16,7 +19,8 @@ public:
                          InsertStatement, DeleteStatement , InsertOrUpdateStatement};
 
     static QString xmlStatement(StatementType type, const QString &tableName,
-                      const QHash<QString, QString> &rec);
+                                const CTTableRecord &row);
+    static QString prepareQuery(QString initStmt, QString whereStmt);
 };
 
 #endif // CT_QUERYPARSER_H

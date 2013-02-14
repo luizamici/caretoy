@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <QTableView>
 #include <QtGui>
-
+#include <QtCore>
+#include <QHeaderView>
 #include "ct_xmldataparser.h"
 #include "ct_tablemodel.h"
 
@@ -16,17 +17,23 @@ public:
 
     QTableView *table;
     CTTableModel *xmlTable;
+    QStatusBar *statusBar;
 
 private:
-    QHash<QString,QString> getSelected();
+    QSortFilterProxyModel *filterModel;
+    QHash<QString, QString> getSelected();
     bool tableSelected;
 
 signals:
     void editScenario(QHash<QString,QString> scenario);
     void newScenario();
 
+    void exec(QString parsedQuery);
+    void execParsedQuery(QString query_type,QString init_stmt,QString where_stmt);
 public slots:
     void save(QHash<QString, QString> scenario);
+
+    void init(CTTableData *table_data);
 
 private slots:
     void on_edit_clicked();

@@ -282,7 +282,6 @@ QString CTConfToyStick::getParameters(QString value){
     stream.writeEndElement(); //end feedback
     stream.writeEndElement(); // end block
 
-    qDebug() << parameters;
     return parameters;
 }
 
