@@ -46,6 +46,7 @@ private slots:
 
 signals:
     void save(QHash<QString,QString> scenario);
+    void titleChanged(QString newTitle);
 };
 
 #endif // CT_SCENARIOCANVAS_H

@@ -68,7 +68,7 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     connect(qpbSave, SIGNAL(clicked()), scenarioCanvas, SLOT(getInfoAndSave()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
 
-
+    connect(scenarioCanvas,SIGNAL(titleChanged(QString)),this, SLOT(setWindowTitle(QString)));
     connect(this, SIGNAL(destroyed()),scenarioCanvas,SIGNAL(destroyed()));
 
     // Center the widget on the screen

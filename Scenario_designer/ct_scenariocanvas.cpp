@@ -296,6 +296,7 @@ void CTScenarioCanvas::resetScenario()
 {
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Entering CTScenarioCanvas::resetScenario ...");
+    titleChanged("Scenario Configuration");
     while (!this->blocks.isEmpty())
     {
         CTSimpleBlock *tmp = this->blocks.takeFirst();
@@ -313,6 +314,7 @@ void CTScenarioCanvas::loadScenario()
     QString name = QFileDialog::getOpenFileName(this, "Load scenario", QDir::currentPath());
     if (!name.isNull())
     {
+        titleChanged(name);
         QFile *file = new QFile(name);
         if (file->open(QIODevice::ReadOnly))
         {
