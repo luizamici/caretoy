@@ -8,6 +8,7 @@ CTConfArch::CTConfArch(QWidget *parent) :
     ui(new Ui::CTConfArch)
 {
     ui->setupUi(this);
+    block_duration = (double) 0.0;
 
     for (int i = 0; i < NUM_LIGHTS; i++)
     {
@@ -80,61 +81,6 @@ bool CTConfArch::setParameters(QString xml)
 }
 
 /*!
- * \brief CTConfArch::setParameters
- *
- * Sets values of all configurable block parameters based on the content of the
- * supplied XML tree.
- *
- * \param root XML tree containing data of all configurable parameters.
- */
-bool CTConfArch::setParameters(QDomElement root)
-{
-    /* Check if the supplied configuration is applicable */
-    if ("block" != root.tagName() || "arch" != root.attribute("name"))
-    {
-        return false;
-    }
-
-    /* Set block comment */
-    QString comment = root.namedItem("comment").toElement().text();
-    ui->qte_comment->setPlainText(comment);
-
-    /* Set block runtime */
-    QDomElement runtime = root.namedItem("runtime").toElement();
-    double duration =
-            runtime.namedItem("duration").toElement().text().toDouble();
-    int repetitions =
-            runtime.namedItem("repetitions").toElement().text().toInt();
-    ui->qsb_block_duration->setValue(duration);
-    ui->qsb_block_repetitions->setValue(repetitions);
-
-    /* Set block stimuli */
-    int num_stimuli = NUM_LIGHTS;
-    QDomElement stimuli_block = root.namedItem("stimuli").toElement();
-    int stimuli_count = stimuli_block.attribute("number").toInt();
-    QDomNodeList stimuli = stimuli_block.childNodes();
-    /* Check consistency */
-    if (num_stimuli != stimuli_count || num_stimuli != stimuli.size())
-    {
-        return false;
-    }
-
-    for (int i = 0; i < num_stimuli; i++)
-    {
-        QDomElement stimulus = stimuli.at(i).toElement();
-        /* Do not process disabled stimuli */
-        if ("false" == stimulus.attribute("enabled")) { continue; }
-
-        light_stimuli[i]->setParameters(stimulus);
-    }
-
-    ui->qsb_pause->setValue(duration - calculateRequiredTime());
-    return true;
-}
-
-
-
-/*!
  * \brief CTConfArch::getParameters
  *
  * Retrieves values of all configurable block parameters and returns them as
@@ -183,55 +129,6 @@ QString CTConfArch::getParameters(QString value){
 }
 
 /*!
- * \brief CTConfArch::getParameters
- *
- * Retrieves values of all configurable block parameters and returns them as
- * an XML tree.
- *
- * \return XML tree containing data of all configurable parameters.
- */
-//TOBE deprecated
-QDomElement CTConfArch::getParameters()
-{
-    QDomDocument doc;
-    QDomElement root = doc.createElement("block");
-    root.setAttribute("id", 1);
-    root.setAttribute("name", "arch");
-
-    /* Insert block comment */
-    QDomElement comment = doc.createElement("comment");
-    root.appendChild(comment);
-    comment.appendChild(doc.createTextNode(ui->qte_comment->toPlainText()));
-
-    /* Insert block runtime */
-    QDomElement runtime = doc.createElement("runtime");
-    root.appendChild(runtime);
-    QDomElement duration = doc.createElement("duration");
-    runtime.appendChild(duration);
-    double duration_calculated = ui->qsb_block_duration->cleanText().toDouble()
-            + ui->qsb_pause->cleanText().toDouble();
-    duration.appendChild(doc.createTextNode(QString::number(duration_calculated)));
-    QDomElement repetitions = doc.createElement("repetitions");
-    runtime.appendChild(repetitions);
-    repetitions.appendChild(doc.createTextNode(
-                                ui->qsb_block_repetitions->cleanText()));
-
-    /* Insert block stimuli */
-    QDomElement stimuli = doc.createElement("stimuli");
-    root.appendChild(stimuli);
-    int num_stimuli = NUM_LIGHTS;
-    stimuli.setAttribute("number", num_stimuli);
-
-    for (int i = 0; i < NUM_LIGHTS; i++)
-    {
-        QDomElement parameters = light_stimuli.at(i)->getParameters();
-        stimuli.appendChild(parameters);
-    }
-
-    return root;
-}
-
-/*!
  * \brief CTConfArch::calculateRequiredTime
  *
  * Calculates the required block duration as the highest sum of the activation
@@ -241,6 +138,7 @@ QDomElement CTConfArch::getParameters()
  */
 double CTConfArch::calculateRequiredTime()
 {
+    qDebug() << "CTConfArch:: calculateRequiredTime()";
     double time_required = 0.0;
 
     for (int i = 0; i < NUM_LIGHTS; i++)
@@ -248,12 +146,13 @@ double CTConfArch::calculateRequiredTime()
         CTLight *st_light = light_stimuli.at(i);
         if (st_light->state->isChecked())
         {
+            qDebug() << "Activation value for light: " << i << "is" << st_light->activation->value();
+            qDebug() <<"Duration max for light "<< i << "is"<<  st_light->duration_max->value();
             double sum = st_light->activation->value() +
                     st_light->duration_max->value();
             if (time_required < sum) { time_required = sum; }
         }
     }
-
     return time_required;
 }
 
@@ -287,6 +186,8 @@ void CTConfArch::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
+        qDebug() << "BLock duration" << block_duration;
+        qDebug() << "Calculated block required time : " << calculateRequiredTime();
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }

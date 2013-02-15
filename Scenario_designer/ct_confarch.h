@@ -15,9 +15,7 @@ class CTConfArch : public QWidget
 public:
     explicit CTConfArch(QWidget *parent = 0);
     ~CTConfArch();
-    bool setParameters(QDomElement root);
     bool setParameters(QString xml);
-    QDomElement getParameters();
     QString getParameters(QString value);
 
 private:
