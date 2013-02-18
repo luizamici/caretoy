@@ -46,6 +46,23 @@ void CTDoubleSpinBox::setup(QString suffix,
 void CTDoubleSpinBox::setMinimumValue(double value) { setMinimum(value); }
 void CTDoubleSpinBox::setMaximumValue(double value) { setMaximum(value); }
 
+/*Added auxiliary methods for standardizing the usage of the point in doubles*/
+QString CTDoubleSpinBox::textFromValue(double value) const
+{
+    QString text = QDoubleSpinBox::textFromValue(value);
+    return text.replace(QLocale().decimalPoint(), QLatin1Char('.'));
+}
+
+/*
+ *Even though a point might be used in the text version of a double,
+ *it will be displayed according to the local settings
+ */
+double CTDoubleSpinBox::valueFromText(const QString& text) const
+{
+    return QString(text).replace(QLatin1Char('.'),QLocale().decimalPoint()).
+            toDouble();
+}
+
 /* ########################################################################## */
 
 CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :

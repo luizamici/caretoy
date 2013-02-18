@@ -21,6 +21,7 @@ public:
 private:
     Ui::CTConfArch *ui;
     QList<CTLight *> light_stimuli;
+    QList<CTSpeaker*> speaker_stimuli;
     double calculateRequiredTime();
     double block_duration;
 

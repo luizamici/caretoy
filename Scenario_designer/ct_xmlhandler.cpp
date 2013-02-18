@@ -88,7 +88,10 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
     if(idWidget == CT_BLOCK_ARCH)
     {
         if(!archLightStimuli.isEmpty())
+        {
             arch_light_stimuli = archLightStimuli;
+            speaker_stimuli = speakerStimuli;
+        }
         else
         {
             Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(

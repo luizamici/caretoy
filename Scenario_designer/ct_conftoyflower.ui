@@ -203,6 +203,141 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Position of the toy in the system</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0,1">
+          <item row="0" column="2">
+           <widget class="QComboBox" name="qcb_block_position_arch">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Any</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#2</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="qrb_block_position_left">
+            <property name="text">
+             <string>Left wall</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="qrb_block_position_right">
+            <property name="text">
+             <string>Right wall</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QComboBox" name="qcb_block_position_right">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Any</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="qcb_block_position_left">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Any</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>#3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="qrb_block_position_arch">
+            <property name="text">
+             <string>Arch</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="qlb_block_position_arch">
+            <property name="text">
+             <string>on position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="qlb_block_position_left">
+            <property name="text">
+             <string>on position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="qlb_block_position_right">
+            <property name="text">
+             <string>on position</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -219,6 +354,7 @@
       <zorder>qgb_comment</zorder>
       <zorder>qgb_runtime</zorder>
       <zorder>verticalSpacer</zorder>
+      <zorder>groupBox</zorder>
      </widget>
      <widget class="QWidget" name="tabStimuli">
       <attribute name="title">

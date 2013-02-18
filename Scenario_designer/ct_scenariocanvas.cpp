@@ -170,6 +170,7 @@ void CTScenarioCanvas::mouseMoveEvent(QMouseEvent *event)
         {
             CTSimpleBlock *tmp = this->blocks.takeAt(positionIndex);
             delete tmp;
+            updateBlockSequence();
         }
     }
 }
@@ -234,8 +235,8 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         else if ("Screen wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN, this); }
         else if ("Arch" == name) { block = new CTSimpleBlock(CT_BLOCK_ARCH, this); }
 
-        QDomDocument doc("");
-        doc.setContent(config);
+//        QDomDocument doc("");
+//        doc.setContent(config);
         //block->initialize(doc.firstChild().toElement());
 //        block->setConfiguration(doc.firstChild().toElement());
         block->setConfiguration(config);

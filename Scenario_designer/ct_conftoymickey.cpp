@@ -181,6 +181,30 @@ QString CTConfToyMickey::getParameters(QString value){
     stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
     stream.writeEndElement(); //end runtime
 
+    stream.writeStartElement("position");
+    stream.writeStartElement("arch");
+    if( ui->qrb_block_position_arch->isChecked())
+        stream.writeAttribute("enabled","true");
+    else
+        stream.writeAttribute("enabled","false");
+    stream.writeAttribute("value", ui->qcb_block_position_arch->currentText());
+    stream.writeEndElement();//end arch
+    stream.writeStartElement("left_wall");
+    if(ui->qrb_block_position_left->isChecked())
+        stream.writeAttribute("enabled", "true");
+    else
+        stream.writeAttribute("enabled", "false");
+    stream.writeAttribute("value", ui->qcb_block_position_left->currentText());
+    stream.writeEndElement();//end left wall
+    stream.writeStartElement("right_wall");
+    if(ui->qrb_block_position_right->isChecked())
+        stream.writeAttribute("enabled","true");
+    else
+        stream.writeAttribute("enabled","false");
+    stream.writeAttribute("value", ui->qcb_block_position_right->currentText());
+    stream.writeEndElement();//end right wall
+    stream.writeEndElement();//end position
+
     /* Insert block stimuli */
     stream.writeStartElement("stimuli");
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
@@ -364,8 +388,6 @@ void CTConfToyMickey::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
-        qDebug() << "BLock duration" << block_duration;
-        qDebug() << "Calculated block required time : " << calculateRequiredTime();
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }

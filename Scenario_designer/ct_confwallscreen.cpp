@@ -278,8 +278,6 @@ void CTConfWallScreen::updateBlockRuntime(double value)
     /*Checks if the overall value of the block duration contains the pause*/
     if(calculateRequiredTime() < block_duration)
     {
-        qDebug() << "BLock duration" << block_duration;
-        qDebug() << "Calculated block required time : " << calculateRequiredTime();
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
 }
