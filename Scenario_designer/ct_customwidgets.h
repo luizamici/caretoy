@@ -42,6 +42,9 @@ public:
 public slots:
     void setMinimumValue(double value);
     void setMaximumValue(double value);
+
+    double valueFromText(const QString& text) const;
+    QString textFromValue(double value) const;
 };
 
 /* ########################################################################## */

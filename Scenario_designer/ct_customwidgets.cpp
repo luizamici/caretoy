@@ -46,6 +46,23 @@ void CTDoubleSpinBox::setup(QString suffix,
 void CTDoubleSpinBox::setMinimumValue(double value) { setMinimum(value); }
 void CTDoubleSpinBox::setMaximumValue(double value) { setMaximum(value); }
 
+/*Added auxiliary methods for standardizing the usage of the point in doubles*/
+QString CTDoubleSpinBox::textFromValue(double value) const
+{
+    QString text = QDoubleSpinBox::textFromValue(value);
+    return text.replace(QLocale().decimalPoint(), QLatin1Char('.'));
+}
+
+/*
+ *Even though a point might be used in the text version of a double,
+ *it will be displayed according to the local settings
+ */
+double CTDoubleSpinBox::valueFromText(const QString& text) const
+{
+    return QString(text).replace(QLatin1Char('.'),QLocale().decimalPoint()).
+            toDouble();
+}
+
 /* ########################################################################## */
 
 CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
@@ -224,7 +241,6 @@ void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
     }
 }
 
-
 void CTBigLight::getParameters(QXmlStreamWriter &stream){
 
     if (NULL != activation)
@@ -265,6 +281,7 @@ void CTBigLight::getParameters(QXmlStreamWriter &stream){
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus
 }
+
 
 /* ########################################################################## */
 
@@ -403,7 +420,6 @@ void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
     }
 }
 
-
 void CTButton::getParameters(QXmlStreamWriter &stream){
 
     if (NULL != activation)
@@ -434,6 +450,8 @@ void CTButton::getParameters(QXmlStreamWriter &stream){
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus
 }
+
+
 
 /* ########################################################################## */
 
@@ -757,6 +775,7 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
                               << "Audio_4sec.wma" << "Audio_60sec.wma"
                               << "Audio_7sec.wma" << "Audio_8sec.wma"
                               << "Audio_9sec.wma";
+
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
     layout->setMargin(0);
@@ -995,7 +1014,6 @@ CTScreen::CTScreen(int id, bool action, QWidget *parent) :
                                << "jumpingtiger.wmv"
                                << "mickey_mouse_cucu.wmv"
                                << "monkeyfromleft_low.wmv";
-
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
     layout->setMargin(0);
@@ -1137,3 +1155,4 @@ void CTScreen::getParameters(QXmlStreamWriter &stream){
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus
 }
+

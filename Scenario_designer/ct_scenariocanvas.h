@@ -30,7 +30,6 @@ private:
     int getPositionIndex(QPoint eventPos, bool dropIndex);
     void updateBlockSequence();
 
-    Log4Qt::Logger *p_logger;
     QString id_scenario;
     QString description;
     QString creation_date;
@@ -46,11 +45,13 @@ protected:
 
 public slots:
     void resetScenario();
+	void loadScenario();
     void loadScenario(QHash<QString,QString> scenario);
     void saveScenario(QString description, QString execution_day, QString execution_order);
 
 signals:
     void save(QHash<QString,QString> scenario);
+    void titleChanged(QString newTitle);
 };
 
 #endif // CT_SCENARIOCANVAS_H

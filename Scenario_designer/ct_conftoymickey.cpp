@@ -9,6 +9,7 @@ CTConfToyMickey::CTConfToyMickey(QWidget *parent) :
     ui(new Ui::CTConfToyMickey)
 {
     ui->setupUi(this);
+    block_duration = (double) 0.0;
 
     /*Initialy disables the tab for the feedback-action*/
     ui->tabFeedbackAction->setDisabled(true);
@@ -138,7 +139,6 @@ bool CTConfToyMickey::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {
@@ -146,7 +146,6 @@ bool CTConfToyMickey::setParameters(QString xml)
     }
     return true;
 }
-
 
 /*!
  * \brief CTConfToyMickey::getParameters
@@ -181,6 +180,30 @@ QString CTConfToyMickey::getParameters(QString value){
     stream.writeTextElement("duration",QString::number(duration_calculated));
     stream.writeTextElement("repetitions", ui->qsb_block_repetitions->cleanText());
     stream.writeEndElement(); //end runtime
+
+    stream.writeStartElement("position");
+    stream.writeStartElement("arch");
+    if( ui->qrb_block_position_arch->isChecked())
+        stream.writeAttribute("enabled","true");
+    else
+        stream.writeAttribute("enabled","false");
+    stream.writeAttribute("value", ui->qcb_block_position_arch->currentText());
+    stream.writeEndElement();//end arch
+    stream.writeStartElement("left_wall");
+    if(ui->qrb_block_position_left->isChecked())
+        stream.writeAttribute("enabled", "true");
+    else
+        stream.writeAttribute("enabled", "false");
+    stream.writeAttribute("value", ui->qcb_block_position_left->currentText());
+    stream.writeEndElement();//end left wall
+    stream.writeStartElement("right_wall");
+    if(ui->qrb_block_position_right->isChecked())
+        stream.writeAttribute("enabled","true");
+    else
+        stream.writeAttribute("enabled","false");
+    stream.writeAttribute("value", ui->qcb_block_position_right->currentText());
+    stream.writeEndElement();//end right wall
+    stream.writeEndElement();//end position
 
     /* Insert block stimuli */
     stream.writeStartElement("stimuli");
@@ -299,7 +322,6 @@ QString CTConfToyMickey::getParameters(QString value){
 
     return parameters;
 }
-
 
 /*!
  * \brief CTConfToyMickey::calculateRequiredTime

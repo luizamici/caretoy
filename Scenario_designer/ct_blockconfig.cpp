@@ -12,8 +12,6 @@ CTBlockConfig::CTBlockConfig(QWidget *parent) :
     connect(ui->qpb_reset, SIGNAL(clicked()), this, SLOT(resetConfig()));
     connect(ui->qpb_save, SIGNAL(clicked()), this, SLOT(saveConfiguration()));
     connect(ui->qpb_cancel, SIGNAL(clicked()), this, SLOT(close()));
-
-    p_logger = Log4Qt::Logger::logger("CTBlockConfig");
 }
 
 CTBlockConfig::~CTBlockConfig()
@@ -24,7 +22,8 @@ CTBlockConfig::~CTBlockConfig()
 
 void CTBlockConfig::showParameters(int id, QString xml)
 {
-    p_logger->info("CTBlockConfig::showParameters begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Entering CTBlockConfig::showParameters ... ");
     this->id = id;
 
     switch (id) {
@@ -34,11 +33,14 @@ void CTBlockConfig::showParameters(int id, QString xml)
         ui->qsa_config->setWidget(config);
         if (!xml.isEmpty()) {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Flower' not set!");
-                qDebug() << "Parameters not set!";
-            }
+               Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                            "CTBlockConfig::showParameters -> flower block"
+                            "parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to flower block");
         }
         break;
     }
@@ -49,11 +51,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Mickey' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> mickey block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to mickey block");
         }
         break;
     }
@@ -64,11 +68,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Ring' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> ring block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to ring block");
         }
         break;
     }
@@ -79,11 +85,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Stick' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> stick block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to stick block");
         }
         break;
     }
@@ -94,11 +102,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'UToy' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> utoy block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to utoy block");
         }
         break;
     }
@@ -109,11 +119,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Arch' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> arch block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to arch block");
         }
         break;
     }
@@ -124,11 +136,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Screen' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> screen block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to wall_screen block");
         }
         break;
     }
@@ -139,11 +153,13 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Wall left' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> wall left block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to wall_left block");
         }
         break;
     }
@@ -154,29 +170,36 @@ void CTBlockConfig::showParameters(int id, QString xml)
         if(!xml.isEmpty())
         {
             if(!config->setParameters(xml))
-            {
-                p_logger->warn("CTBlockconfig::showParameter ;"
-                               "parameters for block 'Wall right' not set!");
-                qDebug() << "Parameters not set!";
-            }
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> wall right block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to wall_right block");
         }
         break;
     }
     default:
         break;
     }
-    p_logger->info("CTBlockConfig::showParameters end");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Exit CTBlockConfig::showParameters . ");
 }
+
 
 void CTBlockConfig::resetConfig()
 {
-    p_logger->info("CTBlockConfig::resetConfig begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Entering CTBlockConfig::resetConfig ... ");
     switch (id) {
     case CT_BLOCK_STICK:
     {
         delete ui->qsa_config->widget();
         CTConfToyStick *config = new CTConfToyStick();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting stick block. ");
         break;
     }
     case CT_BLOCK_RING:
@@ -184,6 +207,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfToyRing *config = new CTConfToyRing();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting ring block. ");
         break;
     }
     case CT_BLOCK_FLOWER:
@@ -191,6 +216,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfToyFlower *config = new CTConfToyFlower();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting flower block. ");
         break;
     }
     case CT_BLOCK_MICKEY:
@@ -198,6 +225,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfToyMickey *config = new CTConfToyMickey();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting mickey block. ");
         break;
     }
     case CT_BLOCK_U:
@@ -205,6 +234,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfToyU *config = new CTConfToyU();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting utoy block. ");
         break;
     }
     case CT_BLOCK_ARCH:
@@ -212,6 +243,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfArch *config = new CTConfArch();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting arch block. ");
         break;
     }
     case CT_BLOCK_WALL_LEFT:
@@ -219,6 +252,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfWallLeft *config = new CTConfWallLeft();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting wall_left block. ");
         break;
     }
     case CT_BLOCK_WALL_RIGHT:
@@ -226,6 +261,8 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfWallRight *config = new CTConfWallRight();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting wall_right block. ");
         break;
     }
     case CT_BLOCK_WALL_SCREEN:
@@ -233,75 +270,116 @@ void CTBlockConfig::resetConfig()
         delete ui->qsa_config->widget();
         CTConfWallScreen *config = new CTConfWallScreen();
         ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting screen block. ");
         break;
     }
     default:
         break;
     }
-    p_logger->info("CTBlockConfig::resetConfig end");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Exit CTBlockConfig::resetConfig . ");
 }
 
 void CTBlockConfig::saveConfiguration()
 {
-    p_logger->info("CTBlockConfig::saveConfiguration begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Entering CTBlockConfig::saveConfiguration ... ");
     switch (id) {
     case CT_BLOCK_STICK:
     {
         CTConfToyStick *config = (CTConfToyStick *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from Stick block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_RING:
     {
         CTConfToyRing *config = (CTConfToyRing *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from ring block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_FLOWER:
     {
         CTConfToyFlower *config = (CTConfToyFlower *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from flower block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_MICKEY:
     {
         CTConfToyMickey *config = (CTConfToyMickey *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from mickey block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_U:
     {
         CTConfToyU *config = (CTConfToyU *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from uToy block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_ARCH:
     {
         CTConfArch *config = (CTConfArch *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from arch block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_WALL_LEFT:
     {
         CTConfWallLeft *config = (CTConfWallLeft *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from wall_left block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_WALL_RIGHT:
     {
         CTConfWallRight *config = (CTConfWallRight *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from wall_right block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     case CT_BLOCK_WALL_SCREEN:
     {
         CTConfWallScreen *config = (CTConfWallScreen *) ui->qsa_config->widget();
-        emit finishedConfig(config->getParameters("QXmlStreamWriter"));
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from screen block empty! ");
+        emit finishedConfig(parameters);
         break;
     }
     default:
         break;
     }
-    p_logger->info("CTBlockConfig::saveConfiguration end");
+    Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                "Exit CTBlockConfig::saveConfiguration . ");
     close();
 }

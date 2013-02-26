@@ -15,7 +15,6 @@ public:
 
 private:
     QPoint dragStartPosition;
-    Log4Qt::Logger *p_logger;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

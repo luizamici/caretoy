@@ -15,6 +15,7 @@ CTConfWallRight::CTConfWallRight(QWidget *parent) :
 
     /*Initialy disables the tab for the feedback-action*/
     ui->tabFeedbackAction->setDisabled(true);
+    block_duration = (double) 0.0;
 
     for (int i = 0; i < NUM_BIGLIGHTS; i++)
     {
@@ -196,7 +197,6 @@ bool CTConfWallRight::setParameters(QString xml)
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {
@@ -386,7 +386,6 @@ QString CTConfWallRight::getParameters(QString value){
 
     return parameters;
 }
-
 
 /*!
  * \brief CTConfWallRight::calculateRequiredTime

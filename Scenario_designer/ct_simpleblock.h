@@ -16,7 +16,6 @@ public:
     ~CTSimpleBlock();
     QString getName();
     QPixmap getImage();
-    QDomElement getConfiguration();
     QString getConfiguration(QString str);
     void enableConfig(bool value);
 
@@ -31,9 +30,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
 
 public slots:
-    void setConfiguration(QDomElement root);
     void setConfiguration(QString xml);
-
 };
 
 #endif // CT_SIMPLEBLOCK_H

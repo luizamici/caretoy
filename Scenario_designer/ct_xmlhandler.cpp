@@ -3,6 +3,8 @@
 
 bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Entering CTXmlHandler::setSubWidgets ... ");
     /*Setting pointers to each ui component of the widget*/
     qte_comment = widget->findChild<QPlainTextEdit*>("qte_comment");
     qsb_block_repetitions = widget->findChild<CTSpinBox*>("qsb_block_repetitions");
@@ -43,6 +45,8 @@ bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
         qrb_button_pressed_event = widget->findChild<QRadioButton*>("qrb_button_pressed_event");
         qcb_button = widget->findChild<QComboBox*>("qcb_button");
     }
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Exit CTXmlHandler::setSubWidgets . ");
     return true;
 
 }
@@ -63,6 +67,9 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
                               QList<CTBigLight*> &bigLightStimuli,
                               QList<CTButton *> &buttonStimuli)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Entering CTXmlHandler::setStimuli ... ");
+
 
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
             || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
@@ -73,22 +80,35 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
             light_stimuli = lightStimuli;
             speaker_stimuli = speakerStimuli;
          }else{
-            qDebug() << "An error with the args detected: empty lists!";
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setStimuli -> An error with the args"
+                        "detected: empty lists!");
          }
     }
     if(idWidget == CT_BLOCK_ARCH)
     {
         if(!archLightStimuli.isEmpty())
+        {
             arch_light_stimuli = archLightStimuli;
+            speaker_stimuli = speakerStimuli;
+        }
         else
-            qDebug() << "An error with the args detected: empty lists!";
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setStimuli -> An error with the args"
+                        "detected: empty lists!");
+        }
     }
     if(idWidget == CT_BLOCK_WALL_SCREEN)
     {
         if(!screenStimuli.isEmpty())
             screen_stimuli = screenStimuli;
         else
-            qDebug() << "An error with the args detected: empty lists!";
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setStimuli -> An error with the args"
+                        "detected: empty lists!");
+        }
     }
     if(idWidget == CT_BLOCK_WALL_LEFT || idWidget == CT_BLOCK_WALL_RIGHT)
     {
@@ -101,8 +121,14 @@ void CTXmlHandler::setStimuli(QList<CTConstLight *> &lightStimuli,
             speaker_stimuli = speakerStimuli;
         }
         else
-            qDebug() << "An error with the args detected: empty lists!";
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setStimuli -> An error with the args"
+                        "detected: empty lists!");
+        }
     }
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Exit CTXmlHandler::setStimuli . ");
 }
 
 
@@ -113,6 +139,9 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
                               QList<CTButton *> &buttonAction,
                               QList<CTLight *> &archLightAction)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Entering CTXmlHandler::setActions ...");
+
     if(idWidget == CT_BLOCK_FLOWER || idWidget == CT_BLOCK_MICKEY
             || idWidget == CT_BLOCK_RING || idWidget == CT_BLOCK_STICK
             || idWidget == CT_BLOCK_U)
@@ -122,7 +151,9 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
             light_actions = lightAction;
             speaker_actions = speakerAction;
         }else{
-            qDebug() << "An error with the args detected: empty lists!";
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setActions -> An error with the args"
+                        "detected: empty lists!");
         }
     }
     if(idWidget == CT_BLOCK_WALL_SCREEN)
@@ -130,7 +161,11 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
         if(!screenAction.isEmpty())
             screen_actions = screenAction;
         else
-            qDebug() << "An error with the args detected: empty lists!";
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setActions -> An error with the args"
+                        "detected: empty lists!");
+        }
     }
     if(idWidget == CT_BLOCK_WALL_LEFT || idWidget == CT_BLOCK_WALL_RIGHT)
     {
@@ -143,8 +178,15 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
             speaker_actions = speakerAction;
         }
         else
-            qDebug() << "An error with the args detected: empty lists!";
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setActions -> An error with the args"
+                        "detected: empty lists!");
+        }
     }
+
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Exit CTXmlHandler::setActions .");
 }
 
 /*!
@@ -156,9 +198,13 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
 
 bool CTXmlHandler::startDocument()
 {
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Entering CTXmlHandler::startDocument ...");
     elementName.clear();
     elementIndentation.clear();
 
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->info(
+                "Exit CTXmlHandler::startDocument .");
     return true;
 }
 
@@ -476,6 +522,12 @@ bool CTXmlHandler::endElement(const QString &, const QString &,
 
 bool CTXmlHandler::fatalError (const QXmlParseException & exception)
 {
+    Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                "CTXmlHandler::fatalError -> " +
+                QString("Fatal error on line %1, column %2: %3").arg(
+                exception.lineNumber()).arg(exception.columnNumber()).arg(
+                exception.message()));
+
     qWarning() << QString("Fatal error on line %1, column %2: %3").arg(
         exception.lineNumber()).arg(exception.columnNumber()).arg(
         exception.message());

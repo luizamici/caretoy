@@ -40,7 +40,6 @@ public:
 private:
     Ui::CTBlockConfig *ui;
     int id;
-    Log4Qt::Logger *p_logger;
 
 signals:
     void finishedConfig(QString xml);

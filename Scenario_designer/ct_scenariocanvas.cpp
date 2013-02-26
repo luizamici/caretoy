@@ -4,17 +4,21 @@
 
 CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
 {
-    p_logger = Log4Qt::Logger::logger("CTScenarioCanvas");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas's constructor... ");
     // Initialize member variables
     this->dragStartPosition = QPoint();
     this->contentLayout = 0;
     this->blocks.clear();
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas's constructor. ");
 }
 
 // Initialize the widget.
 void CTScenarioCanvas::initialize()
 {
-    p_logger->info( "CTScenarioCanvas::initialize() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::initialize ...");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
 
@@ -34,14 +38,15 @@ void CTScenarioCanvas::initialize()
     this->contentLayout->setSpacing(10);
     helpLayout->addLayout(this->contentLayout);
     helpLayout->addStretch();
-    p_logger->info("CTScenarioCanvas::initialize() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::initialize . ");
 }
 
 // Determine linear position index on the grid layout.
 int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
 {
-
-    p_logger->info( "CTScenarioCanvas::getPositionIndex() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::getPositionIndex ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
 
@@ -53,26 +58,35 @@ int CTScenarioCanvas::getPositionIndex(QPoint eventPos, bool dropIndex)
     else { columnIndex = eventPos.x() / cellEdge; }
 
     int rowIndex = eventPos.y() / cellEdge;
-    p_logger->info( "CTScenarioCanvas::getPositionIndex() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::getPositionIndex .");
     return (numberOfColumns * rowIndex) + columnIndex;
 }
 
 // Update the scenario canvas with the current sequence of blocks.
 void CTScenarioCanvas::updateBlockSequence()
 {
-    p_logger->info( "CTScenarioCanvas::updateBlockSequence() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::updateBlockSequence ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
     for (int i = 0; i < this->blocks.count(); i++)
     {
         this->contentLayout->addWidget(this->blocks.at(i), i/numberOfColumns, i%numberOfColumns);
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "CTScenarioCanvas::updateBlockSequence -> UPDATE: Number of blocks: "
+                + this->blocks.count());
     qDebug() << "UPDATE: Number of blocks: " << this->blocks.count();
     for (int i = 0; i < this->blocks.count(); i++)
     {
+        Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                    "CTScenarioCanvas::updateBlockSequence -> " + QString::number(i) + ": "
+                    + this->blocks.at(i)->getName());
         qDebug() << i << ": " << this->blocks.at(i)->getName();
     }
-    p_logger->info( "CTScenarioCanvas::updateBlockSequence() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::updateBlockSequence .");
 }
 
 // Record initial position for a drag operation.
@@ -112,13 +126,14 @@ void CTScenarioCanvas::mouseMoveEvent(QMouseEvent *event)
     QString name = block->getName();
     QPixmap image = block->getImage();
     QString config;
-    QTextStream stream(&config);
-    block->getConfiguration().save(stream, 4);
+//    QTextStream stream(&config);
+    config = block->getConfiguration("Using Sax Parser");
     int positionIndex = this->getPositionIndex(this->dragStartPosition, false);
 
     // Pack block related data
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+
     dataStream << name << image << config << positionIndex;
 
     QMimeData *mimeData = new QMimeData();
@@ -155,6 +170,7 @@ void CTScenarioCanvas::mouseMoveEvent(QMouseEvent *event)
         {
             CTSimpleBlock *tmp = this->blocks.takeAt(positionIndex);
             delete tmp;
+            updateBlockSequence();
         }
     }
 }
@@ -219,10 +235,11 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         else if ("Screen wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN, this); }
         else if ("Arch" == name) { block = new CTSimpleBlock(CT_BLOCK_ARCH, this); }
 
-        QDomDocument doc("");
-        doc.setContent(config);
+//        QDomDocument doc("");
+//        doc.setContent(config);
         //block->initialize(doc.firstChild().toElement());
-        block->setConfiguration(doc.firstChild().toElement());
+//        block->setConfiguration(doc.firstChild().toElement());
+        block->setConfiguration(config);
         block->enableConfig(true);
 
         // Insert the block into the sequence
@@ -278,7 +295,9 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
 // Clear the scenario sequence.
 void CTScenarioCanvas::resetScenario()
 {
-    p_logger->info( "CTScenarioCanvas::resetScenario() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::resetScenario ...");
+    titleChanged("Scenario Configuration");
     while (!this->blocks.isEmpty())
     {
         CTSimpleBlock *tmp = this->blocks.takeFirst();
@@ -289,14 +308,16 @@ void CTScenarioCanvas::resetScenario()
     creation_date.clear();
     execution_day.clear();
     execution_order.clear();
-    p_logger->info( "CTScenarioCanvas::resetScenario() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::resetScenario .");
 }
 
 
 /*Load selected scenario*/
 void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
 {
-    p_logger->info( "CTScenarioCanvas::loadScenario() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::loadScenario ...");
     /*clearing the canvas*/
     resetScenario();
 
@@ -400,7 +421,121 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
         }
     }
     updateBlockSequence();
-    p_logger->info( "CTScenarioCanvas::loadScenario() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::loadScenario .");
+}
+
+/*Load scenario from file*/
+void CTScenarioCanvas::loadScenario()
+{
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::loadScenario ...");
+    QString name = QFileDialog::getOpenFileName(this, "Load scenario", QDir::currentPath());
+    if (!name.isNull())
+    {
+        titleChanged(name);
+        QFile *file = new QFile(name);
+        if (file->open(QIODevice::ReadOnly))
+        {
+            if (!this->blocks.isEmpty()) { resetScenario(); }
+
+            QXmlStreamReader reader(file);
+            QString xml_conf;
+            QXmlStreamWriter stream(&xml_conf);
+            stream.setAutoFormatting(true);
+
+            QString block_name;
+            while(!reader.atEnd())
+            {
+                reader.readNext();
+                /*Skip start document element*/
+                if(reader.tokenType() == QXmlStreamReader::StartDocument)
+                    continue;
+                /*Skip scenario_data and blocks element*/
+                if(reader.name() == "scenario_data" || reader.name() == "blocks")
+                    continue;
+                /*When a new block is found*/
+                if(reader.isStartElement() && reader.name() == "block")
+                {
+                    xml_conf.clear();
+                    block_name = reader.attributes().value("name").toString();
+                }
+                stream.writeCurrentToken(reader);
+
+                /*When a block is ending*/
+                if(reader.isEndElement() && reader.name() == "block")
+                {
+                    if ("stick" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("flower" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("ring" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("mickey" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("utoy" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_U);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("wall_left" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("wall_right" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("wall_screen" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if ("arch" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                }
+            }
+            updateBlockSequence();
+            file->close();
+        }
+    }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::loadScenario .");
 }
 
 
@@ -409,7 +544,8 @@ void CTScenarioCanvas::saveScenario(QString description,
                                       QString execution_day,
                                       QString execution_order)
 {
-    p_logger->info( "CTScenarioCanvas::saveScenario() begin...");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::getInfoAndSave ...");
     QHash<QString,QString> scenario;
     if(!this->blocks.isEmpty())
     {
@@ -463,7 +599,10 @@ void CTScenarioCanvas::saveScenario(QString description,
         scenario["description"] = description;
         emit save(scenario);
     }
-    p_logger->info( "CTScenarioCanvas::saveScenario() end");
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Saving scenario to file: " + name);
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::getInfoAndSave .");
 }
 
 bool CTScenarioCanvas::isNewScenario()

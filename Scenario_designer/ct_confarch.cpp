@@ -2,12 +2,14 @@
 #include "ui_ct_confarch.h"
 
 #define NUM_LIGHTS 12
+#define NUM_SPEAKERS 1
 
 CTConfArch::CTConfArch(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CTConfArch)
 {
     ui->setupUi(this);
+    block_duration = (double) 0.0;
 
     for (int i = 0; i < NUM_LIGHTS; i++)
     {
@@ -21,9 +23,31 @@ CTConfArch::CTConfArch(QWidget *parent) :
                 this, SLOT(updateBlockRuntime(double)));
         connect(st_light->duration_max, SIGNAL(valueChanged(double)),
                 this, SLOT(updateBlockRuntime(double)));
+        /* Add separating lines */
+        QFrame *qh_st_line = new QFrame();
+        qh_st_line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+        ui->qgb_stimuli->layout()->addWidget(qh_st_line);
+    }
+
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        CTSpeaker *st_speaker = new CTSpeaker(i+1, false);
+
+        //TODO DELETE THIS WHEN SPEAKERS ENABLED FOR ARCH
+        st_speaker->setEnabled(false);
+        /**********************************************/
+        speaker_stimuli.append(st_speaker);
+        ui->qgb_stimuli->layout()->addWidget(st_speaker);
+
+        connect(st_speaker->state, SIGNAL(toggled(bool)),
+                 this, SLOT(updateBlockRuntime(bool)));
+        connect(st_speaker->activation, SIGNAL(valueChanged(double)),
+                 this, SLOT(updateBlockRuntime(double)));
+        connect(st_speaker->duration_max,SIGNAL(valueChanged(double)),
+                this, SLOT(updateBlockRuntime(double)));
 
         /* Add separating lines */
-        if (i+1 != NUM_LIGHTS)
+        if (i+1 != NUM_SPEAKERS)
         {
             QFrame *qh_st_line = new QFrame();
             qh_st_line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
@@ -48,7 +72,9 @@ CTConfArch::~CTConfArch()
  */
 bool CTConfArch::setParameters(QString xml)
 {
-    int num_stimuli = NUM_LIGHTS;
+    //TODO: UNCOMMENT WHEN SPEAKERS ENABLED FOR ARCH
+    int num_stimuli = NUM_LIGHTS/* + NUM_SPEAKERS*/;
+    /**********************************************/
 
     QXmlSimpleReader xmlReader;
     QXmlInputSource *source = new QXmlInputSource();
@@ -61,17 +87,16 @@ bool CTConfArch::setParameters(QString xml)
      */
     handler->setWidget(9, this, num_stimuli, 0);
     QList<CTConstLight*> empty1;
-    QList<CTSpeaker*> empty2;
     QList<CTScreen*> empty3;
     QList<CTBigLight*> empty4;
     QList<CTButton*> empty5;
-    handler->setStimuli(empty1, empty2, light_stimuli,empty3,empty4,empty5);
+    handler->setStimuli(empty1, speaker_stimuli, light_stimuli,empty3,empty4,
+                        empty5);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
 
     bool ok = xmlReader.parse(source);
-    qDebug() << "The parsing went ok? " << ok;
     block_duration = handler->getBlockDuration();
     if(ok)
     {
@@ -79,7 +104,6 @@ bool CTConfArch::setParameters(QString xml)
     }
     return true;
 }
-
 
 /*!
  * \brief CTConfArch::getParameters
@@ -117,18 +141,25 @@ QString CTConfArch::getParameters(QString value){
 
     /* Insert block stimuli */
     stream.writeStartElement("stimuli");
-    int num_stimuli = NUM_LIGHTS;
+
+    //TODO: UNCOMMENT WHEN SPEAKERS ENABLED FOR ARCH
+    int num_stimuli = NUM_LIGHTS/* + NUM_SPEAKERS*/;
+    /***********************************************/
+
     stream.writeAttribute("number",QString::number(num_stimuli));
     for (int i = 0; i < NUM_LIGHTS; i++)
     {
         light_stimuli.at(i)->getParameters(stream);
+    }
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_stimuli.at(i)->getParameters(stream);
     }
     stream.writeEndElement(); // end stimuli
     stream.writeEndElement(); // end block
 
     return parameters;
 }
-
 
 /*!
  * \brief CTConfArch::calculateRequiredTime
@@ -152,7 +183,16 @@ double CTConfArch::calculateRequiredTime()
             if (time_required < sum) { time_required = sum; }
         }
     }
-
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+        {
+            CTSpeaker *st_speaker = speaker_stimuli.at(i);
+            if (st_speaker->state->isChecked())
+            {
+                double sum = st_speaker->activation->value() +
+                        st_speaker->duration_max->value();
+                if (time_required < sum){time_required = sum;}
+            }
+        }
     return time_required;
 }
 
