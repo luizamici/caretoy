@@ -22,6 +22,9 @@ private:
 private slots:
     void saveScenarioToDB();
 
+public slots:
+    void openScenario(QHash<QString, QString> scenario);
+
 };
 
 #endif // CT_SCENARIOCONFIG_H

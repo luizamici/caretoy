@@ -15,6 +15,7 @@
 #include "ct_conftoyflower.h"
 #include "ct_conftoymickey.h"
 #include "ct_conftoyring.h"
+#include "TableOfScenarios/ct_logger.h"
 
 
 class CTXmlHandler : public QXmlDefaultHandler

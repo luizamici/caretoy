@@ -10,6 +10,13 @@ CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
     this->dragStartPosition = QPoint();
     this->contentLayout = 0;
     this->blocks.clear();
+
+    id_scenario = "";
+    description = "";
+    creation_date = "";
+    execution_day = "";
+    execution_order = "";
+
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas's constructor. ");
 }
@@ -303,15 +310,23 @@ void CTScenarioCanvas::resetScenario()
         CTSimpleBlock *tmp = this->blocks.takeFirst();
         delete tmp;
     }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::resetScenario .");
+}
+
+void CTScenarioCanvas::clear()
+{
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::clear ...");
+    resetScenario();
     id_scenario.clear();
     description.clear();
     creation_date.clear();
     execution_day.clear();
     execution_order.clear();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Exit CTScenarioCanvas::resetScenario .");
+                "Exit CTScenarioCanvas::clear .");
 }
-
 
 /*Load selected scenario*/
 void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
@@ -319,7 +334,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Entering CTScenarioCanvas::loadScenario ...");
     /*clearing the canvas*/
-    resetScenario();
+    if (!this->blocks.isEmpty()) { clear(); }
 
     /*getting the id_scenario for editing*/
     id_scenario = scenario["id"];
@@ -328,7 +343,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     execution_day = scenario["execution_day"];
     execution_order = scenario["execution_order"];
 
-
+    titleChanged(description);
     QXmlStreamReader reader(scenario["xml_description"]);
     QString xml_conf;
     QXmlStreamWriter stream(&xml_conf);
@@ -426,10 +441,10 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
 }
 
 /*Load scenario from file*/
-void CTScenarioCanvas::loadScenario()
+void CTScenarioCanvas::loadScenarioFromFile()
 {
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Entering CTScenarioCanvas::loadScenario ...");
+                "Entering CTScenarioCanvas::loadScenarioFromFile ...");
     QString name = QFileDialog::getOpenFileName(this, "Load scenario", QDir::currentPath());
     if (!name.isNull())
     {
@@ -535,7 +550,7 @@ void CTScenarioCanvas::loadScenario()
         }
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Exit CTScenarioCanvas::loadScenario .");
+                "Exit CTScenarioCanvas::loadScenarioFromFile .");
 }
 
 
@@ -545,7 +560,7 @@ void CTScenarioCanvas::saveScenario(QString description,
                                       QString execution_order)
 {
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Entering CTScenarioCanvas::getInfoAndSave ...");
+                "Entering CTScenarioCanvas::saveScenario ...");
     QHash<QString,QString> scenario;
     if(!this->blocks.isEmpty())
     {
@@ -562,7 +577,7 @@ void CTScenarioCanvas::saveScenario(QString description,
         {
             QString xml = this->blocks.at(i)->getConfiguration("Using sax parser");
             if(xml.isEmpty())
-                p_logger->warn("CTScenarioCanvas::saveScenario() "
+                Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->warn("CTScenarioCanvas::saveScenario() "
                               " Found configuration empty for block :"
                               + this->blocks.at(i)->getName());
             QXmlStreamReader reader(xml);
@@ -600,9 +615,7 @@ void CTScenarioCanvas::saveScenario(QString description,
         emit save(scenario);
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Saving scenario to file: " + name);
-    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Exit CTScenarioCanvas::getInfoAndSave .");
+                "Exit CTScenarioCanvas::saveScenario .");
 }
 
 bool CTScenarioCanvas::isNewScenario()

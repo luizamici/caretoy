@@ -60,11 +60,14 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     buttonLayout->addWidget(qpbSaveToDB);
     qpbCancel = new QPushButton("Cancel");
     buttonLayout->addWidget(qpbCancel);
+    QPushButton *qpbLoad = new QPushButton("Load");
+    buttonLayout->addWidget(qpbLoad);
 
     // Establish connections
     connect(qpbReset, SIGNAL(clicked()), scenarioCanvas, SLOT(resetScenario()));
     connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(qpbLoad, SIGNAL(clicked()),scenarioCanvas, SLOT(loadScenarioFromFile()));
 
     connect(scenarioCanvas,SIGNAL(titleChanged(QString)),this, SLOT(setWindowTitle(QString)));
     connect(this, SIGNAL(destroyed()),scenarioCanvas,SIGNAL(destroyed()));
@@ -75,6 +78,11 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
 
     Log4Qt::Logger::logger("CTScenarioConfig")->info(
                 "Layout of the scenario configuration widget ready.");
+}
+
+void CTScenarioConfig::openScenario(QHash<QString, QString> scenario)
+{
+    scenarioCanvas->loadScenario(scenario);
 }
 
 void CTScenarioConfig::saveScenarioToDB()
