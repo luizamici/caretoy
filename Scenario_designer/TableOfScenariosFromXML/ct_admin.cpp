@@ -38,7 +38,7 @@ CTAdmin::CTAdmin(QObject *parent) :
 
     connect(view, SIGNAL(newScenario()), config, SLOT(show()));
     connect(view, SIGNAL(newScenario()), config->scenarioCanvas,
-                SLOT(resetScenario()));
+            SLOT(clear()));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
                     view,SLOT(save(QHash<QString,QString>)));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),

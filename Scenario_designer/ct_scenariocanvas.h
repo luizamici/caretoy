@@ -29,7 +29,7 @@ private:
     QList<CTSimpleBlock *> blocks;
     int getPositionIndex(QPoint eventPos, bool dropIndex);
     void updateBlockSequence();
-    void clear();
+
 
     QString id_scenario;
     QString description;
@@ -46,6 +46,7 @@ protected:
 
 public slots:
     void resetScenario();
+    void clear();
     void loadScenarioFromFile();
     void loadScenario(QHash<QString,QString> scenario);
     void saveScenario(QString description, QString execution_day, QString execution_order);
