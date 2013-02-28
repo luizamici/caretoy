@@ -1,7 +1,7 @@
 #include "ct_admin.h"
 #include "ct_xmldataparser.h"
 #include "ct_viewofscenarios.h"
-#include "ct_scenarioconfig.h"
+#include "Scenario_Designer/ct_scenarioconfig.h"
 #include "SecureSocketClient/ct_sslclient.h"
 #include "SecureSocketClient/ct_sslclientthread.h"
 #include "ct_tablerecord.h"

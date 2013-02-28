@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CTConfWallRight</class>
- <widget class="QWidget" name="CTConfWallRight">
+ <class>CTConfWallScreen</class>
+ <widget class="QWidget" name="CTConfWallScreen">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
-    <height>514</height>
+    <width>500</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -35,7 +35,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -264,7 +264,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabFeedbackEvent">
       <attribute name="title">
        <string>Feedback-event</string>
       </attribute>
@@ -277,18 +277,64 @@
          <property name="flat">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>10</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>5</number>
+          </property>
           <item row="0" column="0" colspan="2">
            <widget class="QRadioButton" name="qrb_null_event">
             <property name="text">
-             <string>Do not process feedback</string>
+             <string>Do not proccess feedback</string>
             </property>
             <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="qrb_body_event">
+            <property name="text">
+             <string>Body</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="qlb_position">
+            <property name="text">
+             <string>If infant reaches</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QComboBox" name="qcb_position">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QLabel" name="qlb_position_add">
+            <property name="text">
+             <string>position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
            <spacer name="qv_spacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -304,45 +350,10 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QRadioButton" name="qrb_position_event">
             <property name="text">
              <string>Position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="qlb_position">
-            <property name="text">
-             <string>If infant reaches</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4">
-           <widget class="QLabel" name="qlb_position_add">
-            <property name="text">
-             <string>position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QRadioButton" name="qrb_button_pressed_event">
-            <property name="text">
-             <string>Button</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="qlb_button">
-            <property name="text">
-             <string>If infant presses</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QRadioButton" name="qrb_body_event">
-            <property name="text">
-             <string>Body</string>
             </property>
            </widget>
           </item>
@@ -351,6 +362,23 @@
             <property name="text">
              <string>If body moves</string>
             </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QComboBox" name="qcb_body">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>left to right</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>right to left</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="5" column="0">
@@ -367,77 +395,21 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="2">
+          <item row="5" column="3">
            <widget class="QComboBox" name="qcb_head">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <item>
              <property name="text">
-              <string>right to left</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>left to right</string>
              </property>
             </item>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QComboBox" name="qcb_body">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
             <item>
              <property name="text">
               <string>right to left</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>left to right</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QComboBox" name="qcb_button">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>Button #1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Button #2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Button #3</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Button #4</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>all</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QComboBox" name="qcb_position">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
            </widget>
           </item>
          </layout>
@@ -468,9 +440,6 @@
          <property name="title">
           <string>Feedback - Action</string>
          </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
          <layout class="QVBoxLayout" name="qvb_actions_layout">
           <property name="spacing">
            <number>10</number>
@@ -488,7 +457,7 @@
            <number>10</number>
           </property>
           <item>
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
@@ -565,12 +534,12 @@
   <customwidget>
    <class>CTSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header>Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
   <customwidget>
    <class>CTDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header location="global">Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

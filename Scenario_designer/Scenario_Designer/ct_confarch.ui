@@ -272,12 +272,12 @@
   <customwidget>
    <class>CTSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header>Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
   <customwidget>
    <class>CTDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header>Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

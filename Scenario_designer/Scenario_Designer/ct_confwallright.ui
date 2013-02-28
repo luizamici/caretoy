@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CTConfToyStick</class>
- <widget class="QWidget" name="CTConfToyStick">
+ <class>CTConfWallRight</class>
+ <widget class="QWidget" name="CTConfWallRight">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>472</height>
+    <width>502</width>
+    <height>514</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,11 +34,8 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -127,10 +124,10 @@
           <property name="verticalSpacing">
            <number>5</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="qlb_block_duration">
+          <item row="0" column="2">
+           <widget class="QLabel" name="qlb_block_repetitions">
             <property name="text">
-             <string>Block duration</string>
+             <string>Block repetitions</string>
             </property>
            </widget>
           </item>
@@ -162,6 +159,13 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="qlb_block_duration">
+            <property name="text">
+             <string>Block duration</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="3">
            <widget class="CTSpinBox" name="qsb_block_repetitions">
             <property name="suffix">
@@ -172,13 +176,6 @@
             </property>
             <property name="maximum">
              <number>100</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="qlb_block_repetitions">
-            <property name="text">
-             <string>Block repetitions</string>
             </property>
            </widget>
           </item>
@@ -200,132 +197,6 @@
             <property name="singleStep">
              <double>0.100000000000000</double>
             </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="title">
-          <string>Position of the toy in the system</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,0,1">
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="qrb_block_position_left">
-            <property name="text">
-             <string>Left wall</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="qlb_block_position_arch">
-            <property name="text">
-             <string>on position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="qrb_block_position_arch">
-            <property name="text">
-             <string>Arch</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="qrb_block_position_right">
-            <property name="text">
-             <string>Right wall</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="qcb_block_position_arch">
-            <item>
-             <property name="text">
-              <string>Any</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#3</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="qlb_block_position_left">
-            <property name="text">
-             <string>on position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="qcb_block_position_left">
-            <item>
-             <property name="text">
-              <string>Any</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#3</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="qlb_block_position_right">
-            <property name="text">
-             <string>on position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QComboBox" name="qcb_block_position_right">
-            <item>
-             <property name="text">
-              <string>Any</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>#3</string>
-             </property>
-            </item>
            </widget>
           </item>
          </layout>
@@ -392,10 +263,8 @@
         </spacer>
        </item>
       </layout>
-      <zorder>qgb_stimuli</zorder>
-      <zorder>verticalSpacer_2</zorder>
      </widget>
-     <widget class="QWidget" name="tabFeedbackEvent">
+     <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Feedback-event</string>
       </attribute>
@@ -409,69 +278,13 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="2" column="1" colspan="2">
-           <widget class="QLabel" name="qlb_pressure">
+          <item row="0" column="0" colspan="2">
+           <widget class="QRadioButton" name="qrb_null_event">
             <property name="text">
-             <string>If pressure exceeds</string>
+             <string>Do not process feedback</string>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="3">
-           <widget class="QComboBox" name="qcb_body">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>right to left</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>left to right</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QRadioButton" name="qrb_head_event">
-            <property name="text">
-             <string>Head</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="4">
-           <widget class="QLabel" name="qlb_position_add">
-            <property name="text">
-             <string>position</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLabel" name="qlb_head">
-            <property name="text">
-             <string>If head moves</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" colspan="2">
-           <widget class="QLabel" name="qlb_position">
-            <property name="text">
-             <string>If infant reaches</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QComboBox" name="qcb_position">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QRadioButton" name="qrb_position_event">
-            <property name="text">
-             <string>Position</string>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -491,6 +304,41 @@
             </property>
            </spacer>
           </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="qrb_position_event">
+            <property name="text">
+             <string>Position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="qlb_position">
+            <property name="text">
+             <string>If infant reaches</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLabel" name="qlb_position_add">
+            <property name="text">
+             <string>position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="qrb_button_pressed_event">
+            <property name="text">
+             <string>Button</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="qlb_button">
+            <property name="text">
+             <string>If infant presses</string>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="0">
            <widget class="QRadioButton" name="qrb_body_event">
             <property name="text">
@@ -505,40 +353,21 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="qrb_pressure_event">
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="qrb_head_event">
             <property name="text">
-             <string>Pressure</string>
+             <string>Head</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QRadioButton" name="qrb_null_event">
+          <item row="5" column="1">
+           <widget class="QLabel" name="qlb_head">
             <property name="text">
-             <string>Do not process feedback</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>If head moves</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="CTDoubleSpinBox" name="qsb_pressure">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string> Pa.</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
+          <item row="5" column="2">
            <widget class="QComboBox" name="qcb_head">
             <property name="enabled">
              <bool>false</bool>
@@ -553,6 +382,62 @@
               <string>left to right</string>
              </property>
             </item>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QComboBox" name="qcb_body">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>right to left</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>left to right</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="qcb_button">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Button #1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Button #2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Button #3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Button #4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>all</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QComboBox" name="qcb_position">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
          </layout>
@@ -604,6 +489,13 @@
           </property>
           <item>
            <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Duration interval</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
              <widget class="CTDoubleSpinBox" name="qsb_duration_min">
               <property name="enabled">
@@ -623,13 +515,6 @@
               </property>
               <property name="value">
                <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Duration interval</string>
               </property>
              </widget>
             </item>
@@ -680,12 +565,12 @@
   <customwidget>
    <class>CTSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header>Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
   <customwidget>
    <class>CTDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>ct_customwidgets.h</header>
+   <header location="global">Scenario_Designer/ct_customwidgets.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

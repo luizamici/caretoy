@@ -1,5 +1,5 @@
 #include <QtGui>
-#include "TableOfScenarios/ct_logger.h"
+#include "ct_logger.h"
 #include "TableOfScenariosFromXML/ct_admin.h"
 
 

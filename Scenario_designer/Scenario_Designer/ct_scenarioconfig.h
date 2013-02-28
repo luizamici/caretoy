@@ -5,7 +5,7 @@
 #include "ct_scenariocanvas.h"
 #include "ct_blocksource.h"
 #include "ct_trashcan.h"
-#include "TableOfScenarios/ct_logger.h"
+#include "ct_logger.h"
 
 class CTScenarioConfig : public QWidget
 {

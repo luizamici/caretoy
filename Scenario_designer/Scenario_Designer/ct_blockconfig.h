@@ -24,7 +24,7 @@
 #include "ct_confwallscreen.h"
 
 //Temporary
-#include "TableOfScenarios/ct_logger.h"
+#include "ct_logger.h"
 
 namespace Ui { class CTBlockConfig; }
 

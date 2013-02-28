@@ -4,11 +4,10 @@
 #include <QtGui>
 #include <QtXml>
 #include "ct_simpleblock.h"
-#include "TableOfScenarios/ct_dialog.h"
+#include "ct_dialog.h"
 
 //temporary
-#include "TableOfScenarios/ct_dbconn.h"
-#include "TableOfScenarios/ct_logger.h"
+#include "ct_logger.h"
 
 class CTScenarioCanvas : public QWidget
 {

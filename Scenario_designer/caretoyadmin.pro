@@ -10,89 +10,81 @@ CONFIG += DEBUG
 include(/informatik/home/mici/git_caretoy/log4qt/src/log4qt/log4qt.pri)
 
 SOURCES += main.cpp \
-    ct_customwidgets.cpp \
-    ct_conftoystick.cpp \
-    ct_conftoyring.cpp \
-    ct_conftoymickey.cpp \
-    ct_conftoyflower.cpp \
-    ct_conftoyu.cpp \
-    ct_confarch.cpp \
-    ct_confwallleft.cpp \
-    ct_confwallright.cpp \
-    ct_confwallscreen.cpp \
-    ct_blockconfig.cpp \
-    ct_simpleblock.cpp \
-    ct_trashcan.cpp \
-    ct_scenarioconfig.cpp \
-    ct_scenariocanvas.cpp \
-    ct_blocksource.cpp \
-    TableOfScenarios/ct_dbconn.cpp \
-    TableOfScenarios/ct_tableofscenarios.cpp \
-    TableOfScenarios/ct_sqltable.cpp \
-    TableOfScenarios/ct_sqlmodel.cpp \
-    TableOfScenarios/ct_dialog.cpp \
-    ct_xmlhandler.cpp \
-    TableOfScenarios/ct_logger.cpp \
+    Scenario_Designer/ct_customwidgets.cpp \
+    Scenario_Designer/ct_conftoystick.cpp \
+    Scenario_Designer/ct_conftoyring.cpp \
+    Scenario_Designer/ct_conftoymickey.cpp \
+    Scenario_Designer/ct_conftoyflower.cpp \
+    Scenario_Designer/ct_conftoyu.cpp \
+    Scenario_Designer/ct_confarch.cpp \
+    Scenario_Designer/ct_confwallleft.cpp \
+    Scenario_Designer/ct_confwallright.cpp \
+    Scenario_Designer/ct_confwallscreen.cpp \
+    Scenario_Designer/ct_blockconfig.cpp \
+    Scenario_Designer/ct_simpleblock.cpp \
+    Scenario_Designer/ct_trashcan.cpp \
+    Scenario_Designer/ct_scenarioconfig.cpp \
+    Scenario_Designer/ct_scenariocanvas.cpp \
+    Scenario_Designer/ct_blocksource.cpp \
+    Scenario_Designer/ct_dialog.cpp \
+    Scenario_Designer/ct_xmlhandler.cpp \
+    ct_logger.cpp \
     TableOfScenariosFromXML/ct_viewofscenarios.cpp \
     TableOfScenariosFromXML/ct_queryparser.cpp \
     TableOfScenariosFromXML/ct_xmldataparser.cpp \
     TableOfScenariosFromXML/ct_tablemodel.cpp \
-    SecureSocketClient/ct_sslclient.cpp \
     TableOfScenariosFromXML/ct_tabledata.cpp \
     TableOfScenariosFromXML/ct_tablefield.cpp \
     TableOfScenariosFromXML/ct_tablerecord.cpp \
     TableOfScenariosFromXML/ct_admin.cpp \
+    SecureSocketClient/ct_sslclient.cpp \
     SecureSocketClient/ct_sslclientthread.cpp
 
+
 HEADERS += \
-    ct_customwidgets.h \
-    ct_conftoystick.h \
-    ct_conftoyring.h \
-    ct_conftoymickey.h \
-    ct_conftoyflower.h \
-    ct_conftoyu.h \
-    ct_confwallleft.h \
-    ct_confwallright.h \
-    ct_confwallscreen.h \
-    ct_confarch.h \
-    ct_blockconfig.h \
-    ct_simpleblock.h \
-    ct_trashcan.h \
-    ct_scenarioconfig.h \
-    ct_scenariocanvas.h \
-    ct_blocksource.h \
-    TableOfScenarios/ct_dbconn.h \
-    TableOfScenarios/ct_tableofscenarios.h \
-    TableOfScenarios/ct_sqltable.h \
-    TableOfScenarios/ct_sqlmodel.h \
-    TableOfScenarios/ct_dialog.h \
-    ct_xmlhandler.h \
-    TableOfScenarios/ct_logger.h \
+    Scenario_Designer/ct_customwidgets.h \
+    Scenario_Designer/ct_conftoystick.h \
+    Scenario_Designer/ct_conftoyring.h \
+    Scenario_Designer/ct_conftoymickey.h \
+    Scenario_Designer/ct_conftoyflower.h \
+    Scenario_Designer/ct_conftoyu.h \
+    Scenario_Designer/ct_confwallleft.h \
+    Scenario_Designer/ct_confwallright.h \
+    Scenario_Designer/ct_confwallscreen.h \
+    Scenario_Designer/ct_confarch.h \
+    Scenario_Designer/ct_blockconfig.h \
+    Scenario_Designer/ct_simpleblock.h \
+    Scenario_Designer/ct_trashcan.h \
+    Scenario_Designer/ct_scenarioconfig.h \
+    Scenario_Designer/ct_scenariocanvas.h \
+    Scenario_Designer/ct_blocksource.h \
+    Scenario_Designer/ct_dialog.h \
+    Scenario_Designer/ct_xmlhandler.h \
+    ct_logger.h \
     TableOfScenariosFromXML/ct_viewofscenarios.h \
     TableOfScenariosFromXML/ct_queryparser.h \
     TableOfScenariosFromXML/ct_xmldataparser.h \
     TableOfScenariosFromXML/ct_tablemodel.h \
-    SecureSocketClient/ct_sslclient.h \
     TableOfScenariosFromXML/ct_tabledata.h \
     TableOfScenariosFromXML/ct_tablefield.h \
     TableOfScenariosFromXML/ct_tablerecord.h \
     TableOfScenariosFromXML/ct_admin.h \
+    SecureSocketClient/ct_sslclient.h \
     SecureSocketClient/ct_sslclientthread.h
 
 FORMS += \
-    ct_conftoystick.ui \
-    ct_conftoyring.ui \
-    ct_conftoymickey.ui \
-    ct_conftoyflower.ui \
-    ct_conftoyu.ui \
-    ct_confarch.ui \
-    ct_confwallleft.ui \
-    ct_confwallright.ui \
-    ct_confwallscreen.ui \
-    ct_blockconfig.ui \
-    ct_simpleblock.ui \
-    TableOfScenarios/ct_tableofscenarios.ui \
-    TableOfScenarios/ct_dialog.ui
+    Scenario_Designer/ct_conftoystick.ui \
+    Scenario_Designer/ct_conftoyring.ui \
+    Scenario_Designer/ct_conftoymickey.ui \
+    Scenario_Designer/ct_conftoyflower.ui \
+    Scenario_Designer/ct_conftoyu.ui \
+    Scenario_Designer/ct_confarch.ui \
+    Scenario_Designer/ct_confwallleft.ui \
+    Scenario_Designer/ct_confwallright.ui \
+    Scenario_Designer/ct_confwallscreen.ui \
+    Scenario_Designer/ct_blockconfig.ui \
+    Scenario_Designer/ct_simpleblock.ui \
+    Scenario_Designer/ct_dialog.ui
 
 RESOURCES += \
     ct_resources.qrc
