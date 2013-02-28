@@ -505,7 +505,7 @@
              <bool>false</bool>
             </property>
             <property name="suffix">
-             <string> Nm</string>
+             <string> Nm.</string>
             </property>
             <property name="decimals">
              <number>1</number>

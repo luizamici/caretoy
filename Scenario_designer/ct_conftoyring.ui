@@ -547,7 +547,7 @@
              <bool>false</bool>
             </property>
             <property name="suffix">
-             <string> Pa</string>
+             <string> Pa.</string>
             </property>
             <property name="decimals">
              <number>1</number>
