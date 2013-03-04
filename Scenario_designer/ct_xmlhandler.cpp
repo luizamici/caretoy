@@ -16,6 +16,7 @@ bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
         qcb_body = widget->findChild<QComboBox*>("qcb_body");
         qcb_head = widget->findChild<QComboBox*>("qcb_head");
         qrb_head_event = widget->findChild<QRadioButton*>("qrb_head_event");
+        qrb_headlifted_event = widget->findChild<QRadioButton*>("qrb_headlifted_event");
 
         qsb_duration_min = widget->findChild<CTDoubleSpinBox*>("qsb_duration_min");
         qsb_duration_max = widget->findChild<CTDoubleSpinBox*>("qsb_duration_max");
@@ -496,6 +497,10 @@ bool CTXmlHandler::characters(const QString& ch)
         {
             qrb_button_pressed_event->setChecked(true);
             qcb_button->setCurrentIndex(qcb_button->findText(attr["sensor"].toString()));
+        }
+        else if("head_lift" == event_name)
+        {
+            qrb_headlifted_event->setChecked(true);
         }
     }
     return true;
