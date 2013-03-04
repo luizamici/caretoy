@@ -36,9 +36,11 @@ SOURCES += main.cpp \
     TableOfScenariosFromXML/ct_tabledata.cpp \
     TableOfScenariosFromXML/ct_tablefield.cpp \
     TableOfScenariosFromXML/ct_tablerecord.cpp \
-    TableOfScenariosFromXML/ct_admin.cpp \
     SecureSocketClient/ct_sslclient.cpp \
-    SecureSocketClient/ct_sslclientthread.cpp
+    SecureSocketClient/ct_sslclientthread.cpp \
+    CareToy_Admin/ct_logindialog.cpp \
+    TableOfScenariosFromXML/ct_scenariosadmin.cpp \
+    CareToy_Admin/ct_admin.cpp
 
 
 HEADERS += \
@@ -68,9 +70,11 @@ HEADERS += \
     TableOfScenariosFromXML/ct_tabledata.h \
     TableOfScenariosFromXML/ct_tablefield.h \
     TableOfScenariosFromXML/ct_tablerecord.h \
-    TableOfScenariosFromXML/ct_admin.h \
     SecureSocketClient/ct_sslclient.h \
-    SecureSocketClient/ct_sslclientthread.h
+    SecureSocketClient/ct_sslclientthread.h \
+    CareToy_Admin/ct_logindialog.h \
+    TableOfScenariosFromXML/ct_scenariosadmin.h \
+    CareToy_Admin/ct_admin.h
 
 FORMS += \
     Scenario_Designer/ct_conftoystick.ui \
@@ -84,7 +88,8 @@ FORMS += \
     Scenario_Designer/ct_confwallscreen.ui \
     Scenario_Designer/ct_blockconfig.ui \
     Scenario_Designer/ct_simpleblock.ui \
-    Scenario_Designer/ct_dialog.ui
+    Scenario_Designer/ct_dialog.ui \
+    CareToy_Admin/ct_logindialog.ui
 
 RESOURCES += \
     ct_resources.qrc
