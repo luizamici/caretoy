@@ -413,13 +413,6 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="2" column="5">
-           <widget class="QLabel" name="qlb_pressure3">
-            <property name="text">
-             <string>sensor(s)</string>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="0" colspan="2">
            <widget class="QRadioButton" name="qrb_position_event">
             <property name="text">
@@ -556,7 +549,7 @@
              <bool>false</bool>
             </property>
             <property name="suffix">
-             <string> Pa.</string>
+             <string> Pa</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -580,17 +573,10 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
-           <widget class="QRadioButton" name="qrb_headlifted_event">
+          <item row="2" column="5">
+           <widget class="QLabel" name="qlb_pressure3">
             <property name="text">
-             <string>Head lift</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="2">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>If head is lifted</string>
+             <string>sensor(s)</string>
             </property>
            </widget>
           </item>

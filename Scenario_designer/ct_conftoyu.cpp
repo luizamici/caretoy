@@ -254,15 +254,6 @@ QString CTConfToyU::getParameters(QString value){
         stream.writeCharacters(ui->qcb_head->currentText());
         stream.writeEndElement();//end condition
     }
-    else if(ui->qrb_headlifted_event->isChecked())
-    {
-        stream.writeAttribute("id", "6");
-        stream.writeAttribute("name", "head_lift");
-        stream.writeStartElement("condition");
-        stream.writeAttribute("type","textual");
-        stream.writeCharacters("head up");
-        stream.writeEndElement();//end condition
-    }
     stream.writeEndElement(); //end event
 
     /* Insert block feedback actions */

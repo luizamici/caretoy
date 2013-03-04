@@ -463,17 +463,17 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="3">
-           <widget class="QComboBox" name="qcb_position">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="1" colspan="2">
            <widget class="QLabel" name="qlb_position">
             <property name="text">
              <string>If infant reaches</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QComboBox" name="qcb_position">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -537,7 +537,7 @@
              <bool>false</bool>
             </property>
             <property name="suffix">
-             <string> Pa.</string>
+             <string> Pa</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -562,20 +562,6 @@
               <string>left to right</string>
              </property>
             </item>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QRadioButton" name="qrb_headlifted_event">
-            <property name="text">
-             <string>Head lift</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>If head is lifted</string>
-            </property>
            </widget>
           </item>
          </layout>

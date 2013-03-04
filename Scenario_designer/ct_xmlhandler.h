@@ -75,7 +75,6 @@ public:
     QRadioButton *qrb_body_event;
     QRadioButton *qrb_head_event;
     QRadioButton *qrb_button_pressed_event;
-    QRadioButton *qrb_headlifted_event;
 
     QComboBox *qcb_force;
     QComboBox *qcb_position;

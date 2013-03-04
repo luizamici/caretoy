@@ -412,20 +412,6 @@
             </item>
            </widget>
           </item>
-          <item row="6" column="0">
-           <widget class="QRadioButton" name="qrb_headlifted_event">
-            <property name="text">
-             <string>Head lift</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>If head is lifted</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
