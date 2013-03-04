@@ -314,7 +314,16 @@ QString CTConfWallRight::getParameters(QString value){
         stream.writeAttribute("type", "numerical");
         stream.writeCharacters("1");
         stream.writeEndElement();//end condition
-     }
+    }
+    else if(ui->qrb_headlifted_event->isChecked())
+    {
+        stream.writeAttribute("id", "6");
+        stream.writeAttribute("name", "head_lift");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters("head up");
+        stream.writeEndElement();//end condition
+    }
 
     stream.writeEndElement(); //end event
 
