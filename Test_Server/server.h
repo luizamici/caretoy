@@ -7,6 +7,7 @@
 
 #include "queryparser.h"
 #include "dbconn.h"
+#include "ct_defs.h"
 
 class SSLServerConnection: public QObject
 {
@@ -16,10 +17,18 @@ public:
     ~SSLServerConnection();
 
 private:
-
     QueryParser *parser;
-signals:
-    void exec(QHash<QString,QVariant> query);
+    QSslSocket *socket;
+    DBConn *dbConn;
+
+    int _dataSize;
+    bool _readHeader;
+    quint32 _readType;
+
+
+    void writeAll(const QString &parsedQuery, const quint32 &type);
+    void processXML(QByteArray data);
+    void processQuery(QByteArray data);
 
 public slots:
     void ready();
@@ -27,14 +36,6 @@ public slots:
     void readData();
     void connectionClosed();
     void error(QAbstractSocket::SocketError err);
-
-    void test();
-    void requestToWrite(QString outputData);
-
-private:
-    QSslSocket *socket;
-    int _dataSize;
-    bool _readHeader;
 };
 
 class Server : public QTcpServer
@@ -46,9 +47,6 @@ public:
     ~Server();
 
     void incomingConnection(int socketDescriptor);
-private:
-    DBConn *dbConn;
-
 };
 
 #endif //SERVER_H

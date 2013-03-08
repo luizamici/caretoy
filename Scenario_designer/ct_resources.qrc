@@ -12,5 +12,6 @@
         <file>images/stick.png</file>
         <file>images/uToy.png</file>
         <file>images/wall.png</file>
+        <file>images/logo.png</file>
     </qresource>
 </RCC>

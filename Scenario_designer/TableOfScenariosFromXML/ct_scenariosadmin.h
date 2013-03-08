@@ -1,15 +1,14 @@
-#ifndef CT_ADMIN_H
-#define CT_ADMIN_H
+#ifndef CT_CTSCENARIOSADMIN_H
+#define CT_CTSCENARIOSADMIN_H
 
 #include <QObject>
 #include <QDebug>
 #include <QTimer>
 
-class CTSslClient;
-class CTXmlDataParser;
-class CTViewOfScenarios;
-class CTScenarioConfig;
-class CTSslClientThread;
+#include "ct_xmldataparser.h"
+#include "ct_viewofscenarios.h"
+#include "Scenario_Designer/ct_scenarioconfig.h"
+
 
 class CTScenariosAdmin : public QObject
 {
@@ -17,26 +16,22 @@ class CTScenariosAdmin : public QObject
 public:
     explicit CTScenariosAdmin(QObject *parent = 0);
 
-private:
-    void requestTable();
-
-    CTSslClient *sslClient;
-    CTSslClientThread *sslClientThread;
     CTXmlDataParser *dataParser;
     CTViewOfScenarios *view;
     CTScenarioConfig *config;
 
-    int timeOuts;
+private:
+    void requestTable();
+
+signals:
+    void requestToWriteIntoSocket(const QString &parsedQuery,
+                                  const quint32 &type);
 
 public slots:
     void initialize();
     void execParsedQuery(QString query_type, QString initStmt, QString whereStmt);
     void proccessData(QByteArray table_data);
-    void connectionLost(QString mss);
-
-private slots:
-    void timerTimeout();
 
 };
 
-#endif // CT_ADMIN_H
+#endif // CT_CTSCENARIOSADMIN_H

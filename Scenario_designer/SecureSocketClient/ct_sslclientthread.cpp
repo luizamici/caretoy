@@ -1,7 +1,5 @@
 #include "ct_sslclientthread.h"
 
-#define CT_CHUNK 512
-
 CTSslClientThread::CTSslClientThread(QObject *parent) :
     QThread(parent)
 {
@@ -17,6 +15,7 @@ void CTSslClientThread::run()
 
 void CTSslClientThread::initialize()
 {
+    encryptedConn = false;
     socket = new QSslSocket(this);
     connect(socket, SIGNAL(connected()), this, SLOT(connectedToHost()));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
@@ -47,7 +46,8 @@ void CTSslClientThread::socketStateChanged(QAbstractSocket::SocketState state)
 void CTSslClientThread::socketEncrypted()
 {
     qDebug() << "Socket encrypted!";
-    emit encryptionStarted();
+    encryptedConn = true;
+//    emit encryptionStarted();
 }
 
 
@@ -75,9 +75,7 @@ void CTSslClientThread::socketReadyRead()
         // Read packet header
         if (!_readHeader)
         {
-            char ctPkt[7];
-            qint64 recv = socket->read(ctPkt, strlen("CT_PKT"));
-            ctPkt[6] = '\0';
+            qint64 recv = socket->read((char*)&_readType, sizeof(quint32));
             if (-1 == recv)
             {
                 qDebug() << socket->errorString();
@@ -91,8 +89,7 @@ void CTSslClientThread::socketReadyRead()
                 qDebug() << socket->errorString();
                 return;
             }
-
-            if ("CT_PKT" == QString(ctPkt))
+            if(CT_PKTDATA == _readType || CT_DBSDATA == _readType)
             {
                 _dataSize = size;
                 _readHeader = true;
@@ -114,10 +111,16 @@ void CTSslClientThread::socketReadyRead()
                 delete chunk;
             }
             _readHeader = false;
-            _dataSize = strlen("CT_PKT") + sizeof(int);
+            _dataSize = sizeof(quint32) + sizeof(int);
         }
     }
-    if (!payload.isEmpty()) { proccessData(payload); }
+    if (!payload.isEmpty())
+    {
+        if(CT_PKTDATA == _readType)
+            processXML(payload);
+        else if(CT_DBSDATA == _readType)
+            processData(payload);
+    }
 }
 
 void CTSslClientThread::connectedToHost()
@@ -127,15 +130,15 @@ void CTSslClientThread::connectedToHost()
 }
 
 
-bool CTSslClientThread::requestForWrite(const QString &parsedQuery)
+bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
+                                        const quint32 &type)
 {
     QByteArray out;
     out.append(parsedQuery);
-    if(socket != 0)
+    if(socket != 0 && encryptedConn)
     {
-        qint64 sent = socket->write("CT_PKT");
+        qint64 sent = socket->write((const char*) &type, sizeof(quint32));
         socket->flush();
-
         if (-1 == sent)
         {
                 qDebug() << socket->errorString();
@@ -154,16 +157,17 @@ bool CTSslClientThread::requestForWrite(const QString &parsedQuery)
         int pos = 0;
         while(pos< out.size())
         {
-            sent = socket->write(out.mid(pos, CT_CHUNK));
+            sent = socket->write(out.mid(pos, CT_CHUNKSIZE));
             socket->flush();
             if (-1 == sent)
                 {
                     qDebug() << socket->errorString();
                     return false;
                 }
-                pos += sent;
+            pos += sent;
         }
     }
+    return true;
 }
 
 bool CTSslClientThread::isConnected()

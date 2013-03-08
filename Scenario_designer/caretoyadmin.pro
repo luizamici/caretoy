@@ -44,6 +44,7 @@ SOURCES += main.cpp \
 
 
 HEADERS += \
+    CareToy_Admin/ct_defs.h \
     Scenario_Designer/ct_customwidgets.h \
     Scenario_Designer/ct_conftoystick.h \
     Scenario_Designer/ct_conftoyring.h \

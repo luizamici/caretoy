@@ -24,13 +24,15 @@ CTLoginDialog::CTLoginDialog(QWidget *parent) :
     ui->hl_footer->addWidget(statusBar);
 
     ui->passwordEdit->setEchoMode(QLineEdit::Password);
-    ui->passwordEdit->setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
+    ui->passwordEdit->setInputMethodHints(Qt::ImhHiddenText|
+                                          Qt::ImhNoPredictiveText|
+                                          Qt::ImhNoAutoUppercase);
 }
 
 
 void CTLoginDialog::on_okButton_clicked()
 {
-
+    emit credentials(ui->usernameEdit->text(), ui->passwordEdit->text());
 }
 
 void CTLoginDialog::on_cancelButton_clicked()

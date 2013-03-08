@@ -4,22 +4,20 @@
 #include <qdatetime.h>
 #include <QSslSocket>
 
-#define CT_CHUNK 512
-
 Server::Server(quint16 port, QObject *parent)
     : QTcpServer(parent)
 {
     if(listen(QHostAddress::Any, port))
         qDebug() << "Server started on port:  " << serverPort();
 
-    dbConn = new DBConn();
+//    dbConn = new DBConn();
 }
 
 void Server::incomingConnection(int socketDescriptor)
 {
     SSLServerConnection *conn = new SSLServerConnection(socketDescriptor,this->parent());
-    connect(conn, SIGNAL(exec(QHash<QString,QVariant>)), dbConn, SLOT(exec(QHash<QString,QVariant>)));
-    connect(dbConn, SIGNAL(requestToWrite(QString)),conn, SLOT(requestToWrite(QString)));
+//    connect(conn, SIGNAL(exec(QHash<QString,QVariant>)), dbConn, SLOT(exec(QHash<QString,QVariant>)));
+//    connect(dbConn, SIGNAL(requestToWrite(QString)),conn, SLOT(requestToWrite(QString)));
 }
 
 Server::~Server()
@@ -30,8 +28,11 @@ SSLServerConnection::SSLServerConnection(quint16 socketDescriptor,
                                              QObject *parent)
         : QObject(parent)
 {
+    dbConn = new DBConn();
+    dbConn->initialize();
+    dbConn->openConnection();
 
-    _dataSize = strlen("CT_PKT") + sizeof(int);
+    _dataSize = sizeof(quint32) + sizeof(int);
     _readHeader = false;
 
     // Create an SSL socket and make its QTcpSocket use our accepted
@@ -45,8 +46,6 @@ SSLServerConnection::SSLServerConnection(quint16 socketDescriptor,
 
     parser = new QueryParser();
     connect(socket, SIGNAL(connected()),this,SLOT(acceptedClient()));
-
-
     connect(socket, SIGNAL(disconnected()), SLOT(connectionClosed()));
     connect(socket, SIGNAL(encrypted()),this, SLOT(ready()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(error(QAbstractSocket::SocketError)));
@@ -56,20 +55,20 @@ SSLServerConnection::SSLServerConnection(quint16 socketDescriptor,
 SSLServerConnection::~SSLServerConnection()
 {
     // Report that the connection has closed.
+   dbConn->closeConnection();
+   dbConn->deleteLater();
     qDebug("Connection closed.");
 }
 
-void SSLServerConnection::test()
-{
-}
 
-void SSLServerConnection::requestToWrite(QString outputData)
+void SSLServerConnection::writeAll(const QString &parsedQuery,
+                                   const quint32 &type)
 {
     QByteArray out;
-    out.append(outputData);
+    out.append(parsedQuery);
     if(socket->isOpen())
     {
-        qint64 sent = socket->write("CT_PKT");
+        qint64 sent = socket->write((const char*) &type, sizeof(quint32));
         socket->flush();
 
         if (-1 == sent)
@@ -91,7 +90,7 @@ void SSLServerConnection::requestToWrite(QString outputData)
         int pos = 0;
         while(pos< out.size())
         {
-            sent = socket->write(out.mid(pos, CT_CHUNK));
+            sent = socket->write(out.mid(pos, CT_CHUNKSIZE));
             socket->flush();
             if (-1 == sent)
             {
@@ -132,15 +131,12 @@ void SSLServerConnection::readData()
         // Read packet header
         if (!_readHeader)
         {
-            char ctPkt[7];
-            qint64 recv = socket->read(ctPkt, strlen("CT_PKT"));
-            ctPkt[6] = '\0';
+            qint64 recv = socket->read((char*)&_readType, sizeof(quint32));
             if (-1 == recv)
             {
                 qDebug() << socket->errorString();
                 return;
             }
-
             int size = 0;
             recv = socket->read((char *) &size, sizeof(int));
             if (-1 == recv)
@@ -148,8 +144,7 @@ void SSLServerConnection::readData()
                 qDebug() << socket->errorString();
                 return;
             }
-
-            if ("CT_PKT" == QString(ctPkt))
+            if(CT_PKTDATA == _readType || CT_DBSDATA == _readType)
             {
                 _dataSize = size;
                 _readHeader = true;
@@ -171,10 +166,19 @@ void SSLServerConnection::readData()
                 delete chunk;
             }
             _readHeader = false;
-            _dataSize = strlen("CT_PKT") + sizeof(int);
+            _dataSize = sizeof(quint32) + sizeof(int);
         }
     }
-    if (!payload.isEmpty()) { exec(parser->parse(payload)); }
+    if (!payload.isEmpty())
+    {
+        qDebug() << CT_PKTDATA;
+        qDebug() << CT_DBSDATA;
+        qDebug() << _readType;
+        if(CT_PKTDATA == _readType)
+            processXML(payload);
+        else if(CT_DBSDATA == _readType)
+            processQuery(payload);
+    }
 }
 
 void SSLServerConnection::connectionClosed()
@@ -197,4 +201,81 @@ void SSLServerConnection::error(QAbstractSocket::SocketError)
     // the errors come directly from the underlying SSL library, and
     // the quality of the text may vary.
     qDebug("Error: %s", qPrintable(socket->errorString()));
+}
+
+void SSLServerConnection::processXML(QByteArray data)
+{
+    QXmlStreamReader reader(data);
+    while (!reader.atEnd())
+    {
+        reader.readNext();
+        if (reader.isStartElement())
+        {
+            QString tagName = reader.name().toString();
+            if ("login_request" == tagName)
+            {
+                QXmlStreamAttributes attr = reader.attributes();
+                QString username = attr.value("username").toString();
+                QString password = attr.value("password").toString();
+                // TO DO: Call database query function, send reply
+                QString id = dbConn->authenticate(parser->parseForAuthentication(username,password));
+                if("No valid ID found!" == id)
+                {
+                    qDebug() << "Authentication failure";
+                    QString login_reply;
+                    QXmlStreamWriter stream(&login_reply);
+                    stream.writeStartElement("login_reply");
+                    stream.writeAttribute("type", "failure");
+                    stream.writeAttribute("user_id", id);
+                    stream.writeEndElement();//end login_reply
+
+                    writeAll(login_reply, CT_PKTDATA);
+                }
+                else if(id.contains("Error",Qt::CaseInsensitive))
+                {
+                    qDebug() << "DB Error" << id;
+                    //TODO write db error to log
+                }
+                else
+                {
+                    //authentication successful
+                    //TODO send client id
+                    qDebug() << "Authentication successful : "<< id;
+                    QString login_reply;
+                    QXmlStreamWriter stream(&login_reply);
+                    stream.writeStartElement("login_reply");
+                    stream.writeAttribute("type", "success");
+                    stream.writeAttribute("user_id", id);
+                    stream.writeEndElement();//end login_reply
+
+                    writeAll(login_reply, CT_PKTDATA);
+                }
+            }
+            else if ("scenario_request" == tagName)
+            {
+                QString userId =
+                        reader.attributes().value("user_id").toString();
+                // TO DO: Call database query function, send reply
+            }
+        }
+    }
+}
+
+// Process database query received from caretoyadmin client.
+void SSLServerConnection::processQuery(QByteArray data)
+{
+    qDebug() << "processQuery";
+    QString output;
+    output = dbConn->exec(parser->parse(data));
+    if("No valid data found!" == output)
+    {
+        //Send client no data found
+    }
+    else if(output.contains("Error", Qt::CaseInsensitive))
+    {
+        //write db error to log
+    }
+    else
+        writeAll(output,CT_DBSDATA);
+    return;
 }

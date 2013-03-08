@@ -13,6 +13,8 @@ class QueryParser : public QObject
 public:
     explicit QueryParser(QObject *parent = 0);
     QHash<QString, QVariant> parse(const QByteArray &stmt);
+    QHash<QString, QVariant> parseForAuthentication(QString username,
+                                                        QString psswd);
 
 private:
     QString statement;

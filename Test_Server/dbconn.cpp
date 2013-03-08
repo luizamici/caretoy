@@ -3,29 +3,43 @@
 DBConn::DBConn(QObject *parent) :
     QObject(parent)
 {
+}
+
+void DBConn::initialize()
+{
     db = QSqlDatabase::addDatabase("QPSQL");
     db.setHostName("localhost");
     db.setPort(55555);
     db.setDatabaseName("ljubljana_test");
     db.setUserName("caretoy");
     db.setPassword("c@reTOypROJECT");
+}
+
+void DBConn::openConnection()
+{
     if(!db.open()){
-      qDebug() << "Connection not successful!" <<  db.lastError().text() ;
+      qDebug() << "Connection not successful!" <<  db.lastError().text();
     }
     else{
         qDebug() << "Connection to DB ljubljana_test opened";
     }
 }
 
+void DBConn::closeConnection()
+{
+    if(db.isOpen())
+        db.close();
+    return;
+}
+
 /*
- *Executes query passed as statement to prepare and values to bind
+ *Executes query passed as statement to prepare and values to bind.
  *In case of select table, the result is serialized in xml and
  *written in the socket
  */
-bool DBConn::exec(QHash<QString, QVariant> query)
+QString DBConn::exec(QHash<QString, QVariant> query)
 {
-    qDebug() << query["type"].toString();
-    qDebug() << query["statement"].toString();
+    QString output;
     QList<QSqlRecord> table_info;
     /*
      *Getting tables's info in case of select table
@@ -80,10 +94,67 @@ bool DBConn::exec(QHash<QString, QVariant> query)
             recs.append(sqlQuery.record());
         }
         if(!recs.isEmpty())
-            requestToWrite(DataToXml::tableToXml(
-                               query["table"].toString(),table_info,recs));
+            output = DataToXml::tableToXml(
+                        query["table"].toString(),table_info,recs);
+        else
+            output = "No valid data found!";
     }
     else
-        qDebug() << sqlQuery.lastError().text();
-    return true;
+        output = "Error : " + sqlQuery.lastError().text();
+    return output;
+}
+
+
+QString DBConn::authenticate(QHash<QString, QVariant> query)
+{
+    QString id;
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare(query["statement"].toString());
+    if(!query["values"].toStringList().isEmpty())
+    {
+        foreach(QString value, query["values"].toStringList())
+        sqlQuery.addBindValue(value);
+    }
+    if(sqlQuery.exec())
+    {
+        if(sqlQuery.next())
+            id = sqlQuery.value(0).toString();
+        else
+            id = "No valid ID found!";
+    }
+    else
+    {
+        id = "Error " + sqlQuery.lastError().text();
+    }
+    return id;
+}
+
+QString DBConn::requestScenario(QHash<QString,QVariant> query)
+{
+    QString xmlScenario;
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare(query["statement"].toString());
+    if(!query["values"].toStringList().isEmpty())
+    {
+        foreach(QString value, query["values"].toStringList())
+        sqlQuery.addBindValue(value);
+    }
+    if(sqlQuery.exec())
+    {
+        if(sqlQuery.next())
+        {
+            xmlScenario = sqlQuery.value(0).toString();
+            QSqlQuery trigger;
+            trigger.prepare("UPDATE test_scenario SET flag = 1 WHERE id = ?");
+            trigger.bindValue(0,sqlQuery.value(2));
+            trigger.exec();
+        }
+        else
+            xmlScenario = "No scenario found!";
+    }
+    else
+    {
+        xmlScenario = "Error " + sqlQuery.lastError().text();
+    }
+    return xmlScenario;
 }

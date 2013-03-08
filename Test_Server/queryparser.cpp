@@ -7,6 +7,8 @@ QueryParser::QueryParser(QObject *parent) :
 
 QHash<QString, QVariant> QueryParser::parse(const QByteArray &stmt)
 {
+    qDebug() << stmt;
+
     QXmlStreamReader reader(stmt);
     while(!reader.isEndElement())
     {
@@ -204,5 +206,18 @@ QHash<QString,QVariant> QueryParser::deleteStatement(const QByteArray &stmt)
     }
     out["statement"] = QVariant(s);
     out["values"] = QVariant(values);
+    return out;
+}
+
+QHash<QString, QVariant> QueryParser::parseForAuthentication(QString username,
+                                                    QString psswd)
+{
+    QHash<QString,QVariant> out;
+    //"SELECT id FROM users WHERE nickname = :username AND password = digest(:password, 'sha512')"
+    out["statement"] = "SELECT id FROM test_users WHERE nickname = ? AND password = ? ";
+    QStringList values;
+    values << username << psswd;
+    out["values"] = QVariant(values);
+    out["table"] = "test_users";
     return out;
 }

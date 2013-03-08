@@ -1,6 +1,7 @@
 #include <QtGui>
 #include "ct_logger.h"
-#include "TableOfScenariosFromXML/ct_scenariosadmin.h"
+#include "CareToy_Admin/ct_admin.h"
+//#include "TableOfScenariosFromXML/ct_scenariosadmin.h"
 
 
 int main(int argc, char *argv[])
@@ -11,7 +12,8 @@ int main(int argc, char *argv[])
     CTLogger logger;
     logger.initialize(app.applicationDirPath());
 
-    CTScenariosAdmin admin;
+    CTAdmin admin;
+//    CTScenariosAdmin admin;
 
 
     Log4Qt::Logger::logger(QLatin1String("main"))->info(

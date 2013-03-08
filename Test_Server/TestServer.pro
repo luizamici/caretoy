@@ -19,7 +19,8 @@ SOURCES += main.cpp\
 HEADERS  += server.h \
     queryparser.h \
     dbconn.h \
-    datatoxml.h
+    datatoxml.h \
+    ct_defs.h
 
 RESOURCES += \
     source.qrc

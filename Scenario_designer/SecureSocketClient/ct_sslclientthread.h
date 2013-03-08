@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QSslSocket>
 #include <QHostAddress>
+#include "CareToy_Admin/ct_defs.h"
 
 class CTSslClientThread : public QThread
 {
@@ -15,16 +16,22 @@ public:
     void run();
     void initialize();
     bool isConnected();
+
 private:
     QSslSocket *socket;
     int _dataSize;
     bool _readHeader;
+    quint32 _readType;
+
+    bool encryptedConn;
 
 signals:
     void notConnected(QString warning);
-    void encryptionStarted();
+//    void encryptionStarted();
     void dataReceived(QString input);
-    void proccessData(QByteArray input);
+
+    void processData(QByteArray input);
+    void processXML(QByteArray input);
 public slots:
     void socketStateChanged(QAbstractSocket::SocketState state);
     void socketEncrypted();
@@ -32,7 +39,7 @@ public slots:
     void socketReadyRead();
     void connectedToHost();
 
-    bool requestForWrite(const QString &parsedQuery);
+    bool writeIntoSocket(const QString &parsedQuery, const quint32 &type);
 
 };
 

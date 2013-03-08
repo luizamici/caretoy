@@ -1,5 +1,5 @@
 #include "ct_queryparser.h"
-#include "ct_tabledata.h"
+//#include "ct_tabledata.h"
 
 CTQueryParser::CTQueryParser()
 {

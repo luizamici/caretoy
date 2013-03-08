@@ -1,29 +1,17 @@
 #include "ct_scenariosadmin.h"
-#include "ct_xmldataparser.h"
-#include "ct_viewofscenarios.h"
-#include "Scenario_Designer/ct_scenarioconfig.h"
-#include "SecureSocketClient/ct_sslclient.h"
-#include "SecureSocketClient/ct_sslclientthread.h"
 #include "ct_tablerecord.h"
+#include "CareToy_Admin/ct_defs.h"
 
 CTScenariosAdmin::CTScenariosAdmin(QObject *parent) :
     QObject(parent)
 {
+}
+
+
+void CTScenariosAdmin::initialize()
+{
     view = new CTViewOfScenarios();
-
-    sslClientThread  = new CTSslClientThread();
-    sslClientThread->run();
     config = new CTScenarioConfig();
-
-    timeOuts = 0;
-
-    /*Connection between the sslClient and the local table of scenarios*/
-    connect(sslClientThread,SIGNAL(notConnected(QString)),this, SLOT(
-                connectionLost(QString)));
-    connect(sslClientThread,SIGNAL(encryptionStarted()),this, SLOT(initialize()));
-    connect(sslClientThread,SIGNAL(proccessData(QByteArray)),this,SLOT(
-                proccessData(QByteArray)));
-
 
     connect(view, SIGNAL(execParsedQuery(QString,QString,QString)), this, SLOT(
                 execParsedQuery(QString,QString,QString)));
@@ -42,11 +30,6 @@ CTScenariosAdmin::CTScenariosAdmin(QObject *parent) :
                     view,SLOT(save(QHash<QString,QString>)));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
                     config,SLOT(close()));
-}
-
-
-void CTScenariosAdmin::initialize()
-{
     view->statusBar->showMessage("Connection to server established ", 5000);
     requestTable();
 }
@@ -55,18 +38,10 @@ void CTScenariosAdmin::initialize()
 void CTScenariosAdmin::execParsedQuery(QString query_type, QString initStmt,
                               QString whereStmt)
 {
-    if(sslClientThread->isConnected())
-    {
-        if(query_type != "select" & sslClientThread->requestForWrite(
-                    CTQueryParser::prepareQuery(initStmt,whereStmt)))
-            requestTable();
-    }
-    else
-    {
-        QMessageBox::critical(0, tr("CareToy Admin"),
-                                       tr("Not connected to server! "
-                           "Local changes cannot be saved in the DB."));
-    }
+    emit requestToWriteIntoSocket(CTQueryParser::prepareQuery(
+                                      initStmt,whereStmt), CT_DBSDATA);
+    if(query_type != "select")
+        requestTable();
 }
 
 
@@ -76,31 +51,12 @@ void CTScenariosAdmin::proccessData(QByteArray table_data)
 }
 
 
-void CTScenariosAdmin::connectionLost(QString mss)
-{
-    int i = QMessageBox::critical(0, tr("CareToy Admin"),mss);
-    view->statusBar->showMessage("Not connected to server. "
-                                 "Trying to reconnect ...");
-    qDebug() << i;
-    QTimer::singleShot(5000, this, SLOT(timerTimeout()));
-}
-
-void CTScenariosAdmin::timerTimeout()
-{
-    qDebug() << "CTAdmin::timerTimeout";
-    if(timeOuts < 5)
-        sslClientThread->initialize();
-    else
-        view->statusBar->showMessage("Impossible to establish a connection "
-                                     "with the server!");
-    timeOuts++;
-}
-
 /*Select on pre-known columns of the table test_scenario*/
 void CTScenariosAdmin::requestTable()
 {
     qDebug() << "Requesting the last version of the table!";
-    QStringList fieldNames = QStringList() <<"id" << "execution_day" << "execution_order"
+    QStringList fieldNames = QStringList() <<"id" << "execution_day"
+                                          << "execution_order"
                                           << "creation_date" << "last_edited"
                                           <<  "description" << "xml_description";
 

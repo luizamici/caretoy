@@ -7,8 +7,10 @@
 #include <QVariant>
 #include <QtDebug>
 
-class CTTableData;
-class CTTableRecord;
+#include "ct_tabledata.h"
+//class CTTableData;
+#include "ct_tablerecord.h"
+//class CTTableRecord;
 
 class CTQueryParser
 {

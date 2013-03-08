@@ -1,5 +1,5 @@
 #include "ct_xmldataparser.h"
-#include "ct_tabledata.h"
+//#include "ct_tabledata.h"
 
 CTXmlDataParser::CTXmlDataParser()
 {

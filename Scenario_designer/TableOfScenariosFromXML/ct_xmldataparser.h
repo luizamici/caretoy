@@ -6,7 +6,8 @@
 #include <QObject>
 
 
-class CTTableData;
+//class CTTableData;
+#include "ct_tabledata.h"
 
 class CTXmlDataParser : public QObject
 {
