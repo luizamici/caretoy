@@ -3,8 +3,8 @@
 CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QWidget(parent)
 {
-
     QVBoxLayout *mainLayout = new QVBoxLayout();
+    this->setWindowTitle("CareToy Admin");
     this->setLayout(mainLayout);
     this->setFixedSize(1000, 400);
 

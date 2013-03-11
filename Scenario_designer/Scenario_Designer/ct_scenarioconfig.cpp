@@ -87,22 +87,23 @@ void CTScenarioConfig::openScenario(QHash<QString, QString> scenario)
 
 void CTScenarioConfig::saveScenarioToDB()
 {
-    dialog = new CTDialog();
-    connect(qpbCancel, SIGNAL(clicked()),dialog, SLOT(close()));
+    wizard = new CTWizard();
 
-    connect(dialog,SIGNAL(accepted(QString,QString,QString)),scenarioCanvas,
-            SLOT(saveScenario(QString,QString,QString)));
-
+    connect(qpbCancel, SIGNAL(clicked()),wizard, SLOT(close()));
+    connect(wizard, SIGNAL(accepted(QStringList)), scenarioCanvas, SLOT(saveScenario(QStringList)));
     if(!scenarioCanvas->isNewScenario())
     {
-        dialog->setData(scenarioCanvas->getDescription(),
-                        scenarioCanvas->getExecutionDay(),
-                        scenarioCanvas->getExecutionOrder());
+        wizard->setInputData(scenarioCanvas->getDescription(),
+                             scenarioCanvas->getExecutionDay(),
+                             scenarioCanvas->getExecutionOrder());
+        wizard->setOutcomeMeasures(scenarioCanvas->getOutcomeMeasures());
     }
-    Qt::WindowFlags flags = dialog->windowFlags();
+
+    Qt::WindowFlags flags = wizard->windowFlags();
     flags ^= Qt::WindowStaysOnTopHint;
-    dialog->setWindowFlags( flags );
-    dialog->show();
-    dialog->activateWindow();
+    wizard->setWindowFlags( flags );
+    wizard->show();
+    wizard->raise();
+    wizard->activateWindow();
 }
 

@@ -55,13 +55,13 @@ void CTAdmin::processXML(QByteArray data)
     while (!reader.atEnd())
     {
         reader.readNext();
-        if (reader.isStartElement())
+        if (reader.isStartElement() && !reader.isStartDocument())
         {
             QString tagName = reader.name().toString();
             if ("login_reply" == tagName)
             {
                 QXmlStreamAttributes attr = reader.attributes();
-                QString type = attr.value("type").toString();
+                QString type = attr.value("message").toString();
                 if("success" == type)
                 {
                     dialog->close();

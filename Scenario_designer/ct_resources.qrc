@@ -13,5 +13,6 @@
         <file>images/uToy.png</file>
         <file>images/wall.png</file>
         <file>images/logo.png</file>
+        <file>include/caretoy_ca.crt</file>
     </qresource>
 </RCC>

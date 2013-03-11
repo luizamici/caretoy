@@ -20,6 +20,7 @@ public:
     QString getDescription();
     QString getExecutionDay();
     QString getExecutionOrder();
+    QString getOutcomeMeasures();
 
 
 private:
@@ -35,6 +36,7 @@ private:
     QString creation_date;
     QString execution_day;
     QString execution_order;
+    QString outcome_measures;
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -49,6 +51,7 @@ public slots:
     void loadScenarioFromFile();
     void loadScenario(QHash<QString,QString> scenario);
     void saveScenario(QString description, QString execution_day, QString execution_order);
+    void saveScenario(QStringList data);
 
 signals:
     void save(QHash<QString,QString> scenario);

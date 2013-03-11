@@ -324,6 +324,7 @@ void CTScenarioCanvas::clear()
     creation_date.clear();
     execution_day.clear();
     execution_order.clear();
+    outcome_measures.clear();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::clear .");
 }
@@ -365,6 +366,9 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
             xml_conf.clear();
             block_name = reader.attributes().value("name").toString();
         }
+        if(reader.isStartElement() && reader.name() == "outcome_measures")
+            xml_conf.clear();
+
         stream.writeCurrentToken(reader);
 
         /*When a block is ending*/
@@ -434,6 +438,9 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 blocks.append(new_block);
             }
         }
+
+        if(reader.isEndElement() && reader.name() == "outcome_measures")
+            outcome_measures = xml_conf;
     }
     updateBlockSequence();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
@@ -618,6 +625,80 @@ void CTScenarioCanvas::saveScenario(QString description,
                 "Exit CTScenarioCanvas::saveScenario .");
 }
 
+void CTScenarioCanvas::saveScenario(QStringList data)
+{
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Entering CTScenarioCanvas::saveScenario ...");
+    QHash<QString,QString> scenario;
+    if(!this->blocks.isEmpty())
+    {
+        QString xml_scenario;
+        QXmlStreamWriter stream(&xml_scenario);
+        stream.setAutoFormatting(true);
+        stream.setAutoFormattingIndent(2);
+        stream.writeStartDocument();
+        stream.writeStartElement("scenario_data");
+        stream.writeStartElement("blocks");
+        stream.writeAttribute("number", QString::number(this->blocks.count()));
+
+        for (int i = 0; i < this->blocks.count(); i++)
+        {
+            QString xml = this->blocks.at(i)->getConfiguration("Using sax parser");
+            if(xml.isEmpty())
+                Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->warn("CTScenarioCanvas::saveScenario() "
+                              " Found configuration empty for block :"
+                              + this->blocks.at(i)->getName());
+            QXmlStreamReader reader(xml);
+            while(!reader.atEnd())
+            {
+                reader.readNext();
+                if(reader.tokenType() != QXmlStreamReader::StartDocument)
+                    stream.writeCurrentToken(reader);
+                if(reader.isEndElement() && reader.name() == "block")
+                {
+                    break;
+                }
+            }
+        }
+        stream.writeEndElement(); //end blocks
+
+        QXmlStreamReader reader(data.at(3));
+        while(!reader.atEnd())
+        {
+            reader.readNext();
+            if(reader.tokenType() != QXmlStreamReader::StartDocument)
+                stream.writeCurrentToken(reader);
+            if(reader.isEndElement() && reader.name() == "outcome_measures")
+            {
+                break;
+            }
+        }
+        stream.writeEndElement(); //end scenario_data
+        stream.writeEndDocument();
+
+        if(isNewScenario()){
+            scenario["creation_date"] = QDateTime::currentDateTime().
+                    toString("yyyy-MM-dd HH:mm");
+        }
+        else
+            scenario["creation_date"] = creation_date;
+
+        if(!isNewScenario()){
+            scenario["id"] = id_scenario;
+        }
+        scenario["xml_description"] = xml_scenario;
+        scenario["last_edited"] = QDateTime::currentDateTime().
+                toString("yyyy-MM-dd HH:mm");
+        scenario["execution_day"] = data.at(1);
+        scenario["execution_order"] = data.at(2);
+        scenario["description"] = data.at(0);
+        qDebug() << scenario;
+        emit save(scenario);
+    }
+    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+                "Exit CTScenarioCanvas::saveScenario .");
+}
+
 bool CTScenarioCanvas::isNewScenario()
 {
     if(id_scenario.isEmpty())
@@ -639,4 +720,9 @@ QString CTScenarioCanvas::getExecutionDay()
 QString CTScenarioCanvas::getExecutionOrder()
 {
     return this->execution_order;
+}
+
+QString CTScenarioCanvas::getOutcomeMeasures()
+{
+    return this->outcome_measures;
 }

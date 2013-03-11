@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QSslSocket>
 #include <QHostAddress>
+#include <QFile>
 #include "CareToy_Admin/ct_defs.h"
 
 class CTSslClientThread : public QThread

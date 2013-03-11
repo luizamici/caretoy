@@ -6,6 +6,7 @@
 #include "ct_blocksource.h"
 #include "ct_trashcan.h"
 #include "ct_logger.h"
+#include "ct_wizard.h"
 
 class CTScenarioConfig : public QWidget
 {
@@ -17,6 +18,7 @@ public:
     CTScenarioCanvas *scenarioCanvas;
 private:
     CTDialog *dialog;
+    CTWizard *wizard;
     QPushButton *qpbCancel;
 
 private slots:

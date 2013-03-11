@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     SecureSocketClient/ct_sslclientthread.cpp \
     CareToy_Admin/ct_logindialog.cpp \
     TableOfScenariosFromXML/ct_scenariosadmin.cpp \
-    CareToy_Admin/ct_admin.cpp
+    CareToy_Admin/ct_admin.cpp \
+    Scenario_Designer/ct_wizard.cpp
 
 
 HEADERS += \
@@ -75,7 +76,8 @@ HEADERS += \
     SecureSocketClient/ct_sslclientthread.h \
     CareToy_Admin/ct_logindialog.h \
     TableOfScenariosFromXML/ct_scenariosadmin.h \
-    CareToy_Admin/ct_admin.h
+    CareToy_Admin/ct_admin.h \
+    Scenario_Designer/ct_wizard.h
 
 FORMS += \
     Scenario_Designer/ct_conftoystick.ui \
@@ -90,7 +92,8 @@ FORMS += \
     Scenario_Designer/ct_blockconfig.ui \
     Scenario_Designer/ct_simpleblock.ui \
     Scenario_Designer/ct_dialog.ui \
-    CareToy_Admin/ct_logindialog.ui
+    CareToy_Admin/ct_logindialog.ui \
+    Scenario_Designer/ct_wizard.ui
 
 RESOURCES += \
     ct_resources.qrc
