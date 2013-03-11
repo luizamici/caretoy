@@ -34,7 +34,7 @@ CTConfArch::CTConfArch(QWidget *parent) :
         CTSpeaker *st_speaker = new CTSpeaker(i+1, false);
 
         //TODO DELETE THIS WHEN SPEAKERS ENABLED FOR ARCH
-        st_speaker->setEnabled(false);
+//        st_speaker->setEnabled(false);
         /**********************************************/
         speaker_stimuli.append(st_speaker);
         ui->qgb_stimuli->layout()->addWidget(st_speaker);
@@ -73,7 +73,7 @@ CTConfArch::~CTConfArch()
 bool CTConfArch::setParameters(QString xml)
 {
     //TODO: UNCOMMENT WHEN SPEAKERS ENABLED FOR ARCH
-    int num_stimuli = NUM_LIGHTS/* + NUM_SPEAKERS*/;
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     /**********************************************/
 
     QXmlSimpleReader xmlReader;
@@ -143,7 +143,7 @@ QString CTConfArch::getParameters(QString value){
     stream.writeStartElement("stimuli");
 
     //TODO: UNCOMMENT WHEN SPEAKERS ENABLED FOR ARCH
-    int num_stimuli = NUM_LIGHTS/* + NUM_SPEAKERS*/;
+    int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     /***********************************************/
 
     stream.writeAttribute("number",QString::number(num_stimuli));

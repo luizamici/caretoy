@@ -102,7 +102,7 @@ void CTViewOfScenarios::on_copy_clicked()
 {
     if(tableSelected)
     {
-        QModelIndex index = table->currentIndex();
+        QModelIndex index = filterModel->mapToSource(table->currentIndex());
         xmlTable->copyRecord(index);
     }
 }
@@ -111,7 +111,7 @@ void CTViewOfScenarios::on_remove_clicked()
 {
     if(tableSelected)
     {
-        QModelIndex index = table->currentIndex();
+        QModelIndex index = filterModel->mapToSource(table->currentIndex());
         xmlTable->deleteRecord(index);
     }
 }

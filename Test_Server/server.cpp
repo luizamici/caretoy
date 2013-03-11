@@ -171,9 +171,6 @@ void SSLServerConnection::readData()
     }
     if (!payload.isEmpty())
     {
-        qDebug() << CT_PKTDATA;
-        qDebug() << CT_DBSDATA;
-        qDebug() << _readType;
         if(CT_PKTDATA == _readType)
             processXML(payload);
         else if(CT_DBSDATA == _readType)
