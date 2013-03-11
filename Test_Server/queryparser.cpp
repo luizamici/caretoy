@@ -7,8 +7,6 @@ QueryParser::QueryParser(QObject *parent) :
 
 QHash<QString, QVariant> QueryParser::parse(const QByteArray &stmt)
 {
-    qDebug() << stmt;
-
     QXmlStreamReader reader(stmt);
     while(!reader.isEndElement())
     {

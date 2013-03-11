@@ -19,6 +19,8 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     /*activates selection of whole row*/
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
+    table->setSortingEnabled(true);
+
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     mainLayout->addLayout(buttonLayout);
     mainLayout->addWidget(table);
@@ -44,6 +46,9 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     connect(table, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(
                 on_edit_clicked()));
 
+    QRect desktop = QApplication::desktop()->availableGeometry();
+    this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
+
     show();
 }
 
@@ -52,7 +57,9 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     xmlTable = new CTTableModel(table_data,this->parentWidget());
     connect(xmlTable, SIGNAL(execParsedQuery(QString,QString,QString)),this,
             SIGNAL(execParsedQuery(QString,QString,QString)));
-    table->setModel(xmlTable);
+    filterModel = new QSortFilterProxyModel();
+    filterModel->setSourceModel(xmlTable);
+    table->setModel(filterModel);
 
     xmlTable->setHeader(0, "ID");
     xmlTable->setHeader(1,"Execution day");
@@ -112,7 +119,7 @@ void CTViewOfScenarios::on_remove_clicked()
 
 QHash<QString,QString> CTViewOfScenarios::getSelected()
 {
-    QModelIndex index = table->currentIndex();
+    QModelIndex index = filterModel->mapToSource(table->currentIndex());
     return xmlTable->record(index);
 }
 
