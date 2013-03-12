@@ -133,10 +133,13 @@ CTConfWallRight::CTConfWallRight(QWidget *parent) :
      */
     for(int i=0; i < speaker_stimuli.size() -1 ;i++)
     {
-        connect(speaker_stimuli.at(i)->activation,SIGNAL(valueChanged(double)),
-                speaker_stimuli.at(i + 1)->activation,SLOT(setMinimumValue(double)));
-        connect(speaker_stimuli.at(i + 1)->activation,SIGNAL(valueChanged(double)),
-                speaker_stimuli.at(i)->activation,SLOT(setMaximumValue(double)));
+//        connect(speaker_stimuli.at(i)->activation,SIGNAL(valueChanged(double)),
+//                speaker_stimuli.at(i + 1)->activation,SLOT(setMinimumValue(double)));
+//        connect(speaker_stimuli.at(i + 1)->activation,SIGNAL(valueChanged(double)),
+//                speaker_stimuli.at(i)->activation,SLOT(setMaximumValue(double)));
+
+        connect(speaker_stimuli.at(i), SIGNAL(durationChanged(double)),
+                speaker_stimuli.at(i+1)->activation, SLOT(setMinimumValue(double)));
     }
 
     /* Establish automatic enabling/disabling of related event controls */

@@ -791,7 +791,10 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
     {
         layout->addWidget(new QLabel("Activation time"), row_index, 1);
         activation = new CTDoubleSpinBox();
-        activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        if(id == 1)
+            activation->setup(" sec.", 1, 0.0, 300.0, 0.1, 0.0);
+        else
+            activation->setup(" sec.", 1, 1.0, 300.0, 0.1, 0.0);
         activation->setEnabled(false);
         layout->addWidget(activation, row_index, 2);
         row_index++;
@@ -853,6 +856,12 @@ CTSpeaker::CTSpeaker(int id, bool action, QWidget *parent) :
         duration_min = NULL;
         duration_max = NULL;
     }
+
+    if(!isAction)
+    {
+        connect(duration_max, SIGNAL(valueChanged(double)), this, SLOT(durationValueChanged()));
+        connect(activation, SIGNAL(valueChanged(double)), this, SLOT(durationValueChanged()));
+    }
     /**************************************************************************/
 
     /* Add elements for control over the sound file ***************************/
@@ -908,6 +917,12 @@ void CTSpeaker::stateChecked(bool b)
         /*Set default values*/
         setDefault();
     }
+}
+
+
+void CTSpeaker::durationValueChanged()
+{
+    emit(durationChanged(duration_max->value() + activation->value()));
 }
 
 void CTSpeaker::setDefault()

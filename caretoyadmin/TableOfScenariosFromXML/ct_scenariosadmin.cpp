@@ -7,11 +7,12 @@ CTScenariosAdmin::CTScenariosAdmin(QObject *parent) :
 {
 }
 
-
 void CTScenariosAdmin::initialize()
 {
     view = new CTViewOfScenarios();
     config = new CTScenarioConfig();
+
+//    connect(view, SIGNAL(),config, SLOT(deleteLater()));
 
     connect(view, SIGNAL(execParsedQuery(QString,QString,QString)), this, SLOT(
                 execParsedQuery(QString,QString,QString)));

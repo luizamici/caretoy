@@ -180,8 +180,13 @@ public:
 
 private:
     void setDefault();
+
 private slots:
     void stateChecked(bool b);
+    void durationValueChanged();
+
+signals:
+    void durationChanged(double durationOfSpeaker);
 };
 
 /* ########################################################################## */
