@@ -49,7 +49,7 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
 
-//    show();
+    show();
 }
 
 void CTViewOfScenarios::init(CTTableData *table_data)
