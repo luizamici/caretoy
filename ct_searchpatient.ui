@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CTSearchPatient</class>
+ <widget class="QWidget" name="CTSearchPatient">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>330</width>
+    <height>96</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <item>
+    <widget class="QComboBox" name="qcbSearchBy">
+     <item>
+      <property name="text">
+       <string>Filter by ...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Reference</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>First name</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Last name</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Father</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Mother</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Gest. age</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="qleINputSearch">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

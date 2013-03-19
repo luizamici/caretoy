@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="save_button.png">images/save_button.png</file>
+        <file alias="plus_icon.png">images/plus_icon.png</file>
+        <file alias="logo.jpeg">images/logo.jpeg</file>
+        <file alias="error.png">images/error.png</file>
+        <file alias="check.png">images/check.png</file>
+        <file alias="logo.png">images/logo.png</file>
+        <file alias="search_button.png">images/search-button2.png</file>
+        <file alias="add_button.png">images/add_button.png</file>
+        <file alias="save_button2.png">images/save_button2.png</file>
+        <file alias="edit_button.png">images/edit_button.png</file>
+        <file alias="check-icon.png">images/check-icon_scaled.png</file>
+    </qresource>
+</RCC>

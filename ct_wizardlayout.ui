@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CTWizardLayout</class>
+ <widget class="QWidget" name="CTWizardLayout">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>911</width>
+    <height>324</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="qleParent_2"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="qleParent_1"/>
+     </item>
+     <item row="0" column="4" rowspan="8">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="qlePhone"/>
+     </item>
+     <item row="1" column="5">
+      <widget class="QLabel" name="qlbNotes">
+       <property name="text">
+        <string>Notes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="qleAddress"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="qlbAddress">
+       <property name="text">
+        <string>Address</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>10</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="7" column="3">
+      <widget class="QLineEdit" name="qleEmail"/>
+     </item>
+     <item row="0" column="7">
+      <widget class="QLabel" name="qlbAttendant">
+       <property name="text">
+        <string>Attendant*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="qlbLastname">
+       <property name="text">
+        <string>Last name*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLabel" name="qlbReference">
+       <property name="text">
+        <string>Reference*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="qlbParent2">
+       <property name="text">
+        <string>Mother</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QComboBox" name="qcbSex">
+       <item>
+        <property name="text">
+         <string>Choose ...</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Male</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Female</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="qlbFirstname">
+       <property name="text">
+        <string>First name*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="qlbDateofbirth">
+       <property name="text">
+        <string>Date of birth*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="qlbPHone">
+       <property name="text">
+        <string>Phone</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="qleZip_code"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="qleFirstname">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLineEdit" name="qleCity"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QComboBox" name="qcbGest_age">
+       <item>
+        <property name="text">
+         <string>Choose ...</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>30th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>31st week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>32nd week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>33rd week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>34th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>35th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>36th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>37th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>38th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>39th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>40th week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>41st week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>42nd week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>43rd week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>44th week</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="qlbEmail">
+       <property name="text">
+        <string>Email</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="qlbSex">
+       <property name="text">
+        <string>Sex*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="qlbGestage">
+       <property name="text">
+        <string>Gest. age*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QLineEdit" name="qleId"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="qlbParent1">
+       <property name="text">
+        <string>Father</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6" rowspan="7" colspan="3">
+      <widget class="QTextEdit" name="qteNotes">
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOn</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="qleLastname"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="qlbZipcode">
+       <property name="text">
+        <string>Zip code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="qlbCity">
+       <property name="text">
+        <string>City</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="QLineEdit" name="qleAttendant"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QDateEdit" name="qdeDate_of_birth">
+       <property name="date">
+        <date>
+         <year>2012</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
