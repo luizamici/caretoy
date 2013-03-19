@@ -20,7 +20,7 @@ public:
     CTViewOfScenarios *view;
     CTScenarioConfig *config;
 
-private:
+    void showMessage(QString mssg);
     void requestTable();
 
 signals:
@@ -29,7 +29,7 @@ signals:
 
 public slots:
     void initialize();
-    void execParsedQuery(QString query_type, QString initStmt, QString whereStmt);
+    void execParsedQuery(QString initStmt, QString whereStmt);
     void proccessData(QByteArray table_data);
 
 };

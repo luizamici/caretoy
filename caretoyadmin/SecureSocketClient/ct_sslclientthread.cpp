@@ -16,6 +16,8 @@ void CTSslClientThread::run()
 void CTSslClientThread::initialize()
 {
     encryptedConn = false;
+    waitForTable = false;
+    readingSocket = false;
 
     socket = new QSslSocket(this);
     connect(socket, SIGNAL(connected()), this, SLOT(connectedToHost()));
@@ -70,6 +72,7 @@ void CTSslClientThread::sslErrors(const QList<QSslError> &errors)
 
 void CTSslClientThread::socketReadyRead()
 {
+    readingSocket = true;
     QByteArray payload;
     while (_dataSize <= socket->bytesAvailable())
     {
@@ -120,13 +123,18 @@ void CTSslClientThread::socketReadyRead()
         if(CT_PKTDATA == _readType)
             processXML(payload);
         else if(CT_DBSDATA == _readType)
+        {
             processData(payload);
+            waitForTable = false;
+        }
+        readingSocket = false;
     }
 }
 
 void CTSslClientThread::connectedToHost()
 {
     qDebug() << "Connected to " << "fsm.caretoy.eu : 61499";
+    emit connectionSuccessful("Connected to fsm.caretoy.eu:61499");
 }
 
 
@@ -154,4 +162,12 @@ bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
         pos += written;
     }
     return true;
+}
+
+void CTSslClientThread::requestTable(const QString &parsedQuery, const quint32 &type)
+{
+    waitForTable = true;
+    _tableRequest = parsedQuery;
+    writeIntoSocket(parsedQuery, type);
+    return;
 }

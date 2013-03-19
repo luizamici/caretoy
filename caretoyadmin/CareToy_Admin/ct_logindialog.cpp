@@ -21,6 +21,8 @@ CTLoginDialog::CTLoginDialog(QWidget *parent) :
     statusBar = new QStatusBar();
     statusBar->setMaximumHeight(20);
     statusBar->setFont(QFont("Helvetica [Cronyx]", 10));
+    showMessage("Connecting to server ...");
+
     ui->hl_footer->addWidget(statusBar);
 
     ui->passwordEdit->setEchoMode(QLineEdit::Password);
@@ -40,6 +42,10 @@ void CTLoginDialog::on_cancelButton_clicked()
     this->close();
 }
 
+void CTLoginDialog::showMessage(QString mss)
+{
+    statusBar->showMessage(mss);
+}
 
 CTLoginDialog::~CTLoginDialog()
 {

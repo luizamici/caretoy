@@ -49,7 +49,7 @@ private:
     QVector<QVariant> *headerDt;
 
 signals:
-    void execParsedQuery(QString query_type,QString init_stmt, QString where_stmt);
+    void execParsedQuery(QString init_stmt, QString where_stmt);
 
 
 };

@@ -55,8 +55,8 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
 void CTViewOfScenarios::init(CTTableData *table_data)
 {
     xmlTable = new CTTableModel(table_data,this->parentWidget());
-    connect(xmlTable, SIGNAL(execParsedQuery(QString,QString,QString)),this,
-            SIGNAL(execParsedQuery(QString,QString,QString)));
+    connect(xmlTable, SIGNAL(execParsedQuery(QString,QString)),this,
+            SIGNAL(execParsedQuery(QString,QString)));
     filterModel = new QSortFilterProxyModel();
     filterModel->setSourceModel(xmlTable);
     table->setModel(filterModel);
@@ -68,8 +68,10 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     xmlTable->setHeader(4, "Last edited");
     xmlTable->setHeader(5, "Description");
 
+
     /*columns which are not wished to be viewd */
     table->setColumnHidden(6, true); // xml_description hidden
+    table->setColumnHidden(7, true);
 
     /*
      *Signals are emitted if valid rows are selected from the table

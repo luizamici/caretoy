@@ -7,6 +7,7 @@ CTXmlDataParser::CTXmlDataParser()
 
 CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
 {
+    bool tableEmpty = true;
     QXmlStreamReader reader(table_data);
     CTTableData *tableData;
     CTTableRecord rec;
@@ -43,6 +44,8 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
             reader.attributes().value("auto").toString() == "true"?
                         field.setAutoValue(true): field.setAutoValue(false);
 
+            field.setDefaultValue(reader.attributes().value("column_default").toString());
+
             if(!reader.attributes().value("constraint_type").toString().isEmpty())
             {
                 QPair<QString, CTTableField> p;
@@ -64,7 +67,8 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
         }
         if(reader.isStartElement() && reader.name() == "row")
         {
-            _rec = rec;
+//            _rec = rec;
+            tableEmpty = false;
             i = 0;
         }
 
@@ -72,16 +76,20 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
         {
             if(!reader.text().toString().trimmed().isEmpty())
             {
-                _rec.setValue(i,reader.text().toString());
+                rec.setValue(i,reader.text().toString());
                 i++;
             }
         }
         if(reader.isEndElement() && reader.name() == "row")
         {
-            tableData->insertRecord(-1,_rec);
+            tableData->insertRecord(-1,rec);
         }
-
-        if(reader.isEndElement() && reader.name() == "table")
+        if(reader.isEndElement() && reader.name() == "table" && tableEmpty == true)
+        {
+            tableData->insertRecord(-1, rec);
+            tableData->constraints = _constraints;
+        }
+        if(reader.isEndElement() && reader.name() == "table" && tableEmpty != true)
         {
             tableData->constraints = _constraints;
         }

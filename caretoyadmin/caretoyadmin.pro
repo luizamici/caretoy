@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     CareToy_Admin/ct_logindialog.cpp \
     TableOfScenariosFromXML/ct_scenariosadmin.cpp \
     CareToy_Admin/ct_admin.cpp \
-    Scenario_Designer/ct_wizard.cpp
+    Scenario_Designer/ct_wizard.cpp \
+    Scenario_Designer/ct_wizardpage.cpp
 
 
 HEADERS += \
@@ -73,7 +74,8 @@ HEADERS += \
     CareToy_Admin/ct_logindialog.h \
     TableOfScenariosFromXML/ct_scenariosadmin.h \
     CareToy_Admin/ct_admin.h \
-    Scenario_Designer/ct_wizard.h
+    Scenario_Designer/ct_wizard.h \
+    Scenario_Designer/ct_wizardpage.h
 
 FORMS += \
     Scenario_Designer/ct_conftoystick.ui \

@@ -10,6 +10,7 @@ QString DataToXml::tableToXml(QString tableName,QList<QSqlRecord> tableInfo,
                               QList<QSqlRecord> recs)
 {
     qDebug() << "DataToXml::tableToXml";
+    QList<QSqlRecord> _fields = tableInfo;
 
     QString xml;
     QXmlStreamWriter stream(&xml);
@@ -17,13 +18,21 @@ QString DataToXml::tableToXml(QString tableName,QList<QSqlRecord> tableInfo,
     stream.writeStartElement("table");
     stream.writeAttribute("name", tableName);
     stream.writeStartElement("fields");
-    QSqlRecord _rec = recs.at(0);
-    for(int i=0; i< _rec.count(); i++)
+
+    if(!recs.isEmpty())
     {
-        foreach(QSqlRecord column, tableInfo)
-        {
-            if(_rec.fieldName(i) == column.value("column_name").toString())
+        QSqlRecord _rec = recs.at(0);
+        _fields.clear();
+        for (int var = 0; var < _rec.count(); ++var) {
+            foreach(QSqlRecord column, tableInfo)
             {
+                if(_rec.fieldName(var) == column.value("column_name").toString())
+                    _fields.append(column);
+            }
+        }
+    }
+    foreach(QSqlRecord column, _fields)
+        {
                 stream.writeStartElement("field");
                 stream.writeAttribute("name", column.value("column_name").
                                       toString());
@@ -43,10 +52,10 @@ QString DataToXml::tableToXml(QString tableName,QList<QSqlRecord> tableInfo,
                     stream.writeAttribute("auto", "false");
                 stream.writeAttribute("constraint_type", column.value(
                                           "constraint_type").toString());
+                stream.writeAttribute("column_default", column.value(
+                                          "column_default").toString());
                 stream.writeEndElement();//end field
             }
-        }
-    }
     stream.writeEndElement();//end fields
 
     foreach(QSqlRecord record, recs)

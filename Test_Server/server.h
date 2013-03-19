@@ -21,7 +21,7 @@ private:
     QSslSocket *socket;
     DBConn *dbConn;
 
-    int _dataSize;
+    qint64 _dataSize;
     bool _readHeader;
     quint32 _readType;
 

@@ -692,7 +692,6 @@ void CTScenarioCanvas::saveScenario(QStringList data)
         scenario["execution_day"] = data.at(1);
         scenario["execution_order"] = data.at(2);
         scenario["description"] = data.at(0);
-        qDebug() << scenario;
         emit save(scenario);
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(

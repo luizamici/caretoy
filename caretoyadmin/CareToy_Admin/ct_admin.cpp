@@ -12,6 +12,8 @@ CTAdmin::CTAdmin()
 
     scenarioAdmin = new CTScenariosAdmin();
 
+    connect(sslClientThread, SIGNAL(connectionSuccessful(QString)), dialog,
+            SLOT(showMessage(QString)));
     connect(sslClientThread,SIGNAL(notConnected(QString)),this, SLOT(
                 connectionLost(QString)));
     connect(dialog, SIGNAL(credentials(QString,QString)), this, SLOT(
@@ -22,7 +24,7 @@ CTAdmin::CTAdmin()
     connect(sslClientThread,SIGNAL(processXML(QByteArray)),this, SLOT(processXML(QByteArray)));
 
     connect(scenarioAdmin, SIGNAL(requestToWriteIntoSocket(QString,quint32)),
-            sslClientThread, SLOT(writeIntoSocket(QString,quint32)));
+            sslClientThread, SLOT(requestTable(QString,quint32)));
 }
 
 void CTAdmin::authenticate(QString username, QString psswd)
@@ -66,10 +68,18 @@ void CTAdmin::processXML(QByteArray data)
                     dialog->statusBar->showMessage(attr.value("user_id").
                                                    toString(), 5000);
             }
-            else
+            else if("query_reply" == tagName)
             {
-                qDebug() << "Reply not recognized";
+                QXmlStreamAttributes attr = reader.attributes();
+                QString type = attr.value("message").toString();
+                if("success" == type)
+                {
+                    scenarioAdmin->showMessage("Query executed successfully!");
+                    scenarioAdmin->requestTable();
+                }
             }
+            else
+                qDebug() << "Reply not recognized";
         }
     }
     return;

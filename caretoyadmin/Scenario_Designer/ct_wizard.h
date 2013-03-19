@@ -2,8 +2,10 @@
 #define CT_WIZARD_H
 
 #include <QWizard>
+#include <QtGui>
 #include <QDebug>
 #include <QXmlStreamWriter>
+
 
 namespace Ui {
 class CTWizard;
@@ -33,5 +35,6 @@ private:
 signals:
     void accepted(QStringList data);
 };
+
 
 #endif // CT_WIZARD_H

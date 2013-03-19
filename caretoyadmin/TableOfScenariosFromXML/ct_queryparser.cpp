@@ -40,7 +40,7 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         for(int i = 0; i< row.count(); i++)
         {
             /*the auto increment types of the DB are skipped*/
-            if(!row.field(i).isAutoValue())
+            if(row.field(i).defaultValue().isEmpty())
             {
                 stream.writeStartElement("field");
                 stream.writeAttribute("name", row.fieldName(i));
@@ -63,13 +63,16 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         stream.writeAttribute("number", QString::number(row.count()));
         for(int i = 0; i< row.count(); i++)
         {
-            stream.writeStartElement("field");
-            stream.writeAttribute("name",row.fieldName(i));
-            if(row.fieldName(i).contains("xml"))
-                stream.writeCDATA(row.value(i));
-            else
-                stream.writeCharacters(row.value(i));
-            stream.writeEndElement();//end field
+            if(row.field(i).defaultValue().isEmpty())
+            {
+                stream.writeStartElement("field");
+                stream.writeAttribute("name",row.fieldName(i));
+                if(row.fieldName(i).contains("xml"))
+                    stream.writeCDATA(row.value(i));
+                else
+                    stream.writeCharacters(row.value(i));
+                stream.writeEndElement();//end field
+            }
         }
         stream.writeEndElement();// end fields
         stream.writeEndElement();//end table

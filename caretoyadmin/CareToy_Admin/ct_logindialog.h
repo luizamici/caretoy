@@ -26,6 +26,9 @@ signals:
 private slots:
     void on_okButton_clicked();
     void on_cancelButton_clicked();
+
+public slots:
+    void showMessage(QString mss);
 };
 
 #endif // CT_LOGINDIALOG_H

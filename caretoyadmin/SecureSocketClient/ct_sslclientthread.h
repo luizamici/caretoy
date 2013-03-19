@@ -6,6 +6,7 @@
 #include <QSslSocket>
 #include <QHostAddress>
 #include <QFile>
+#include <QTimer>
 #include "CareToy_Admin/ct_defs.h"
 
 class CTSslClientThread : public QThread
@@ -24,9 +25,14 @@ private:
     quint32 _readType;
 
     bool encryptedConn;
+    bool waitForTable;
+    bool readingSocket;
+
+    QString _tableRequest;
 
 signals:
     void notConnected(QString warning);
+    void connectionSuccessful(QString mss);
     void dataReceived(QString input);
 
     void processData(QByteArray input);
@@ -39,6 +45,7 @@ public slots:
     void connectedToHost();
 
     bool writeIntoSocket(const QString &parsedQuery, const quint32 &type);
+    void requestTable(const QString &parsedQuery, const quint32 &type);
 
 };
 

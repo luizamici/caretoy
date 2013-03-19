@@ -13,8 +13,8 @@ void CTScenariosAdmin::initialize()
     view = new CTViewOfScenarios();
     config = new CTScenarioConfig();
 
-    connect(view, SIGNAL(execParsedQuery(QString,QString,QString)), this, SLOT(
-                execParsedQuery(QString,QString,QString)));
+    connect(view, SIGNAL(execParsedQuery(QString,QString)), this, SLOT(
+                execParsedQuery(QString,QString)));
 
     /*Connections between viewOfScenarios and the scenario designer*/
     connect(view,SIGNAL(editScenario(QHash<QString,QString>)),config, SLOT(show()));
@@ -35,13 +35,10 @@ void CTScenariosAdmin::initialize()
 }
 
 
-void CTScenariosAdmin::execParsedQuery(QString query_type, QString initStmt,
-                              QString whereStmt)
+void CTScenariosAdmin::execParsedQuery(QString initStmt, QString whereStmt)
 {
     emit requestToWriteIntoSocket(CTQueryParser::prepareQuery(
                                       initStmt,whereStmt), CT_DBSDATA);
-    if(query_type != "select")
-        requestTable();
 }
 
 
@@ -54,10 +51,12 @@ void CTScenariosAdmin::proccessData(QByteArray table_data)
 /*Select on pre-known columns of the table test_scenario*/
 void CTScenariosAdmin::requestTable()
 {
+
     QStringList fieldNames = QStringList() <<"id" << "execution_day"
                                           << "execution_order"
                                           << "creation_date" << "last_edited"
-                                          <<  "description" << "xml_description";
+                                          <<  "description" << "xml_description"
+                                           << "flag";
 
     CTTableRecord rec = CTTableRecord();
     int i =0;
@@ -68,5 +67,11 @@ void CTScenariosAdmin::requestTable()
     }
     QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
                                                "test_scenario",rec);
-    execParsedQuery("select",stmt, QString());
+    execParsedQuery(stmt, QString());
+    showMessage("Retreiving table from DB...");
+}
+
+void CTScenariosAdmin::showMessage(QString mssg)
+{
+    view->statusBar->showMessage(mssg, 5000);
 }

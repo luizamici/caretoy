@@ -91,13 +91,14 @@ QString DBConn::exec(QHash<QString, QVariant> query)
         QList<QSqlRecord> recs;
         while(sqlQuery.next())
         {
+            qDebug() << "rec found";
             recs.append(sqlQuery.record());
         }
-        if(!recs.isEmpty())
-            output = DataToXml::tableToXml(
+//        if(!recs.isEmpty())
+        output = DataToXml::tableToXml(
                         query["table"].toString(),table_info,recs);
-        else
-            output = "No valid data found!";
+//        else
+//            output = "No valid data found!";
     }
     else
         output = "Error : " + sqlQuery.lastError().text();

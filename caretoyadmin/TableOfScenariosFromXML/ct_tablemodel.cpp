@@ -38,7 +38,6 @@ QVariant CTTableModel::data(
 QVariant CTTableModel::headerData(
         int section, Qt::Orientation orientation, int role) const
 {
-
     if (role != Qt::DisplayRole)
         return QVariant();
 
@@ -104,7 +103,7 @@ bool CTTableModel::insertRowIntoTable(const CTTableRecord &rec)
     QString initial_statement = CTQueryParser::xmlStatement(
                 CTQueryParser::InsertStatement, p_table_data->table_name,
                 rec);
-    execParsedQuery("insert",initial_statement, QString());
+    execParsedQuery(initial_statement, QString());
     return true;
 }
 
@@ -130,7 +129,7 @@ bool CTTableModel::updateRowInTable(const CTTableRecord &rec)
     QString where_statement = CTQueryParser::xmlStatement(
                 CTQueryParser::WhereStatement, p_table_data->table_name,
                 whereRec);
-    execParsedQuery("update",initial_statement, where_statement);
+    execParsedQuery(initial_statement, where_statement);
     return true;
 }
 
@@ -156,7 +155,7 @@ bool CTTableModel::deleteRowFromTable(const CTTableRecord &rec)
     QString where_statement = CTQueryParser::xmlStatement(
                 CTQueryParser::WhereStatement, p_table_data->table_name,
                 whereRec);
-    execParsedQuery("delete",initial_statement, where_statement);
+    execParsedQuery(initial_statement, where_statement);
     return true;
 }
 

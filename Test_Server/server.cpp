@@ -78,7 +78,7 @@ void SSLServerConnection::writeAll(const QString &parsedQuery,
         }
 
         int size = out.size();
-        sent = socket->write((const char*) &size, sizeof(int));
+        sent = socket->write((const char*) &size, sizeof(qint64));
         socket->flush();
 
         if (-1 == sent)
@@ -137,8 +137,8 @@ void SSLServerConnection::readData()
                 qDebug() << socket->errorString();
                 return;
             }
-            int size = 0;
-            recv = socket->read((char *) &size, sizeof(int));
+            qint64 size = 0;
+            recv = socket->read((char *) &size, sizeof(qint64));
             if (-1 == recv)
             {
                 qDebug() << socket->errorString();
@@ -166,7 +166,7 @@ void SSLServerConnection::readData()
                 delete chunk;
             }
             _readHeader = false;
-            _dataSize = sizeof(quint32) + sizeof(int);
+            _dataSize = sizeof(quint32) + sizeof(qint64);
         }
     }
     if (!payload.isEmpty())
@@ -222,7 +222,7 @@ void SSLServerConnection::processXML(QByteArray data)
                     QString login_reply;
                     QXmlStreamWriter stream(&login_reply);
                     stream.writeStartElement("login_reply");
-                    stream.writeAttribute("type", "failure");
+                    stream.writeAttribute("message", "failure");
                     stream.writeAttribute("user_id", id);
                     stream.writeEndElement();//end login_reply
 
@@ -241,7 +241,7 @@ void SSLServerConnection::processXML(QByteArray data)
                     QString login_reply;
                     QXmlStreamWriter stream(&login_reply);
                     stream.writeStartElement("login_reply");
-                    stream.writeAttribute("type", "success");
+                    stream.writeAttribute("message", "success");
                     stream.writeAttribute("user_id", id);
                     stream.writeEndElement();//end login_reply
 
@@ -261,14 +261,13 @@ void SSLServerConnection::processXML(QByteArray data)
 // Process database query received from caretoyadmin client.
 void SSLServerConnection::processQuery(QByteArray data)
 {
-    qDebug() << "processQuery";
     QString output;
     output = dbConn->exec(parser->parse(data));
-    if("No valid data found!" == output)
-    {
-        //Send client no data found
-    }
-    else if(output.contains("Error", Qt::CaseInsensitive))
+//    if("No valid data found!" == output)
+//    {
+//        //Send client no data found
+//    }
+    if(output.contains("Error", Qt::CaseInsensitive))
     {
         //write db error to log
     }

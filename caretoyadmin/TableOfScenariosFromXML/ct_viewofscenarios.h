@@ -29,7 +29,7 @@ signals:
     void newScenario();
 
     void exec(QString parsedQuery);
-    void execParsedQuery(QString query_type,QString init_stmt,QString where_stmt);
+    void execParsedQuery(QString init_stmt,QString where_stmt);
 public slots:
     void save(QHash<QString, QString> scenario);
 

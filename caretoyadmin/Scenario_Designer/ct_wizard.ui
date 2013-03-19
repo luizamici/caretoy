@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>358</height>
+    <width>563</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,9 +19,12 @@
   <property name="options">
    <set>QWizard::NoBackButtonOnStartPage</set>
   </property>
-  <widget class="QWizardPage" name="CTWizardPageInput">
+  <widget class="CTWizardPage" name="CTWizardPageInput">
    <property name="title">
     <string/>
+   </property>
+   <property name="subTitle">
+    <string>Please fill in the following data.</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -68,7 +71,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Enter description</string>
+         <string>Description</string>
         </property>
        </widget>
       </item>
@@ -92,10 +95,10 @@
       <item row="2" column="1">
        <widget class="QSpinBox" name="qsb_execution">
         <property name="minimum">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
        </widget>
       </item>
@@ -116,9 +119,12 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="CTWizardPageOutM">
+  <widget class="CTWizardPage" name="CTWizardPageOutM">
    <property name="title">
     <string/>
+   </property>
+   <property name="subTitle">
+    <string>Check at least one outcome measure and then click Finish to save the defined scenario into the database.</string>
    </property>
    <attribute name="pageId">
     <string notr="true">1</string>
@@ -192,6 +198,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CTWizardPage</class>
+   <extends>QWizardPage</extends>
+   <header>Scenario_Designer/ct_wizardpage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -7,6 +7,14 @@ CTWizard::CTWizard(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Save scenario");
+    /*
+      Setting mandatory fields for the wizard
+     */
+    ui->CTWizardPageInput->registerFields("qle_description*", ui->qle_description);
+    ui->CTWizardPageInput->registerFields("qde_execution*", ui->qde_execution);
+    ui->CTWizardPageInput->registerFields("qsb_execution*", ui->qsb_execution);
+
+//    ui->qgb_outcome_measures->test();
 
     connect(this->button(FinishButton), SIGNAL(clicked()),this, SLOT(accepted()));
 }
