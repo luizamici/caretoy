@@ -5,7 +5,7 @@
 #include "Patients_Admin/ct_patientmodule.h"
 
 
-CTStaffModule::CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent) :
+CTStaffModule::CTStaffModule(QWidget *parent) :
     QWidget(parent)
 {
 //    this->setStyleSheet("background-image: url(:/images/logo.png);"
@@ -23,8 +23,6 @@ CTStaffModule::CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent
     QFont serifFont("Times", 12, QFont::Bold);
     searchPatient = new CTSearchPatient();
 
-    openSessionData  = sessionData; //gets the userData from the class' args
-
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setMargin(20);
     layout->setSpacing(10);
@@ -41,15 +39,15 @@ CTStaffModule::CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent
     QHBoxLayout *subLayout1 = new QHBoxLayout();
     subLayout1->setMargin(10);
     subLayout1->setSpacing(30);
-    QLabel *label_1 = new QLabel();
+    label_1 = new QLabel();
     QFont font;
     font.setPointSize(12);
     font.setBold(true);
     label_1->setFont(font);
-    label_1->setText(openSessionData["name"] + " " +openSessionData["lastname"]);
+
     subLayout1->addWidget(label_1, 0 , Qt::AlignRight);
-    QLabel *label_2 = new QLabel();
-    label_2->setText("<font color= green> Last login : 2012-12-15 18:00 </font>");
+    label_2 = new QLabel();
+
     subLayout1->addWidget(label_2);
     subLayout1->addStretch();
 
@@ -84,16 +82,14 @@ CTStaffModule::CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent
 
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
-    QPushButton *addButton = new QPushButton("Add");
+    addButton = new QPushButton("Add");
     editButton = new QPushButton("Edit");
     editButton->setEnabled(false);
     deleteButton = new QPushButton("Delete");
     deleteButton->setEnabled(false);
-    QPushButton *submit = new QPushButton("Submit");
     buttonLayout->addWidget(addButton, 1, Qt::AlignRight);
     buttonLayout->addWidget(editButton);
     buttonLayout->addWidget(deleteButton);
-    buttonLayout->addWidget(submit);
     buttonLayout->addStretch();
     buttonLayout->addSpacing(1);
     subLayout2->addLayout(buttonLayout,2,0);
@@ -132,28 +128,11 @@ CTStaffModule::CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent
                 "Are u sure you wish to delete the selected patient?");
     confirmationMessage->setStandardButtons(
                 QMessageBox::Ok | QMessageBox::Cancel);
-
-    /*
-     *When the Edit button is clicked the staffmoduleAdmin is notified by the
-     *editSelectedPatient() signal
-     */
-    connect(editButton,SIGNAL(clicked()),this, SIGNAL(editSelectedPatient()));
-    /*
-     *When the Add button is clicked the staffmoduleAdmin is notified by the
-     *openNewPatientDialog() signal
-     */
-    connect(addButton,SIGNAL(clicked()),this, SIGNAL(openNewPatientDialog()));
     /*
      *When the Delete button is clicked the staffmoduleAdmin is notified by
      *the deleteSelectedPatient() signal
      */
     connect(deleteButton,SIGNAL(clicked()),this, SLOT(confirmDeletionOfpatient()));
-
-    /*
-     *This has been added to test the caching capabilitie of the tableModel
-     *used for patient's viewing
-     */
-    connect(submit,SIGNAL(clicked()),this, SIGNAL(submit()));
 }
 
 /*
@@ -173,7 +152,11 @@ void CTStaffModule::confirmDeletionOfpatient(){
     }
 }
 
-CTSearchPatient* CTStaffModule::getSearchWidget(){
-    return searchPatient;
+void CTStaffModule::showOkMessage(QString message){
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "green" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage(message,5000);
 }
+
 

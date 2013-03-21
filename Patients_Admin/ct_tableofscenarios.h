@@ -4,8 +4,10 @@
 #include <QTableView>
 #include <QAbstractItemView>
 #include <QtGui>
-#include "ct_qsqltableofscenarios.h"
 #include <QSqlRecord>
+
+#include "DbTableXML/ct_tabledata.h"
+#include "DbTableXML/ct_tablemodel.h"
 
 class CTTableOfScenarios : public QTableView
 {
@@ -13,11 +15,12 @@ class CTTableOfScenarios : public QTableView
 public:
     explicit CTTableOfScenarios(QWidget *parent = 0);
 
-    void setQSqlModel(CTQSqlTableOfScenarios *sqlTableOfScenarios);
+    CTTableModel *xmlTable;
+    void init(CTTableData *table_data);
+
 
 private:
-    CTQSqlTableOfScenarios *localSqlTable;
-    QHeaderView *header;
+    QSortFilterProxyModel *filterModel;
     
 signals:
     void checkForResults(QString id_scenario);

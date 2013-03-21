@@ -6,33 +6,33 @@
 #include "ct_loginadmin.h"
 #include "mod_staff/ct_staffmoduleadmin.h"
 #include "Patients_Admin/ct_patientmoduleadmin.h"
-#include "Patients_Admin/ct_qsqltableofscenarios.h"
 #include "Patients_Admin/ct_qsqltableofresults.h"
+#include "SecureSocketClient/ct_sslclientthread.h"
 
 
-class CTScenariosAdmin : public QObject
+class CTAdmin : public QObject
 {
     Q_OBJECT
 public:
-    explicit CTScenariosAdmin(QObject *parent = 0);
+    explicit CTAdmin(QObject *parent = 0);
     CTDBConnAdmin *dbConnAdmin;
     CTLoginAdmin *loginAdmin;
     CTStaffModuleAdmin *staffModuleAdmin;
     CTPatientModuleAdmin *patientModuleAdmin;
-    CTQSqlTableOfPatients *sqlTableOfPatient;
-    CTQSqlTableOfScenarios *sqlTableOfScenarios;
     CTQSqlTableOfResults *sqlTableOfResults;
 
 
 private:
-    QHash<QString,QString> userDataSession;
+    CTSslClientThread *sslClientThread;
     void initializeStaffModule();
 
-signals:
+private slots:
+    void authenticate(QString username, QString psswd);
+    void processXML(QByteArray data);
+    void proccessData(QByteArray data, QString table_name);
     
 public slots:
-    void loginSuccessful(QHash<QString,QString> userData);
-    void refreshStaffModule(QString submodule);
+    void loginSuccessful();
 
     void editSelectedPatient(QHash<QString,QString> selectedPatient);
 

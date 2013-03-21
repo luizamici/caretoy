@@ -1,4 +1,4 @@
-QT += core gui xml sql opengl
+QT += core gui xml sql opengl network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,19 +17,23 @@ SOURCES += main.cpp \
     CareToy_Admin/ct_dbconnadmin.cpp \
     mod_staff/ct_staffmoduleadmin.cpp \
     mod_staff/ct_worklogs.cpp \
-    mod_staff/ct_qsqltableofpatients.cpp \
     Patients_Admin/ct_patientmodule.cpp \
     Patients_Admin/ct_patientmoduleadmin.cpp \
     Patients_Admin/ct_wizardlayout.cpp \
     Patients_Admin/ct_tableofscenarios.cpp \
-    Patients_Admin/ct_qsqltableofscenarios.cpp \
     Patients_Admin/ct_tableofresults.cpp \
     Patients_Admin/ct_qsqltableofresults.cpp \
     Patients_Admin/ct_patientsform.cpp \
-    mod_staff/ct_searchpatient.cpp
+    mod_staff/ct_searchpatient.cpp \
+    SecureSocketClient/ct_sslclientthread.cpp \
+    DbTableXML/ct_queryparser.cpp \
+    DbTableXML/ct_tabledata.cpp \
+    DbTableXML/ct_tablefield.cpp \
+    DbTableXML/ct_tablemodel.cpp \
+    DbTableXML/ct_tablerecord.cpp \
+    DbTableXML/ct_xmldataparser.cpp
 
 HEADERS += \
-    mod_staff/ct_dbconn.h \
     mod_staff/ct_tableofpatients.h \
     mod_staff/ct_staffmodule.h \
     CareToy_Admin/ct_logindialog.h \
@@ -37,18 +41,24 @@ HEADERS += \
     CareToy_Admin/ct_loginadmin.h \
     CareToy_Admin/ct_admin.h \
     CareToy_Admin/ct_dbconnadmin.h \
+    CareToy_Admin/ct_defs.h \
     mod_staff/ct_staffmoduleadmin.h \
     mod_staff/ct_worklogs.h \
-    mod_staff/ct_qsqltableofpatients.h \
     Patients_Admin/ct_patientmodule.h \
     Patients_Admin/ct_patientmoduleadmin.h \
     Patients_Admin/ct_wizardlayout.h \
     Patients_Admin/ct_tableofscenarios.h \
-    Patients_Admin/ct_qsqltableofscenarios.h \
     Patients_Admin/ct_tableofresults.h \
     Patients_Admin/ct_qsqltableofresults.h \
     Patients_Admin/ct_patientsform.h \
-    mod_staff/ct_searchpatient.h
+    mod_staff/ct_searchpatient.h \
+    SecureSocketClient/ct_sslclientthread.h \
+    DbTableXML/ct_queryparser.h \
+    DbTableXML/ct_tabledata.h \
+    DbTableXML/ct_tablefield.h \
+    DbTableXML/ct_tablemodel.h \
+    DbTableXML/ct_tablerecord.h \
+    DbTableXML/ct_xmldataparser.h
 
 
 FORMS += \

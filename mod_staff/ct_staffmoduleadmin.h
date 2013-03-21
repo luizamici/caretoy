@@ -5,7 +5,7 @@
 #include "ct_staffmodule.h"
 #include "ct_tableofpatients.h"
 #include "ct_worklogs.h"
-#include "ct_qsqltableofpatients.h"
+
 
 class CTStaffModuleAdmin : public QWidget
 {
@@ -14,10 +14,11 @@ public:
     explicit CTStaffModuleAdmin(QWidget *parent = 0);
 
     CTStaffModule *staffModule;
-    CTQSqlTableOfPatients *sqlTableModelOfPatients;
 
-    void initialize(QHash<QString, QString> sessionData);
-    void setSqlTableModelOfPatients(CTQSqlTableOfPatients *sqlTableModelOfPatientsFromDB);
+    void initialize();
+    void requestTable();
+    void requestWorkLog();
+
     void setWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB);
     void refreshWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB, bool newLog);
     void showStaffModule();
@@ -25,9 +26,7 @@ public:
     void showConfirmationMessageStatus();
     
 private:
-    QHash<QString,QString> localSessionData; //contains the user data:
-                                             //id_staff(id of user inside the DB staff's table),
-                                             //name, surname
+
     QMap<QPair<QString,QString>,QString> localWorkLogsList;
     QStringList timestamps;
     QStringList logs;
@@ -41,14 +40,11 @@ private:
 signals:
     void saveNewLog(QHash<QString,QString> newlogToSave);
     void updateLog(QHash<QString,QString> worklogToUpdate);
-
     void editSelectedPatient(QHash<QString,QString> patientToEdit);
     void openNewPatientDialog(QStringList idList);
 
-    void error(QString error);
-    void success(QString message,QString row);
-    
-    void insertUser(QSqlRecord& newUser);
+    void requestToWriteIntoSocket(const QString &parsedQuery,
+                                  const quint32 &type);
 
 public slots:
     void getLog();
@@ -60,6 +56,12 @@ public slots:
     void deleteSelectedPatient();
     void updateSelectedPatient(QHash<QString,QString> patientEdited);
     void saveNewPatient(QHash<QString,QString> newPatient);
+
+
+    void proccessData(QByteArray table_data);
+
+private slots:
+    void execParsedQuery(QString initStmt, QString whereStmt);
 
 };
 

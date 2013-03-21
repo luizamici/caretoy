@@ -1,31 +1,41 @@
 #include "ct_admin.h"
 #include "mod_staff/ct_staffmodule.h"
-#include "mod_staff/ct_qsqltableofpatients.h"
 
-
-CTScenariosAdmin::CTScenariosAdmin(QObject *parent) :
+CTAdmin::CTAdmin(QObject *parent) :
     QObject(parent)
 {
-    dbConnAdmin = new CTDBConnAdmin();
     loginAdmin = new CTLoginAdmin();
+    sslClientThread  = new CTSslClientThread();
+    sslClientThread->run();
+
+    /*
+     *This signal is emitted whenever the user presses 'ok' button on the login dialog
+     *The dbConnAdmin controls if the username and password inserted are present in the db
+     */
+    connect(loginAdmin,SIGNAL(requestForAuthentication(QString,QString)),this,
+            SLOT(authenticate(QString,QString)));
+
+    connect(sslClientThread,SIGNAL(processXML(QByteArray)),this, SLOT(processXML(QByteArray)));
+//    reconnectTimeOuts = 0;
+
+//    connect(sslClientThread, SIGNAL(connectionSuccessful(QString)), dialog,
+//            SLOT(showMessage(QString)));
+//    connect(sslClientThread,SIGNAL(notConnected(QString)),this, SLOT(
+//                connectionLost(QString)));
+
+    dbConnAdmin = new CTDBConnAdmin();
     staffModuleAdmin = new CTStaffModuleAdmin();
     patientModuleAdmin = new CTPatientModuleAdmin();
 
-   /*
-    *This signal is emitted whenever the user presses 'ok' button on the login dialog
-    *The dbConnAdmin controls if the username and password inserted are present in the db
-    */
-    connect(loginAdmin,SIGNAL(requestForAuthentication(QString,QString)),dbConnAdmin,SLOT(authenticate(QString,QString)));
-   /*
-    *The DB connection emits this signal whenever the inserted credentials were not in the db
-    *In this case a message is shown in the login dialog's status bar
-    */
-    connect(dbConnAdmin,SIGNAL(authorizationFailed()),loginAdmin,SLOT(showWrongCredentialsMessage()));
-   /*
-    *In case of successful authentication the login dialog is closed and the staff module ui is shown
-    */
-    connect(dbConnAdmin,SIGNAL(userAuthorized(QHash<QString,QString>)),this, SLOT(loginSuccessful(QHash<QString,QString>)));
-    connect(dbConnAdmin,SIGNAL(refreshStaffModule(QString)),this, SLOT(refreshStaffModule(QString)));
+
+    connect(staffModuleAdmin, SIGNAL(requestToWriteIntoSocket(QString,quint32)),
+            sslClientThread, SLOT(requestTable(QString,quint32)));
+
+    connect(patientModuleAdmin, SIGNAL(requestToWriteIntoSocket(QString,quint32)),
+            sslClientThread, SLOT(requestTable(QString,quint32)));
+
+    connect(sslClientThread,SIGNAL(processTable(QByteArray,QString)),this,
+                SLOT(proccessData(QByteArray,QString)));
 
     /*
      *In case the staffModuleAdmin is requesting a new worklog to be stored to the DB
@@ -38,66 +48,98 @@ CTScenariosAdmin::CTScenariosAdmin(QObject *parent) :
     connect(patientModuleAdmin,SIGNAL(selectedPatientChanged(QHash<QString,QString>)),staffModuleAdmin,SLOT(updateSelectedPatient(QHash<QString,QString>)));
     connect(patientModuleAdmin,SIGNAL(newPatientAdded(QHash<QString,QString>)),staffModuleAdmin,SLOT(saveNewPatient(QHash<QString,QString>)));
 
-    connect(staffModuleAdmin,SIGNAL(error(QString)),patientModuleAdmin,SLOT(showErrorMessage(QString)));
-    connect(staffModuleAdmin,SIGNAL(success(QString,QString)),patientModuleAdmin,SLOT(updateRow(QString,QString)));
-    connect(staffModuleAdmin,SIGNAL(insertUser(QSqlRecord&)),dbConnAdmin, SLOT(insertUser(QSqlRecord&)));
-
 }
 
-void CTScenariosAdmin::editSelectedPatient(QHash<QString, QString> selectedPatient){
+void CTAdmin::authenticate(QString username, QString psswd)
+{
+    QCryptographicHash *crypt = new QCryptographicHash(QCryptographicHash::Sha1);
+    QByteArray hashedPsswd = crypt->hash(psswd.toLatin1(),QCryptographicHash::Sha1);
+    QString hashedPsswdToString = hashedPsswd.toHex().constData();
 
-    QStringList scenarios_for_patient = dbConnAdmin->getScenariosForPatient(selectedPatient["id"]);
-    sqlTableOfScenarios = new CTQSqlTableOfScenarios(this, dbConnAdmin->getDBConnection());
-    sqlTableOfResults = new CTQSqlTableOfResults(this, dbConnAdmin->getDBConnection());
-    patientModuleAdmin->editSelectedPatient(selectedPatient,sqlTableOfScenarios,sqlTableOfResults);
-    if (!scenarios_for_patient.isEmpty()){
-        sqlTableOfScenarios->initialize(scenarios_for_patient);
-        sqlTableOfResults->initialize(scenarios_for_patient);
+    QString statement;
+    QXmlStreamWriter stream(&statement);
+    stream.writeStartElement("login_request");
+    stream.writeAttribute("username", username);
+    stream.writeAttribute("password", hashedPsswdToString);
+    stream.writeEndElement();//end login_request
+
+    sslClientThread->writeIntoSocket(statement, CT_PKTDATA);
+    return;
+}
+
+
+void CTAdmin::processXML(QByteArray data)
+{
+    QXmlStreamReader reader(data);
+    while (!reader.atEnd())
+    {
+        reader.readNext();
+        if (reader.isStartElement() && !reader.isStartDocument())
+        {
+            QString tagName = reader.name().toString();
+            if ("login_reply" == tagName)
+            {
+                QXmlStreamAttributes attr = reader.attributes();
+                QString type = attr.value("message").toString();
+//                QString name = attr.value("name").toString();
+//                QString surname = attr.value("surname").toString();
+//                QString id = attr.value("id").toString();
+//                QString last_login = attr.value("last_login").toString();
+                if("success" == type)
+                {
+                    qDebug() << "SUCCESS";
+                    qApp->setProperty("UserName", "Name");
+                    qApp->setProperty("UserSurname", "Surname");
+                    qApp->setProperty("UserID", "2");
+                    qApp->setProperty("UserLastLogin", "last_login");
+                    loginSuccessful();
+                }
+                else if("failure" == type)
+                    qDebug() << "Failure!";
+            }
+            else if("query_reply" == tagName)
+            {
+                QXmlStreamAttributes attr = reader.attributes();
+                QString type = attr.value("message").toString();
+                if("success" == type)
+                {
+                    initializeStaffModule();
+                    staffModuleAdmin->showConfirmationMessageStatus();
+                    patientModuleAdmin->showConfirmationMessageStatus();
+                }
+            }
+            else
+                qDebug() << "Reply not recognized";
+        }
     }
+    return;
 }
+
+void CTAdmin::proccessData(QByteArray data, QString table_name)
+{
+    if(table_name == "patients")
+        staffModuleAdmin->proccessData(data);
+    else if(table_name == "test_scenario")
+        patientModuleAdmin->proccessData(data);
+}
+
 
 /*
  *The user interface switches from the login dialog to the staff module window in case of successful login
  */
-void CTScenariosAdmin::loginSuccessful(QHash<QString,QString> userData){
+void CTAdmin::loginSuccessful(){
 
     loginAdmin->close();
-    userDataSession = userData; // id_staff,name,lastname
     initializeStaffModule();
 }
 
-void CTScenariosAdmin::initializeStaffModule(){
 
-    staffModuleAdmin->initialize(userDataSession);
-
-    sqlTableOfPatient = new CTQSqlTableOfPatients(this, dbConnAdmin->getDBConnection());
-    staffModuleAdmin->setSqlTableModelOfPatients(sqlTableOfPatient);
-
-    staffModuleAdmin->setWorkLogList(dbConnAdmin->getWorkLogs(userDataSession["id_staff"]));
+void CTAdmin::initializeStaffModule(){
+    staffModuleAdmin->initialize();
     staffModuleAdmin->showStaffModule();
 }
 
-void CTScenariosAdmin::refreshStaffModule(QString submodule){
 
-    CTQSqlTableOfPatients *sqlTable;
-    if( submodule == "all"){
-        sqlTable = new CTQSqlTableOfPatients(this,dbConnAdmin->getDBConnection());
-        sqlTable->setTable("patients");
-        sqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
-        sqlTable->select();
-        staffModuleAdmin->setSqlTableModelOfPatients(sqlTable);
-        staffModuleAdmin->setWorkLogList(dbConnAdmin->getWorkLogs(userDataSession["id_staff"]));
-    }else if( submodule == "tableOfPatients"){
-        sqlTable = new CTQSqlTableOfPatients(this,dbConnAdmin->getDBConnection());
-        sqlTable->setTable("patients");
-        sqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
-        sqlTable->select();
-        staffModuleAdmin->setSqlTableModelOfPatients(sqlTable);
-    }else if( submodule == "updatedworklog"){
-        staffModuleAdmin->refreshWorkLogList(dbConnAdmin->getWorkLogs(userDataSession["id_staff"]),false);
-    }else if( submodule == "insertednewworklog"){
-        staffModuleAdmin->refreshWorkLogList(dbConnAdmin->getWorkLogs(userDataSession["id_staff"]),true);
-    }
-    staffModuleAdmin->showConfirmationMessageStatus();
+void CTAdmin::editSelectedPatient(QHash<QString, QString> selectedPatient){
+    patientModuleAdmin->initEdit(selectedPatient);
 }
-

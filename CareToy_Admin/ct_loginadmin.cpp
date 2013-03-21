@@ -6,7 +6,8 @@ CTLoginAdmin::CTLoginAdmin(QObject *parent) :
     loginDialog = new CTLoginDialog();
     loginDialog->show();
 
-    connect(loginDialog,SIGNAL(credentials(QString,QString)),this, SIGNAL(requestForAuthentication(QString,QString)));
+    connect(loginDialog,SIGNAL(credentials(QString,QString)),this, SIGNAL(
+                requestForAuthentication(QString,QString)));
 }
 
 void CTLoginAdmin::showWrongCredentialsMessage(){

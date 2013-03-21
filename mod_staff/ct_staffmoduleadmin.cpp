@@ -1,5 +1,9 @@
 #include "ct_staffmoduleadmin.h"
 #include "ct_worklogs.h"
+#include "DbTableXML/ct_tablerecord.h"
+#include "DbTableXML/ct_queryparser.h"
+#include "DbTableXML/ct_xmldataparser.h"
+#include "CareToy_Admin/ct_defs.h"
 
 CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
     QWidget(parent)
@@ -7,12 +11,8 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
     /*Two submodules*/
     workLogs = new CTWorklogs();
     tableOfPatients = new CTTableOfPatients(this->parentWidget());
-}
 
-void CTStaffModuleAdmin::initialize(QHash<QString, QString> sessionData){
-
-    localSessionData = sessionData;
-    staffModule = new CTStaffModule(localSessionData,this->parentWidget());
+    staffModule = new CTStaffModule(this->parentWidget());
     staffModule->subLayout3->addWidget(workLogs);
     staffModule->subLayout2->addWidget(tableOfPatients,1,0);
 
@@ -21,36 +21,111 @@ void CTStaffModuleAdmin::initialize(QHash<QString, QString> sessionData){
      *for enabling/disabling the edit/delete button in case of selection-or-not of a
      *patient from the list
      */
-    connect(tableOfPatients,SIGNAL(tableSelected(bool)),staffModule->deleteButton,SLOT(setEnabled(bool)));
-    connect(tableOfPatients,SIGNAL(tableSelected(bool)),staffModule->editButton,SLOT(setEnabled(bool)));
-    connect(tableOfPatients,SIGNAL(beforeInsert(QSqlRecord&)),this, SIGNAL(insertUser(QSqlRecord&)));
+    connect(tableOfPatients,SIGNAL(tableSelected(bool)),staffModule->deleteButton,
+            SLOT(setEnabled(bool)));
+    connect(tableOfPatients,SIGNAL(tableSelected(bool)),staffModule->editButton,
+            SLOT(setEnabled(bool)));
+    connect(tableOfPatients,SIGNAL(execParsedQuery(QString,QString)),this,
+            SLOT(execParsedQuery(QString,QString)));
 
-    connect(staffModule,SIGNAL(editSelectedPatient()),this,SLOT(requestEdit()));
-    connect(staffModule,SIGNAL(openNewPatientDialog()),this, SLOT(requestNew()));
+
+    connect(staffModule->editButton,SIGNAL(clicked()),this,SLOT(requestEdit()));
+    connect(staffModule->addButton,SIGNAL(clicked()),this, SLOT(requestNew()));
     connect(staffModule,SIGNAL(deleteSelectedPatient()),this,SLOT(deleteSelectedPatient()));
-    connect(staffModule->getSearchWidget(),SIGNAL(searchBy(int)),tableOfPatients,SLOT(setSearchCriteria(int)));
-    connect(staffModule->getSearchWidget(),SIGNAL(searchFor(QString)),tableOfPatients,SLOT(filter(QString)));
-    connect(staffModule,SIGNAL(submit()),tableOfPatients, SLOT(submitAll()));
+
+    connect(staffModule->searchPatient,SIGNAL(searchBy(int)),tableOfPatients,SLOT(setSearchCriteria(int)));
+    connect(staffModule->searchPatient,SIGNAL(searchFor(QString)),tableOfPatients,SLOT(filter(QString)));
 
     connect(workLogs,SIGNAL(saveLog()),this,SLOT(getLog()));
     connect(workLogs->comboBox,SIGNAL(currentIndexChanged(QString)),this, SLOT(updateWorklogEditor(QString)));
 }
 
+void CTStaffModuleAdmin::initialize(){
 
-void CTStaffModuleAdmin::setSqlTableModelOfPatients(CTQSqlTableOfPatients *sqlTableModelOfPatientsFromDB){
-    /*
-     *The sqlTableModelOfPatients is an sqlTableModel pointer connected to the DB's table
-     *called 'patients'. The CTTableOfPatients class takes care of the vizualization of the
-     *data and its editing modes.
-     */
-    sqlTableModelOfPatients = sqlTableModelOfPatientsFromDB;
-    tableOfPatients->initializeTableOfPatients(sqlTableModelOfPatients);
+    staffModule->label_1->setText(qApp->property("UserName").toString() + " "
+                     + qApp->property("UserSurname").toString());
+    staffModule->label_2->setText("<font color= green>" + qApp->property("UserLastLogin").
+                     toString() + " </font>");
+    requestTable();
+    requestWorkLog();
 }
 
+
+/*Select on pre-known columns of the table patients*/
+void CTStaffModuleAdmin::requestTable()
+{
+    QStringList fieldNames = QStringList() <<"id" << "firstname"
+                                          << "lastname"
+                                          << "parent_1" << "parent_2"
+                                          <<  "date_of_birth" << "sex"
+                                          << "gest_age" << "attendant"
+                                          << "address" << "zip_code"
+                                          << "city" << "phone" << "email"
+                                          << "notes";
+
+    CTTableRecord rec = CTTableRecord();
+    int i =0;
+    foreach(QString fieldName, fieldNames)
+    {
+        rec.insert(i, CTTableField(fieldName, fieldName));
+        i++;
+    }
+    QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
+                                               "patients",rec);
+    execParsedQuery(stmt, QString());
+}
+
+void CTStaffModuleAdmin::requestWorkLog()
+{
+    //TODO
+}
+
+void CTStaffModuleAdmin::execParsedQuery(QString initStmt, QString whereStmt)
+{
+    qDebug() << initStmt << whereStmt;
+    emit requestToWriteIntoSocket(CTQueryParser::prepareQuery(
+                                      initStmt,whereStmt), CT_DBSDATA);
+}
+
+
+void CTStaffModuleAdmin::proccessData(QByteArray table_data)
+{
+    tableOfPatients->init(CTXmlDataParser::parse_table(table_data));
+}
 
 void CTStaffModuleAdmin::showStaffModule(){
     staffModule->show();
 }
+
+
+/********************Patient management**************************************/
+void CTStaffModuleAdmin::requestEdit(){
+    emit editSelectedPatient(getSelectedPatient());
+}
+
+void CTStaffModuleAdmin::requestNew(){
+    QStringList idList = tableOfPatients->getListOfId();
+    emit openNewPatientDialog(idList);
+}
+
+void CTStaffModuleAdmin::deleteSelectedPatient(){
+    QHash<QString,QString> patientToDelete = getSelectedPatient();
+    tableOfPatients->deleteSelectedPatient(patientToDelete);
+}
+
+QHash<QString,QString> CTStaffModuleAdmin::getSelectedPatient(){
+    return(tableOfPatients->getSelectedPatient());
+}
+
+void CTStaffModuleAdmin::updateSelectedPatient(QHash<QString, QString> patientEdited){
+    tableOfPatients->updateSelectedPatient(patientEdited);
+}
+
+void CTStaffModuleAdmin::saveNewPatient(QHash<QString, QString> newPatient){
+   tableOfPatients->saveNewPatient(newPatient);
+}
+
+/*******************************************************************************/
 
 /**********************************Worklog management*******************************************/
 void CTStaffModuleAdmin::setWorkLogList(QMap<QPair<QString,QString>,QString> workLogsListFromDB){
@@ -172,10 +247,7 @@ void CTStaffModuleAdmin::sortLocalWorkLogsListById(){
 /************************Status bar messages************************************/
 void CTStaffModuleAdmin::showConfirmationMessageStatus(){
 
-    QPalette palette;
-    palette.setColor( QPalette::WindowText, "green" );
-    staffModule->statusBar->setPalette( palette );
-    staffModule->statusBar->showMessage("Operation successful!",5000);
+    staffModule->showOkMessage("Operation successful!");
 }
 
 void CTStaffModuleAdmin::showMessageStatus(QString message){
@@ -187,37 +259,4 @@ void CTStaffModuleAdmin::showMessageStatus(QString message){
 /*******************************************************************************/
 
 
-/********************Patient management**************************************/
-void CTStaffModuleAdmin::requestEdit(){
-    QHash<QString,QString> patientToEdit = getSelectedPatient();
-    emit editSelectedPatient(patientToEdit);
-}
 
-void CTStaffModuleAdmin::requestNew(){
-    QStringList idList = tableOfPatients->getListOfId();
-    emit openNewPatientDialog(idList);
-}
-
-void CTStaffModuleAdmin::deleteSelectedPatient(){
-    QHash<QString,QString> patientToDelete = getSelectedPatient();
-    tableOfPatients->deleteSelectedPatient(patientToDelete);
-}
-
-QHash<QString,QString> CTStaffModuleAdmin::getSelectedPatient(){
-    return(tableOfPatients->getSelectedPatient());
-}
-
-void CTStaffModuleAdmin::updateSelectedPatient(QHash<QString, QString> patientEdited){
-    tableOfPatients->updateSelectedPatient(patientEdited);
-}
-
-void CTStaffModuleAdmin::saveNewPatient(QHash<QString, QString> newPatient){
-    int row = tableOfPatients->saveNewPatient(newPatient);
-    if(row == -1){
-        emit error("There was an errow inserting the patient");
-    }else{
-        emit success("Patient added succesfully",QString::number(row));
-    }
-}
-
-/*******************************************************************************/

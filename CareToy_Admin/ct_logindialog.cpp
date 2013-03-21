@@ -21,6 +21,8 @@ CTLoginDialog::CTLoginDialog(QWidget *parent) :
     ui->horizontalLayout_3->addWidget(statusBar);
 
 
+    ui->usernameEdit->setPlaceholderText("Username");
+    ui->passwordEdit->setPlaceholderText("Password");
     ui->passwordEdit->setEchoMode(QLineEdit::Password);
     ui->passwordEdit->setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
     connect(ui->okButton, SIGNAL(clicked()), this, SLOT(okPressed()));

@@ -9,11 +9,12 @@ CTPatientsForm::CTPatientsForm(QWidget *parent) :
      *Initialize class containing ui
      */
     patientsForm = new CTWizardLayout();
+    newPatient = true;
 
     /*
      *Initialize the local patient data with empty fields
      */
-    initializeLocalPatientData();
+    clearLocalData();
 
     /**************************************************/
     /*Setting widgets in mainLayout
@@ -41,7 +42,9 @@ CTPatientsForm::CTPatientsForm(QWidget *parent) :
             patientsForm->findChildren<QLineEdit*>()){
         if(lineEdit->objectName() == "qleFirstname" || lineEdit->objectName()
                 == "qleLastname" || lineEdit->objectName() == "qleId" ||
-                lineEdit->objectName() == "qleAttendant")
+                lineEdit->objectName() == "qleAttendant" ||
+                lineEdit->objectName() == "qleParent_1" ||
+                lineEdit->objectName() == "qleParent_2")
         {
             group->add(lineEdit);
         }
@@ -55,6 +58,7 @@ CTPatientsForm::CTPatientsForm(QWidget *parent) :
     group->setOkButton(updateButton);
     connect(updateButton,SIGNAL(clicked()),this, SLOT(check()));
     connect(undo,SIGNAL(clicked()),this, SLOT(reset()));
+
 }
 
 /*
@@ -64,7 +68,7 @@ void CTPatientsForm::initializeFormWithPatient(
         QHash<QString,QString> patient)
 {
     localPatient = patient;
-    setRow(patient["row"]);
+    patientsForm->clear();
     patientsForm->setPatient(patient);
     patientsForm->validReferenceEditing(false);
 }
@@ -74,9 +78,8 @@ void CTPatientsForm::initializeFormWithPatient(
  */
 void CTPatientsForm::initializeNewPatient()
 {
-    initializeLocalPatientData();
-    setRow("");
     patientsForm->clear();
+    clearLocalData();
     patientsForm->validReferenceEditing(true);
 }
 
@@ -95,30 +98,37 @@ void CTPatientsForm::reset()
 void CTPatientsForm::check()
 {
     QHash<QString,QString> patientFromUI = patientsForm->getPatient();
+
     /*
      *Checking if the inserted reference(id) already exists
      */
-    if(idList.contains(patientFromUI["id"].trimmed())){
-        updateButton->setEnabled(false);
-        emit nothingToSave("Inserted Reference already exists!");
-    }
-    else{
-        if(areChanges(patientFromUI))
+//    if(idList.contains(patientFromUI["id"].trimmed())){
+//        updateButton->setEnabled(false);
+//        emit nothingToSave("Inserted Reference already exists!");
+//    }
+//    else{
+        if(newPatient)
         {
-            if(localPatient.isEmpty() || row.isEmpty()){
+            qDebug() << "new patient";
+            localPatient = patientFromUI;
+            emit insert(localPatient);
+            newPatient = false;
+            patientsForm->validReferenceEditing(false);
+        }
+        else
+        {
+            if(areChanges(patientFromUI))
+            {
+                qDebug() << "update patient";
                 localPatient = patientFromUI;
-                emit insert(localPatient);
-                patientsForm->validReferenceEditing(false);
-            }else{
-                localPatient = patientFromUI;
-                localPatient["row"] = getRow();
-                qDebug() << localPatient["row"];
                 emit update(localPatient);
             }
-        }else{
-            emit nothingToSave("No changes found, data already up to date!");
+            else
+            {
+                emit nothingToSave("No changes found, data already up to date!");
+            }
         }
-    }
+//    }
 }
 
 
@@ -128,9 +138,11 @@ void CTPatientsForm::check()
  */
 bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
 {
+    qDebug() << "patientFromUI: " << patientFromUI;
+    qDebug() << "localData: " << localPatient;
     bool changesDetected = false;
-    foreach(QString key, patientFromUI.keys()){
-        if(localPatient[key] != patientFromUI[key] && key != "row"){
+    foreach(QString key, localPatient.keys()){
+        if(localPatient[key] != patientFromUI[key]){
             qDebug() << localPatient[key] << " " <<  patientFromUI[key];
             changesDetected =  true;
         }
@@ -138,24 +150,25 @@ bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
     return changesDetected;
 }
 
-
-void CTPatientsForm::initializeLocalPatientData()
+void CTPatientsForm::clearLocalData()
 {
-    localPatient["firstname"] = "";
-    localPatient["lastname"] = "";
-    localPatient["parent_1"] = "";
-    localPatient["parent_2"] = "";
-    localPatient["address"] = "";
-    localPatient["zip_code"] = "";
-    localPatient["phone"] = "";
-    localPatient["city"] = "";
-    localPatient["email"] = "";
-    localPatient["id"] = "";
-    localPatient["attendant"] = "";
-    localPatient["notes"] = "";
-    localPatient["sex"] = "Choose ...";
-    localPatient["gest_age"] = "Choose ...";
-    localPatient["date_of_birth"] = "2012-01-01";
+    localPatient = patientsForm->getPatient();
+    qDebug() << "CTPatientsForm::clearLocalData(): " << localPatient;
+//    localPatient["firstname"] = " ";
+//    localPatient["lastname"] = " ";
+//    localPatient["parent_1"] = " ";
+//    localPatient["parent_2"] = " ";
+//    localPatient["address"] = "Address";
+//    localPatient["zip_code"] = "0";
+//    localPatient["phone"] = "Phone";
+//    localPatient["city"] = "City";
+//    localPatient["email"] = "Email";
+//    localPatient["id"] = " ";
+//    localPatient["attendant"] = " ";
+//    localPatient["notes"] = "Here notes can be added";
+//    localPatient["sex"] = "Choose ...";
+//    localPatient["gest_age"] = "Choose ...";
+//    localPatient["date_of_birth"] = "2012-01-01";
 }
 
 /*
@@ -181,7 +194,7 @@ bool CTPatientsForm::updateButtonEnabled()
  *in order to allow further changes
  */
 void CTPatientsForm::setRow(QString row){
-    this->row = row;
+//    this->row = row;
 }
 
 void CTPatientsForm::setIdList(QStringList id_list){
@@ -193,11 +206,11 @@ void CTPatientsForm::setIdList(QStringList id_list){
 
 
 QString CTPatientsForm::getRow(){
-    qDebug() << "getting row: " << row;
-    return this->row;
+//    qDebug() << "getting row: " << row;
+//    return this->row;
 }
 
-
+/******************************************************************************/
 void MandatoryFieldGroup::add(QWidget *widget)
 {
     if (!widgets.contains(widget)) {

@@ -21,6 +21,7 @@ public:
     bool unsavedChanges();
     bool updateButtonEnabled();
 
+    bool newPatient;
 private:
     MandatoryFieldGroup *group;
 
@@ -32,13 +33,16 @@ private:
 
     QString getRow();
     bool areChanges(QHash<QString,QString> patientFromUI);
-    void initializeLocalPatientData();
+
+    void clearLocalData();
+
 
 signals:
     void nothingToSave(QString message);
     void insert(QHash<QString,QString> newPatient);
     void update(QHash<QString,QString> patientToUpdate);
-    
+
+
 public slots:
     void reset();
     void check();

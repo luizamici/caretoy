@@ -12,6 +12,7 @@ CTPatientModule::CTPatientModule(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setMinimumSize(1200,700);
+    this->setWindowTitle(tr("Patient's form[*]"));
 
     QFont serifFont("Times", 12, QFont::Bold);
     ui->qlbPatientData->setFont(serifFont);

@@ -2,6 +2,9 @@
 #include "ct_patientmodule.h"
 #include "ct_patientsform.h"
 
+#include "CareToy_Admin/ct_defs.h"
+#include "DbTableXML/ct_xmldataparser.h"
+
 CTPatientModuleAdmin::CTPatientModuleAdmin(QWidget *parent) :
     QWidget(parent)
 {
@@ -38,12 +41,9 @@ CTPatientModuleAdmin::CTPatientModuleAdmin(QWidget *parent) :
     connect(patientModule,SIGNAL(addButtonClicked()),this, SLOT(checkAddButtonClicked()));
 }
 
-void CTPatientModuleAdmin::editSelectedPatient(
-        QHash<QString,QString> patient,
-        CTQSqlTableOfScenarios *sqlTableOfpatients,
-        CTQSqlTableOfResults *sqlTableOfResults){
-
-    newPatient = false;
+void CTPatientModuleAdmin::initEdit(QHash<QString, QString> patient)
+{
+    form->newPatient = false;
     /*
      *The selected-for-editting patient's data is stored into a local variable
      *in order to check for changed data through the patient module interface
@@ -51,30 +51,27 @@ void CTPatientModuleAdmin::editSelectedPatient(
     localPatientData.clear();
     localPatientData = patient;
     form->initializeFormWithPatient(localPatientData);
-    tableOfScenarios->setQSqlModel(sqlTableOfpatients);
-    tableOfResults->setQSqlModel(sqlTableOfResults);
+    //tableOfscenarios.init()
+    //tableOfResults.init()
     patientModule->show();
+    requestTableOfScenarios();
 }
 
 
 void CTPatientModuleAdmin::openNewPatientDialog(QStringList idList){
 
-    newPatient = true;
+    form->newPatient = true;
     localPatientData.clear();
     form->initializeNewPatient();
     form->setIdList(idList);
-    tableOfScenarios->setQSqlModel(new CTQSqlTableOfScenarios());
+//    tableOfScenarios->setQSqlModel(new CTQSqlTableOfScenarios());
+    //tableOfScenarios.init()
     patientModule->show();
+    requestTableOfScenarios();
 }
 
 void CTPatientModuleAdmin::searchResults(QString id_scenario){
     tableOfResults->filterByScenario(id_scenario);
-}
-
-
-void CTPatientModuleAdmin::updateRow(QString message, QString row){
-    patientModule->showOkMessage(message);
-    form->setRow(row);
 }
 
 
@@ -115,19 +112,6 @@ void CTPatientModuleAdmin::showConfirmationDialog(){
 }
 
 
-bool CTPatientModuleAdmin::isEmpty(QHash<QString, QString> p){
-    bool empty = true;
-    p["row"] = "";
-    foreach(QString key, p.keys()){
-        if(!p[key].trimmed().isEmpty()){
-            empty = false;
-        }
-    }
-    return empty;
-
-}
-
-
 /*
  *In case the user has inserted changes to the patient's data in the user interface
  */
@@ -138,8 +122,44 @@ void CTPatientModuleAdmin::updateLocalPatientData(QHash<QString,QString> patient
 }
 
 
-void CTPatientModuleAdmin::showErrorMessage(QString errorMessage){
+void CTPatientModuleAdmin::showConfirmationMessageStatus(){
+
+    patientModule->showOkMessage("Operation successful!");
 }
 
+
+/*Select on pre-known columns of the table patients*/
+void CTPatientModuleAdmin::requestTableOfScenarios()
+{
+    QStringList fieldNames = QStringList() <<"id" << "execution_day"
+                                          << "execution_order"
+                                          << "creation_date" << "last_edited"
+                                          <<  "description" << "xml_description"
+                                           << "flag";
+
+    CTTableRecord rec = CTTableRecord();
+    int i =0;
+    foreach(QString fieldName, fieldNames)
+    {
+        rec.insert(i, CTTableField(fieldName, fieldName));
+        i++;
+    }
+    QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
+                                               "test_scenario",rec);
+    execParsedQuery(stmt, QString());
+}
+
+
+void CTPatientModuleAdmin::execParsedQuery(QString initStmt, QString whereStmt)
+{
+    emit requestToWriteIntoSocket(CTQueryParser::prepareQuery(
+                                      initStmt,whereStmt), CT_DBSDATA);
+}
+
+
+void CTPatientModuleAdmin::proccessData(QByteArray table_data)
+{
+    tableOfScenarios->init(CTXmlDataParser::parse_table(table_data));
+}
 
 

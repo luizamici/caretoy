@@ -25,6 +25,8 @@ public:
     
 private:
     Ui::CTWizardLayout *ui;
+
+
 };
 
 #endif // CT_WIZARDLAYOUT_H

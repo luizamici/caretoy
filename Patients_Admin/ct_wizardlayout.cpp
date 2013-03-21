@@ -17,7 +17,8 @@ void CTWizardLayout::setPatient(QHash<QString, QString> patient){
 
     foreach(QLineEdit *lineEdit, findChildren<QLineEdit*>()){
         QString key = lineEdit->objectName().remove(0,3).toLower();
-        lineEdit->setText(patient[key]);
+        if(patient[key] != lineEdit->placeholderText())
+            lineEdit->setText(patient[key]);
     }
     QTextEdit *notes = findChild<QTextEdit*>();
     notes->setPlainText(patient["notes"]);
@@ -38,17 +39,14 @@ void CTWizardLayout::setPatient(QHash<QString, QString> patient){
  */
 QHash<QString,QString> CTWizardLayout::getPatient(){
     QHash<QString,QString> _patient;
-    _patient["firstname"] = ui->qleFirstname->text();
-    _patient["lastname"] = ui->qleLastname->text();
-    _patient["parent_1"] = ui->qleParent_1->text();
-    _patient["parent_2"] = ui->qleParent_2->text();
-    _patient["address"] = ui->qleAddress->text();
-    _patient["zip_code"] = ui->qleZip_code->text();
-    _patient["phone"] = ui->qlePhone->text();
-    _patient["city"] = ui->qleCity->text();
-    _patient["email"] = ui->qleEmail->text();
-    _patient["id"] = ui->qleId->text();
-    _patient["attendant"] = ui->qleAttendant->text();
+
+    foreach(QLineEdit *lineEdit, findChildren<QLineEdit*>()){
+        QString key = lineEdit->objectName().remove(0,3).toLower();
+        if(!lineEdit->text().trimmed().isEmpty())
+            _patient[key] = lineEdit->text();
+        else
+            _patient[key] = lineEdit->placeholderText();
+    }
     _patient["notes"] = ui->qteNotes->toPlainText();
     if(ui->qcbSex->currentIndex() == 1){_patient["sex"] = "M";}
     else if(ui->qcbSex->currentIndex() == 2){_patient["sex"] = "F";}
@@ -63,14 +61,17 @@ QHash<QString,QString> CTWizardLayout::getPatient(){
 void CTWizardLayout::clear(){
         /*
          *Clearing all the edit lines on the form
+         *For now the clearing consists in setting the default value
          */
-        foreach(QLineEdit *widget, findChildren<QLineEdit*>()) {
+        foreach(QLineEdit *widget, findChildren<QLineEdit*>())
+        {
             widget->clear();
         }
+        ui->qteNotes->setPlainText("Here notes can be added");
+
         /*
-         *Clearing the notes editor, the comboboxes and date editor
+         *Clearing the comboboxes and date editor
          */
-        ui->qteNotes->clear();
         ui->qcbGest_age->setCurrentIndex(0);
         ui->qcbSex->setCurrentIndex(0);
         ui->qdeDate_of_birth->setDate(QDate::fromString("2012-01-01","yyyy-MM-dd"));

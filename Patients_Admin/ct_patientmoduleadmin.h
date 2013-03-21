@@ -13,7 +13,7 @@ class CTPatientModuleAdmin : public QWidget
 public:
     explicit CTPatientModuleAdmin(QWidget *parent = 0);
 
-    void setSqlTableModelOfScenarios(CTQSqlTableOfScenarios *sqlTableModelOfScenariosFromDB);
+    void proccessData(QByteArray table_data);
     
 private:
     CTPatientModule *patientModule;
@@ -24,26 +24,32 @@ private:
     CTTableOfResults *tableOfResults;
     QMessageBox *confirmationMessage;
 
-    bool isEmpty(QHash<QString,QString> p);
-
     void updateLocalPatientData(QHash<QString,QString> patientDataFromUI);
+
+    void requestTableOfScenarios();
+    void execParsedQuery(QString initStmt, QString whereStmt);
+
 
 
 signals:
     void selectedPatientChanged(QHash<QString,QString> patient);
     void newPatientAdded(QHash<QString,QString> new_patient);
 
+    void requestToWriteIntoSocket(const QString &parsedQuery,
+                                  const quint32 &type);
+
 public slots:
-    void editSelectedPatient(QHash<QString,QString> patient, CTQSqlTableOfScenarios *sqlTableOfpatients,CTQSqlTableOfResults *sqlTableOfResults);
+    void initEdit(QHash<QString,QString> patient);
     void openNewPatientDialog(QStringList idList);
 
     void goBack();
-    void updateRow(QString message,QString row);
     void searchResults(QString id_scenario);
     void checkAddButtonClicked();
 
-    void showErrorMessage(QString errorMessage);
     void showConfirmationDialog();
+
+
+    void showConfirmationMessageStatus();
 };
 
 #endif // CT_PATIENTMODULEADMIN_H

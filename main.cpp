@@ -6,15 +6,15 @@
 
 int main(int argc, char *argv[])
 {
-
-
     QApplication::setDesktopSettingsAware(false);
     QApplication app(argc, argv);
+    QString s("Ciao!");
+    app.setProperty("global_variable", s);
 
     app.setStyleSheet("*[mandatoryField='true'] { border-width: 1px; border-color: red;  border-style: solid; }");
 //    app.setStyle(new QWindowsStyle);
 
-    CTScenariosAdmin admin;
+    CTAdmin admin;
 
     return app.exec();
 }

@@ -13,28 +13,24 @@ class CTStaffModule : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CTStaffModule(QHash<QString,QString> sessionData, QWidget *parent);
+    explicit CTStaffModule(QWidget *parent);
 
     QPushButton *editButton;
     QPushButton *deleteButton;
+    QPushButton *addButton;
     QGridLayout *subLayout2;
     QVBoxLayout *subLayout3;
     QStatusBar *statusBar;
+    QLabel *label_1;
+    QLabel *label_2;
+    CTSearchPatient *searchPatient;
 
-    CTSearchPatient* getSearchWidget();
-
+    void showOkMessage(QString message);
 signals:
-    void editSelectedPatient();
     void openNewPatientDialog();
     void deleteSelectedPatient();
-    void submit();
 
 private:
-
-    QHash<QString,QString> openSessionData;
-    CTTableOfPatients *tableOfPatients;
-    CTPatientModule *patientModuleById;
-    CTSearchPatient *searchPatient;
     QMessageBox *confirmationMessage; 
 
 public slots:
