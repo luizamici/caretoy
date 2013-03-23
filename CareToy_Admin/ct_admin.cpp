@@ -117,10 +117,10 @@ void CTAdmin::processXML(QByteArray data)
 
 void CTAdmin::proccessData(QByteArray data, QString table_name)
 {
-    if(table_name == "patients")
-        staffModuleAdmin->proccessData(data);
-    else if(table_name == "test_scenario")
-        patientModuleAdmin->proccessData(data);
+    if(table_name == "patients" || table_name == "worklogs")
+        staffModuleAdmin->proccessData(data,table_name);
+    else if(table_name == "test_scenario" )
+        patientModuleAdmin->proccessData(data, table_name);
 }
 
 

@@ -31,7 +31,10 @@ SOURCES += main.cpp \
     DbTableXML/ct_tablefield.cpp \
     DbTableXML/ct_tablemodel.cpp \
     DbTableXML/ct_tablerecord.cpp \
-    DbTableXML/ct_xmldataparser.cpp
+    DbTableXML/ct_xmldataparser.cpp \
+    DbTreeXml/ct_treemodel.cpp \
+    mod_staff/ct_treeofworklogs.cpp \
+    mod_staff/ct_worklogswidget.cpp
 
 HEADERS += \
     mod_staff/ct_tableofpatients.h \
@@ -58,7 +61,10 @@ HEADERS += \
     DbTableXML/ct_tablefield.h \
     DbTableXML/ct_tablemodel.h \
     DbTableXML/ct_tablerecord.h \
-    DbTableXML/ct_xmldataparser.h
+    DbTableXML/ct_xmldataparser.h \
+    DbTreeXml/ct_treemodel.h \
+    mod_staff/ct_treeofworklogs.h \
+    mod_staff/ct_worklogswidget.h
 
 
 FORMS += \
@@ -66,7 +72,8 @@ FORMS += \
     ct_dialogs.ui \
     ct_patientmodule.ui \
     ct_wizardlayout.ui \
-    ct_searchpatient.ui
+    ct_searchpatient.ui \
+    mod_staff/ct_worklogswidget.ui
 
 
 

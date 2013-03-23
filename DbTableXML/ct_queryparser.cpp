@@ -24,7 +24,7 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         for(int i = 0; i< row.count(); i++)
         {
             stream.writeStartElement("field");
-            stream.writeAttribute("name", row.value(i));
+            stream.writeAttribute("name", tableName + "." + row.value(i));
             stream.writeEndElement();
         }
         stream.writeEndElement();//end fields

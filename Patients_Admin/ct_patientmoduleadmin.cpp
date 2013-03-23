@@ -51,7 +51,6 @@ void CTPatientModuleAdmin::initEdit(QHash<QString, QString> patient)
     localPatientData.clear();
     localPatientData = patient;
     form->initializeFormWithPatient(localPatientData);
-    //tableOfscenarios.init()
     //tableOfResults.init()
     patientModule->show();
     requestTableOfScenarios();
@@ -64,8 +63,6 @@ void CTPatientModuleAdmin::openNewPatientDialog(QStringList idList){
     localPatientData.clear();
     form->initializeNewPatient();
     form->setIdList(idList);
-//    tableOfScenarios->setQSqlModel(new CTQSqlTableOfScenarios());
-    //tableOfScenarios.init()
     patientModule->show();
     requestTableOfScenarios();
 }
@@ -157,9 +154,10 @@ void CTPatientModuleAdmin::execParsedQuery(QString initStmt, QString whereStmt)
 }
 
 
-void CTPatientModuleAdmin::proccessData(QByteArray table_data)
+void CTPatientModuleAdmin::proccessData(QByteArray table_data, QString table_name)
 {
-    tableOfScenarios->init(CTXmlDataParser::parse_table(table_data));
+    if(table_name == "test_scenario")
+        tableOfScenarios->init(CTXmlDataParser::parse_table(table_data));
 }
 
 

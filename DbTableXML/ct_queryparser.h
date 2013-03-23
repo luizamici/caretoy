@@ -18,7 +18,7 @@ public:
     CTQueryParser();
 
     enum StatementType { WhereStatement, SelectStatement, UpdateStatement,
-                         InsertStatement, DeleteStatement , InsertOrUpdateStatement};
+                         InsertStatement, DeleteStatement };
 
     static QString xmlStatement(StatementType type, const QString &tableName,
                                 const CTTableRecord &row);

@@ -13,7 +13,7 @@ class CTPatientModuleAdmin : public QWidget
 public:
     explicit CTPatientModuleAdmin(QWidget *parent = 0);
 
-    void proccessData(QByteArray table_data);
+    void proccessData(QByteArray table_data, QString table_name);
     
 private:
     CTPatientModule *patientModule;

@@ -32,6 +32,7 @@ signals:
 
 
     void execParsedQuery(QString init_stmt,QString where_stmt);
+    void tableInitialized();
     
 public slots:
     void tableSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);

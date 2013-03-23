@@ -6,6 +6,9 @@
 #include "ct_tableofpatients.h"
 #include "ct_worklogs.h"
 
+#include "ct_treeofworklogs.h"
+#include "ct_worklogswidget.h"
+
 
 class CTStaffModuleAdmin : public QWidget
 {
@@ -17,7 +20,7 @@ public:
 
     void initialize();
     void requestTable();
-    void requestWorkLog();
+
 
     void setWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB);
     void refreshWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB, bool newLog);
@@ -31,7 +34,8 @@ private:
     QStringList timestamps;
     QStringList logs;
     CTTableOfPatients *tableOfPatients;
-    CTWorklogs *workLogs;
+    CTWorklogsWidget *workLogs;
+
     QString localSelectedLogTimestamp;
 
     bool isNewLog();
@@ -58,10 +62,11 @@ public slots:
     void saveNewPatient(QHash<QString,QString> newPatient);
 
 
-    void proccessData(QByteArray table_data);
+    void proccessData(QByteArray table_data, QString table_name);
 
 private slots:
     void execParsedQuery(QString initStmt, QString whereStmt);
+    void requestWorkLog();
 
 };
 

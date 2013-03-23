@@ -49,6 +49,8 @@ void CTTableOfPatients::init(CTTableData *table_data)
     connect(this->selectionModel(),SIGNAL(
                 selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(tableSelectionChanged(QItemSelection,QItemSelection)));
+
+    emit tableInitialized();
 }
 
 void CTTableOfPatients::tableSelectionChanged(const QItemSelection &selected,

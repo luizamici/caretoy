@@ -6,6 +6,8 @@
 CTWorklogs::CTWorklogs(QWidget *parent) :
     QWidget(parent)
 {
+    treeOfLogs = new CTTreeOfWorkLogs();
+
     QGridLayout *layout = new QGridLayout();
     layout->setSpacing(20);
 
@@ -28,8 +30,8 @@ CTWorklogs::CTWorklogs(QWidget *parent) :
     comboBox->setMinimumHeight(30);
     resetComboBox();
 
-    toolBar->addSeparator();
-    toolBar->addWidget(comboBox);
+//    toolBar->addSeparator();
+//    toolBar->addWidget(comboBox);
 
     /******************************************************/
 
@@ -53,9 +55,18 @@ CTWorklogs::CTWorklogs(QWidget *parent) :
     workLogEdit->addScrollBarWidget(this->parentWidget(),Qt::AlignRight);
     disableWorkLogEditor(workLogEdit);
 
-    layout->addWidget(worklogList,0,0,0,1);
+//    layout->addWidget(worklogList,0,0,0,1);
+    layout->addWidget(treeOfLogs,0,0,0,1);
     layout->addWidget(workLogEdit,1,1);
     this->setLayout(layout);
+
+    connect(treeOfLogs, SIGNAL(clicked(QModelIndex)), this, SLOT(showLog(QModelIndex)));
+}
+
+void CTWorklogs::showLog(QModelIndex index)
+{
+    workLogEdit->setText(treeOfLogs->getWorklog(index));
+    disableWorkLogEditor(workLogEdit);
 }
 
 /*
@@ -72,12 +83,12 @@ void CTWorklogs::initializeComboBox(QStringList timestampsList){
  *with the current logs' timestamps on the DB and their corrisponding log as a list
  */
 void CTWorklogs::initializeWorklogList(QStringList timestamps, QStringList worklogsList){
-    worklogList->clear();
-    for(int i = 0; i < timestamps.size(); i ++){
-        worklogList->append('*' + timestamps.at(i));
-        worklogList->append(worklogsList.at(i));
-        worklogList->append("    "); //this values is inserted for displaying purposes
-    }
+//    worklogList->clear();
+//    for(int i = 0; i < timestamps.size(); i ++){
+//        worklogList->append('*' + timestamps.at(i));
+//        worklogList->append(worklogsList.at(i));
+//        worklogList->append("    "); //this values is inserted for displaying purposes
+//    }
 }
 
 /*
