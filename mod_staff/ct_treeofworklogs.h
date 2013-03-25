@@ -17,10 +17,12 @@ public:
 
     void init(QByteArray table_data);
 
-    QString getWorklog(QModelIndex index);
+    QStringList getWorklog(QModelIndex index);
+    QStringList save(QString log, QString id);
+    QStringList saveNew(QString log);
     CTTreeModel *xmlTree;
     
-signals:
+
     
 public slots:
     

@@ -8,10 +8,7 @@ CTAdmin::CTAdmin(QObject *parent) :
     sslClientThread  = new CTSslClientThread();
     sslClientThread->run();
 
-    /*
-     *This signal is emitted whenever the user presses 'ok' button on the login dialog
-     *The dbConnAdmin controls if the username and password inserted are present in the db
-     */
+
     connect(loginAdmin,SIGNAL(requestForAuthentication(QString,QString)),this,
             SLOT(authenticate(QString,QString)));
 
@@ -23,7 +20,6 @@ CTAdmin::CTAdmin(QObject *parent) :
 //    connect(sslClientThread,SIGNAL(notConnected(QString)),this, SLOT(
 //                connectionLost(QString)));
 
-    dbConnAdmin = new CTDBConnAdmin();
     staffModuleAdmin = new CTStaffModuleAdmin();
     patientModuleAdmin = new CTPatientModuleAdmin();
 
@@ -37,16 +33,16 @@ CTAdmin::CTAdmin(QObject *parent) :
     connect(sslClientThread,SIGNAL(processTable(QByteArray,QString)),this,
                 SLOT(proccessData(QByteArray,QString)));
 
-    /*
-     *In case the staffModuleAdmin is requesting a new worklog to be stored to the DB
-     */
-    connect(staffModuleAdmin,SIGNAL(saveNewLog(QHash<QString,QString>)),dbConnAdmin,SLOT(saveNewLog(QHash<QString,QString>)));
-    connect(staffModuleAdmin,SIGNAL(updateLog(QHash<QString,QString>)),dbConnAdmin,SLOT(updateLog(QHash<QString,QString>)));
-    connect(staffModuleAdmin,SIGNAL(editSelectedPatient(QHash<QString,QString>)),this,SLOT(editSelectedPatient(QHash<QString,QString>)));
-    connect(staffModuleAdmin,SIGNAL(openNewPatientDialog(QStringList)),patientModuleAdmin,SLOT(openNewPatientDialog(QStringList)));
 
-    connect(patientModuleAdmin,SIGNAL(selectedPatientChanged(QHash<QString,QString>)),staffModuleAdmin,SLOT(updateSelectedPatient(QHash<QString,QString>)));
-    connect(patientModuleAdmin,SIGNAL(newPatientAdded(QHash<QString,QString>)),staffModuleAdmin,SLOT(saveNewPatient(QHash<QString,QString>)));
+    connect(staffModuleAdmin,SIGNAL(editSelectedPatient(QHash<QString,QString>)),
+            this,SLOT(editSelectedPatient(QHash<QString,QString>)));
+    connect(staffModuleAdmin,SIGNAL(openNewPatientDialog(QStringList)),
+            patientModuleAdmin,SLOT(openNewPatientDialog(QStringList)));
+
+    connect(patientModuleAdmin,SIGNAL(selectedPatientChanged(QHash<QString,QString>)),
+            staffModuleAdmin,SLOT(updateSelectedPatient(QHash<QString,QString>)));
+    connect(patientModuleAdmin,SIGNAL(newPatientAdded(QHash<QString,QString>)),
+            staffModuleAdmin,SLOT(saveNewPatient(QHash<QString,QString>)));
 
 }
 
@@ -90,12 +86,12 @@ void CTAdmin::processXML(QByteArray data)
                     qDebug() << "SUCCESS";
                     qApp->setProperty("UserName", "Name");
                     qApp->setProperty("UserSurname", "Surname");
-                    qApp->setProperty("UserID", "2");
+                    qApp->setProperty("UserID", "02");
                     qApp->setProperty("UserLastLogin", "last_login");
                     loginSuccessful();
                 }
                 else if("failure" == type)
-                    qDebug() << "Failure!";
+                    loginAdmin->showWrongCredentialsMessage();
             }
             else if("query_reply" == tagName)
             {

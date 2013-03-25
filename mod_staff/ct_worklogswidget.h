@@ -2,6 +2,7 @@
 #define CT_WORKLOGSWIDGET_H
 
 #include <QWidget>
+#include <QtGui>
 
 namespace Ui {
 class CTWorklogsWidget;
@@ -21,12 +22,20 @@ private slots:
     void on_qtb_saveButton_clicked();
     void on_qtb_editButton_clicked();
     void on_qtbNewButton_clicked();
+    void showLog(QModelIndex index);
 
 private:
     Ui::CTWorklogsWidget *ui;
 
+    QString currentLog;
+    QString idLog;
     void readMode();
     void editMode();
+    void newLogMode();
+
+signals:
+    void nothingToSave(QString message);
+    void execParsedQuery(QString init_stmt,QString where_stmt);
 };
 
 #endif // CT_WORKLOGSWIDGET_H

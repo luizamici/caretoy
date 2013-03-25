@@ -2,7 +2,6 @@
 #define CT_LOGINDIALOG_H
 
 #include <QDialog>
-#include "ct_dbconn.h"
 #include <QStatusBar>
 
 namespace Ui {
@@ -16,7 +15,6 @@ class CTLoginDialog : public QDialog
 public:
     explicit CTLoginDialog(QWidget *parent = 0);
     ~CTLoginDialog();
-    CTDBConn *conn;
     QStatusBar *statusBar;
     
 private:

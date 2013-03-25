@@ -4,7 +4,6 @@
 #include <QObject>
 #include "ct_staffmodule.h"
 #include "ct_tableofpatients.h"
-#include "ct_worklogs.h"
 
 #include "ct_treeofworklogs.h"
 #include "ct_worklogswidget.h"
@@ -21,39 +20,20 @@ public:
     void initialize();
     void requestTable();
 
-
-    void setWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB);
-    void refreshWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB, bool newLog);
     void showStaffModule();
-
     void showConfirmationMessageStatus();
     
 private:
-
-    QMap<QPair<QString,QString>,QString> localWorkLogsList;
-    QStringList timestamps;
-    QStringList logs;
     CTTableOfPatients *tableOfPatients;
     CTWorklogsWidget *workLogs;
 
-    QString localSelectedLogTimestamp;
-
-    bool isNewLog();
-    void sortLocalWorkLogsListById();
-    void showMessageStatus(QString message);
 signals:
-    void saveNewLog(QHash<QString,QString> newlogToSave);
-    void updateLog(QHash<QString,QString> worklogToUpdate);
     void editSelectedPatient(QHash<QString,QString> patientToEdit);
     void openNewPatientDialog(QStringList idList);
-
     void requestToWriteIntoSocket(const QString &parsedQuery,
                                   const quint32 &type);
 
 public slots:
-    void getLog();
-    void updateWorklogEditor(QString selectedlogtimestamp);
-
     QHash<QString, QString> getSelectedPatient();
     void requestEdit();
     void requestNew();
@@ -67,6 +47,7 @@ public slots:
 private slots:
     void execParsedQuery(QString initStmt, QString whereStmt);
     void requestWorkLog();
+    void showMessageStatus(QString message);
 
 };
 

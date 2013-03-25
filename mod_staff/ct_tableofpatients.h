@@ -5,7 +5,6 @@
 #include <QMouseEvent>
 #include <QAbstractItemView>
 #include <QtGui>
-#include "CareToy_Admin/ct_dbconn.h"
 
 #include "DbTableXML/ct_tablemodel.h"
 
@@ -40,8 +39,6 @@ public slots:
     void filter(QString input);
 
 private:
-    CTDBConn *conn;
-    QSqlTableModel *sqlTable;
     QSortFilterProxyModel *proxy ;
     int searchCriteria;
 

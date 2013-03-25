@@ -1,7 +1,4 @@
 #include "ct_staffmodule.h"
-#include "ct_dialogs.h"
-#include "ct_combolog.h"
-#include "ct_worklogedit.h"
 #include "Patients_Admin/ct_patientmodule.h"
 
 
@@ -15,12 +12,12 @@ CTStaffModule::CTStaffModule(QWidget *parent) :
 
     this->setWindowTitle("Staff Module");
     this->setWindowIcon(QIcon(":images/logo.jpeg"));
-    this->setMinimumSize(1200,700);
+    this->setMinimumSize(1200,800);
     // Center the widget on the screen
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
 
-    QFont serifFont("Times", 12, QFont::Bold);
+    QFont serifFont("Serif", 12, QFont::Normal);
     searchPatient = new CTSearchPatient();
 
     QVBoxLayout *layout = new QVBoxLayout();
@@ -109,11 +106,7 @@ CTStaffModule::CTStaffModule(QWidget *parent) :
     //where the logs of the application's user(staff)
     //can be viewd and edited if necessary.
     subLayout3 = new QVBoxLayout();
-    subLayout3->setSpacing(10);
-    QLabel *label_4 = new QLabel(tr("  Work logs"));
-    label_4->setFont(serifFont);
-    subLayout3->addWidget(label_4, 1, Qt::AlignLeft);
-
+    subLayout3->setSpacing(5);
     verticalLayout->addLayout(subLayout3);
 
     statusBar = new QStatusBar();

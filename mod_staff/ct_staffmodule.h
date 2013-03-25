@@ -4,8 +4,6 @@
 #include <QWidget>
 #include <QtGui>
 #include "ct_tableofpatients.h"
-#include "CareToy_Admin/ct_dbconn.h"
-#include "ct_worklog.h"
 #include "Patients_Admin/ct_patientmodule.h"
 #include "ct_searchpatient.h"
 

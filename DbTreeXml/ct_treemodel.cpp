@@ -1,6 +1,10 @@
 #include <QtGui>
 #include "ct_treemodel.h"
 
+#include "DbTableXML/ct_tablefield.h"
+#include "DbTableXML/ct_tablerecord.h"
+#include "DbTableXML/ct_queryparser.h"
+
 class CTTreeItem
 {
 public:
@@ -61,7 +65,6 @@ CTTreeModel::CTTreeModel(const QByteArray &data, QObject *parent)
     rootData << "Timestamps" << "Id" ;
     rootItem = new CTTreeItem(rootData);
     setupModelData(getParents(data), getChildren(data),  rootItem);
-
 }
 
 CTTreeModel::~CTTreeModel()
@@ -70,14 +73,20 @@ CTTreeModel::~CTTreeModel()
 }
 
 
-QString CTTreeModel::getChildAt(const QModelIndex &parent)
+QStringList CTTreeModel::getChildAt(const QModelIndex &parent)
 {
-    QString child;
+    QStringList child;
     CTTreeItem *item = static_cast<CTTreeItem*>(parent.internalPointer());
     if(item->childCount() > 0)
-        child = item->child(0)->data(0).toString();
+    {
+        child << item->child(0)->data(0).toString();
+        child << item->child(0)->data(1).toString();
+    }
     else
-        child = item->data(0).toString();
+    {
+        child << item->data(0).toString();
+        child << item->data(1).toString();
+    }
     return child;
 }
 
@@ -198,6 +207,8 @@ void CTTreeModel::setupModelData(const QStringList &parents, const QList<QString
     }
 }
 
+//The secondary leaves of the tree(after the root leaf) are the
+//timestamps of the logs
 QStringList CTTreeModel::getParents(QByteArray data)
 {
     QStringList listParents;
@@ -215,7 +226,7 @@ QStringList CTTreeModel::getParents(QByteArray data)
         /*When a new block is found*/
         if(reader.isCharacters() && !reader.text().toString().trimmed().isEmpty() && write == true)
         {
-            listParents << reader.text().toString();
+            listParents << formatDate(reader.text().toString());
         }
     }
     return listParents;
@@ -247,3 +258,61 @@ QList<QStringList> CTTreeModel::getChildren(QByteArray data)
     return _listChildren;
 }
 
+
+//Removes the 'T' character from the DB returned timestamp
+QString CTTreeModel::formatDate(QString date)
+{
+    return date.replace("T", " ");
+}
+
+QStringList CTTreeModel::updateLog(QString log, QString id)
+{
+    QStringList stmt;
+    CTTableField field;
+    field.setName("log");
+    field.setValue(log);
+    CTTableRecord rec;
+    rec.append(field);
+    QString  initial_statement = CTQueryParser::xmlStatement(
+                CTQueryParser::UpdateStatement, "worklogs",
+                rec);
+
+    CTTableRecord whereRec;
+    field.clear();
+    field.setName("id");
+    field.setValue(id);
+    whereRec.append(field);
+
+    QString where_statement = CTQueryParser::xmlStatement(
+                CTQueryParser::WhereStatement, "worklogs",
+                whereRec);
+
+    stmt << initial_statement << where_statement;
+    return stmt;
+}
+
+QStringList CTTreeModel::saveLog(QString log)
+{
+    QStringList stmt;
+    CTTableRecord rec;
+    CTTableField field;
+    field.setName("log");
+    field.setValue(log);
+    rec.append(field);
+    field.clear();
+    field.setName("relativetimestamp");
+    field.setValue(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm"));
+    rec.append(field);
+    field.clear();
+    field.setName("staff");
+    field.setValue(qApp->property("UserID").toString());
+    rec.append(field);
+
+    QString  initial_statement = CTQueryParser::xmlStatement(
+                CTQueryParser::InsertStatement, "worklogs",
+                rec);
+
+    QString where_statement = "";
+    stmt << initial_statement << where_statement;
+    return stmt;
+}

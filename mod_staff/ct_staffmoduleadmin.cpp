@@ -1,5 +1,4 @@
 #include "ct_staffmoduleadmin.h"
-#include "ct_worklogs.h"
 #include "DbTableXML/ct_tablerecord.h"
 #include "DbTableXML/ct_queryparser.h"
 #include "DbTableXML/ct_xmldataparser.h"
@@ -30,6 +29,7 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
             SLOT(setEnabled(bool)));
     connect(tableOfPatients,SIGNAL(execParsedQuery(QString,QString)),this,
             SLOT(execParsedQuery(QString,QString)));
+    connect(workLogs, SIGNAL(execParsedQuery(QString,QString)),this, SLOT(execParsedQuery(QString,QString)));
 
 
     connect(staffModule->editButton,SIGNAL(clicked()),this,SLOT(requestEdit()));
@@ -39,8 +39,7 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
     connect(staffModule->searchPatient,SIGNAL(searchBy(int)),tableOfPatients,SLOT(setSearchCriteria(int)));
     connect(staffModule->searchPatient,SIGNAL(searchFor(QString)),tableOfPatients,SLOT(filter(QString)));
 
-//    connect(workLogs,SIGNAL(saveLog()),this,SLOT(getLog()));
-//    connect(workLogs->comboBox,SIGNAL(currentIndexChanged(QString)),this, SLOT(updateWorklogEditor(QString)));
+    connect(workLogs, SIGNAL(nothingToSave(QString)),this, SLOT(showMessageStatus(QString)));
 }
 
 void CTStaffModuleAdmin::initialize(){
@@ -80,6 +79,7 @@ void CTStaffModuleAdmin::requestTable()
 
 void CTStaffModuleAdmin::requestWorkLog()
 {
+    qDebug() << "Requesting worlogs";
     QStringList fieldNames = QStringList() << "relativetimestamp" << "log" << "id" ;
 
     CTTableRecord rec = CTTableRecord();
@@ -108,7 +108,6 @@ void CTStaffModuleAdmin::proccessData(QByteArray table_data, QString table_name)
         tableOfPatients->init(CTXmlDataParser::parse_table(table_data));
     else if(table_name == "worklogs")
     {
-        /*TODO init treeOfLogs*/
         qDebug() << table_data;
         workLogs->init(table_data);
     }
@@ -148,121 +147,6 @@ void CTStaffModuleAdmin::saveNewPatient(QHash<QString, QString> newPatient){
 
 /*******************************************************************************/
 
-/**********************************Worklog management*******************************************/
-void CTStaffModuleAdmin::setWorkLogList(QMap<QPair<QString,QString>,QString> workLogsListFromDB){
-//    /*
-//     *This hash map has the worklogs' timestamps in the keys, and the relative
-//     *log as value.
-//    */
-//    localWorkLogsList = workLogsListFromDB;
-//    /*
-//     *Since the QMap doesn't keep in memory the order of insert, a sorting of
-//     *the worklog list by id_worklog is necessary
-//     */
-//    sortLocalWorkLogsListById();
-//    workLogs->initializeComboBox(timestamps);
-//    workLogs->initializeWorklogList(timestamps,logs);
-}
-
-void CTStaffModuleAdmin::refreshWorkLogList(QMap<QPair<QString, QString>, QString> workLogsListFromDB,bool newLog){
-    /*
-     *This hash map has the worklogs' timestamps in the keys, and the relative
-     *log as value.
-    */
-//    localWorkLogsList = workLogsListFromDB;
-//    sortLocalWorkLogsListById();
-//    if(!newLog){
-//        workLogs->initializeWorklogList(timestamps,logs);
-//    }else{
-//        workLogs->initializeWorklogList(timestamps,logs);
-//        workLogs->initializeComboBox(timestamps);
-//        workLogs->comboBox->setCurrentIndex(workLogs->comboBox->count() - 1);
-//    }
-}
-
-void CTStaffModuleAdmin::getLog(){
-    /*
-     *This public slot is used in both cases: when a new log is requested to be saved
-     *and when an already existing log is being changed and submitted
-     */
-//    QHash<QString,QString> newWorklogToSave;
-//    QHash<QString,QString> worklogToUpdate;
-//    if(isNewLog()){
-//        /*If the worklog being saved to the DB is new, then its corresponding
-//         *timestamp is created new
-//         */
-//        newWorklogToSave["log"] = workLogs->getLog();
-//        QDateTime currentDateTime = QDateTime::currentDateTime();
-//        newWorklogToSave["relativetimestamp"] = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-//        emit saveNewLog(newWorklogToSave);
-//    }else{
-//        if(!localSelectedLogTimestamp.isEmpty()){
-//            QPair<QString,QString> key;
-//            for(int i = 0; i < localWorkLogsList.keys().size() ; i++){
-//                key = localWorkLogsList.keys().at(i);
-//                if(key.second == localSelectedLogTimestamp){
-//                    worklogToUpdate["id_worklog"] = key.first;
-//                    worklogToUpdate["relativetimestamp"] = localSelectedLogTimestamp;
-//                    worklogToUpdate["log"] = workLogs->getLog();
-//                }
-//            }
-//            emit updateLog(worklogToUpdate);
-//        }else{qDebug() << "CTStaffModuleAdmin::getLog() is returning with error because localSelectedLogTimestamp is empty ";}
-//    }
-}
-
-void CTStaffModuleAdmin::updateWorklogEditor(QString selectedlogtimestamp){
-    /*
-     *Since the selected log is probably being further changed,
-     *its corresponging timestamps is stored locally for then being
-     *used when changes are requested to be saved
-     */
-//    QPair<QString,QString> key;
-//    localSelectedLogTimestamp = selectedlogtimestamp;
-//    for(int i = 0; i < localWorkLogsList.keys().size() ; i++){
-//        key = localWorkLogsList.keys().at(i);
-//        if(key.second == localSelectedLogTimestamp){
-//            workLogs->workLogEdit->setText(localWorkLogsList[key]);
-//            workLogs->disableWorkLogEditor(workLogs->workLogEdit);
-//            if(!isNewLog())showMessageStatus("Press 'Edit' button for changing the selected worklog");
-//        }
-//    }
-
-}
-
-bool CTStaffModuleAdmin::isNewLog(){
-//    return(workLogs->comboBox->currentIndex() == 0);
-}
-
-void CTStaffModuleAdmin::sortLocalWorkLogsListById(){
-
-//    QPair<QString,QString> key;
-//    QList<int> id_worklogs;
-//    timestamps.clear();
-//    logs.clear();
-//    /*populating the list of worklogs from the localWorkLogsList*/
-//    for(int i = 0; i < localWorkLogsList.keys().size() ; i ++){
-//        key = localWorkLogsList.keys().at(i);
-//        id_worklogs.append(key.first.toInt());
-//    }
-//    /*sorting the id's list in ascending order*/
-//    qSort(id_worklogs.begin(), id_worklogs.end(), qLess<int>());
-//    /*
-//     *The sorting does not return another QMap object since that brings us
-//     *to nothing. Instead the sorted data is appended to two lists:
-//     *list of timestamps and list of logs
-//     */
-//    foreach(int id_worklog, id_worklogs){
-//        for(int i = 0; i < localWorkLogsList.keys().size() ; i ++){
-//            key = localWorkLogsList.keys().at(i);
-//            if(id_worklog == key.first.toInt()){
-//                timestamps.append(key.second);
-//                logs.append(localWorkLogsList[key]);
-//            }
-//        }
-//    }
-}
-/*******************************************************************************/
 
 
 /************************Status bar messages************************************/

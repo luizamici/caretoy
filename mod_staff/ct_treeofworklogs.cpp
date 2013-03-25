@@ -15,8 +15,18 @@ void CTTreeOfWorkLogs::init(QByteArray table_data)
 }
 
 
-QString CTTreeOfWorkLogs::getWorklog(QModelIndex index)
+QStringList CTTreeOfWorkLogs::getWorklog(QModelIndex index)
 {
     qDebug() << "retreiveing from :" << index.row() << index.column();
     return xmlTree->getChildAt(index);
+}
+
+QStringList CTTreeOfWorkLogs::save(QString log, QString id)
+{
+    return xmlTree->updateLog(log, id);
+}
+
+QStringList CTTreeOfWorkLogs::saveNew(QString log)
+{
+    return xmlTree->saveLog(log);
 }

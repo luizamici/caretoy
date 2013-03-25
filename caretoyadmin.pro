@@ -11,12 +11,9 @@ SOURCES += main.cpp \
     mod_staff/ct_tableofpatients.cpp \
     mod_staff/ct_staffmodule.cpp \
     CareToy_Admin/ct_logindialog.cpp \
-    CareToy_Admin/ct_dbconn.cpp \
     CareToy_Admin/ct_loginadmin.cpp \
     CareToy_Admin/ct_admin.cpp \
-    CareToy_Admin/ct_dbconnadmin.cpp \
     mod_staff/ct_staffmoduleadmin.cpp \
-    mod_staff/ct_worklogs.cpp \
     Patients_Admin/ct_patientmodule.cpp \
     Patients_Admin/ct_patientmoduleadmin.cpp \
     Patients_Admin/ct_wizardlayout.cpp \
@@ -40,13 +37,10 @@ HEADERS += \
     mod_staff/ct_tableofpatients.h \
     mod_staff/ct_staffmodule.h \
     CareToy_Admin/ct_logindialog.h \
-    CareToy_Admin/ct_dbconn.h \
     CareToy_Admin/ct_loginadmin.h \
     CareToy_Admin/ct_admin.h \
-    CareToy_Admin/ct_dbconnadmin.h \
     CareToy_Admin/ct_defs.h \
     mod_staff/ct_staffmoduleadmin.h \
-    mod_staff/ct_worklogs.h \
     Patients_Admin/ct_patientmodule.h \
     Patients_Admin/ct_patientmoduleadmin.h \
     Patients_Admin/ct_wizardlayout.h \
@@ -69,7 +63,6 @@ HEADERS += \
 
 FORMS += \
     ct_logindialog.ui \
-    ct_dialogs.ui \
     ct_patientmodule.ui \
     ct_wizardlayout.ui \
     ct_searchpatient.ui \

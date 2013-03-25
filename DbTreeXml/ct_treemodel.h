@@ -27,14 +27,16 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-     QString getChildAt(const QModelIndex &parent);
+    QStringList getChildAt(const QModelIndex &parent);
+    QStringList updateLog(QString log, QString id);
+    QStringList saveLog(QString log);
 
 private:
     void setupModelData(const QStringList &parents, const QList<QStringList> &children, CTTreeItem *parent);
 
     QStringList getParents(QByteArray data);
     QList<QStringList> getChildren(QByteArray data);
-
+    QString formatDate(QString date);
 
     CTTreeItem *rootItem;
 };
