@@ -45,11 +45,12 @@ public slots:
     void goBack();
     void searchResults(QString id_scenario);
     void checkAddButtonClicked();
-
     void showConfirmationDialog();
 
 
     void showConfirmationMessageStatus();
+    void showFailureMessageStatus();
+    void showMessage(QString mssg);
 };
 
 #endif // CT_PATIENTMODULEADMIN_H

@@ -16,7 +16,7 @@ public:
 signals:
     void requestForAuthentication(const QString &nickname,const QString &password);
 public slots:
-    void showWrongCredentialsMessage();
+    void showWrongCredentialsMessage(QString mssg);
 };
 
 #endif // CT_LOGINADMIN_H

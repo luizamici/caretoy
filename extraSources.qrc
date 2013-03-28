@@ -11,5 +11,6 @@
         <file alias="save_button2.png">images/save_button2.png</file>
         <file alias="edit_button.png">images/edit_button.png</file>
         <file alias="check-icon.png">images/check-icon_scaled.png</file>
+        <file>images/trash.png</file>
     </qresource>
 </RCC>

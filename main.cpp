@@ -3,7 +3,6 @@
 #include <QApplication>
 #include "Patients_Admin/ct_wizard.h"
 
-
 int main(int argc, char *argv[])
 {
     QApplication::setDesktopSettingsAware(false);

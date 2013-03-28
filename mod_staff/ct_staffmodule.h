@@ -24,6 +24,8 @@ public:
     CTSearchPatient *searchPatient;
 
     void showOkMessage(QString message);
+    void showFailureMessage(QString message);
+    void showMessage(QString message);
 signals:
     void openNewPatientDialog();
     void deleteSelectedPatient();

@@ -88,7 +88,7 @@ void CTPatientsForm::initializeNewPatient()
  */
 void CTPatientsForm::reset()
 {
-    patientsForm->setPatient(localPatient);
+    patientsForm->resetPatient(localPatient);
 }
 
 
@@ -102,11 +102,12 @@ void CTPatientsForm::check()
     /*
      *Checking if the inserted reference(id) already exists
      */
-//    if(idList.contains(patientFromUI["id"].trimmed())){
-//        updateButton->setEnabled(false);
-//        emit nothingToSave("Inserted Reference already exists!");
-//    }
-//    else{
+    if(idList.contains(patientFromUI["id"].trimmed())){
+        updateButton->setEnabled(false);
+        QMessageBox::critical(0, tr("Patient Admin"),"Inserted Reference already exists!\n"
+                              "Please specify a unique reference number for each patient.");
+    }
+    else{
         if(newPatient)
         {
             qDebug() << "new patient";
@@ -128,7 +129,7 @@ void CTPatientsForm::check()
                 emit nothingToSave("No changes found, data already up to date!");
             }
         }
-//    }
+    }
 }
 
 
@@ -138,8 +139,7 @@ void CTPatientsForm::check()
  */
 bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
 {
-    qDebug() << "patientFromUI: " << patientFromUI;
-    qDebug() << "localData: " << localPatient;
+
     bool changesDetected = false;
     foreach(QString key, localPatient.keys()){
         if(localPatient[key] != patientFromUI[key]){
@@ -153,22 +153,6 @@ bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
 void CTPatientsForm::clearLocalData()
 {
     localPatient = patientsForm->getPatient();
-    qDebug() << "CTPatientsForm::clearLocalData(): " << localPatient;
-//    localPatient["firstname"] = " ";
-//    localPatient["lastname"] = " ";
-//    localPatient["parent_1"] = " ";
-//    localPatient["parent_2"] = " ";
-//    localPatient["address"] = "Address";
-//    localPatient["zip_code"] = "0";
-//    localPatient["phone"] = "Phone";
-//    localPatient["city"] = "City";
-//    localPatient["email"] = "Email";
-//    localPatient["id"] = " ";
-//    localPatient["attendant"] = " ";
-//    localPatient["notes"] = "Here notes can be added";
-//    localPatient["sex"] = "Choose ...";
-//    localPatient["gest_age"] = "Choose ...";
-//    localPatient["date_of_birth"] = "2012-01-01";
 }
 
 /*
@@ -188,15 +172,6 @@ bool CTPatientsForm::updateButtonEnabled()
 }
 
 
-/*
- *After successful insertion of a new patient, while the just inserted
- *patient form is still open, the new row assinged to him is updated
- *in order to allow further changes
- */
-void CTPatientsForm::setRow(QString row){
-//    this->row = row;
-}
-
 void CTPatientsForm::setIdList(QStringList id_list){
     /*The list of Id is saved in order to double check the inserted Id */
     this->idList = id_list;
@@ -204,11 +179,6 @@ void CTPatientsForm::setIdList(QStringList id_list){
     patientsForm->setCompleter(id_list);
 }
 
-
-QString CTPatientsForm::getRow(){
-//    qDebug() << "getting row: " << row;
-//    return this->row;
-}
 
 /******************************************************************************/
 void MandatoryFieldGroup::add(QWidget *widget)

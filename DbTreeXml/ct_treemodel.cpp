@@ -1,6 +1,8 @@
 #include <QtGui>
 #include "ct_treemodel.h"
 
+#include "CareToy_Admin/ct_aux.h"
+
 #include "DbTableXML/ct_tablefield.h"
 #include "DbTableXML/ct_tablerecord.h"
 #include "DbTableXML/ct_queryparser.h"
@@ -62,6 +64,7 @@ CTTreeModel::CTTreeModel(const QByteArray &data, QObject *parent)
     : QAbstractItemModel(parent)
 {
     QList<QVariant> rootData;
+    parentNodes = new QStringList();
     rootData << "Timestamps" << "Id" ;
     rootItem = new CTTreeItem(rootData);
     setupModelData(getParents(data), getChildren(data),  rootItem);
@@ -88,6 +91,11 @@ QStringList CTTreeModel::getChildAt(const QModelIndex &parent)
         child << item->data(1).toString();
     }
     return child;
+}
+
+QStringList CTTreeModel::getFirstChild()
+{
+    return getChildAt(index(0,0));
 }
 
 int CTTreeModel::columnCount(const QModelIndex &parent) const
@@ -229,6 +237,7 @@ QStringList CTTreeModel::getParents(QByteArray data)
             listParents << formatDate(reader.text().toString());
         }
     }
+    parentNodes->append(listParents);
     return listParents;
 }
 
@@ -258,12 +267,6 @@ QList<QStringList> CTTreeModel::getChildren(QByteArray data)
     return _listChildren;
 }
 
-
-//Removes the 'T' character from the DB returned timestamp
-QString CTTreeModel::formatDate(QString date)
-{
-    return date.replace("T", " ");
-}
 
 QStringList CTTreeModel::updateLog(QString log, QString id)
 {
@@ -314,5 +317,22 @@ QStringList CTTreeModel::saveLog(QString log)
 
     QString where_statement = "";
     stmt << initial_statement << where_statement;
+    return stmt;
+}
+
+QStringList CTTreeModel::deleteLogById(QString id_log)
+{
+    QStringList stmt;
+    CTTableRecord rec;
+    CTTableField field;
+    field.setName("id");
+    field.setValue(id_log);
+    rec.append(field);
+    QString initial_stmt = CTQueryParser::xmlStatement(
+                CTQueryParser::DeleteStatement, "worklogs", rec);
+    QString where_stmt = CTQueryParser::xmlStatement(
+                CTQueryParser::WhereStatement, "worklogs", rec);
+
+    stmt << initial_stmt << where_stmt;
     return stmt;
 }

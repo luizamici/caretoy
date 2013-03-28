@@ -26,7 +26,7 @@ void CTTableOfPatients::init(CTTableData *table_data)
     this->setModel(filterModel);
 
     xmlTable->setHeader(0, tr("Ref. Number"));
-    xmlTable->setHeader(1, tr("Frist Name"));
+    xmlTable->setHeader(1, tr("First Name"));
     xmlTable->setHeader(2, tr("Last Name"));
     xmlTable->setHeader(3, tr("Parent 1"));
     xmlTable->setHeader(4, tr("Parent 2"));

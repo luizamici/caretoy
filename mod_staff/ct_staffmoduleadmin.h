@@ -4,7 +4,7 @@
 #include <QObject>
 #include "ct_staffmodule.h"
 #include "ct_tableofpatients.h"
-
+#include "CareToy_Admin/ct_defs.h"
 #include "ct_treeofworklogs.h"
 #include "ct_worklogswidget.h"
 
@@ -18,10 +18,13 @@ public:
     CTStaffModule *staffModule;
 
     void initialize();
-    void requestTable();
+    void refresh();
+    void requestPatientsTable();
 
     void showStaffModule();
     void showConfirmationMessageStatus();
+    void showFailureMessageStatus();
+    void showWarningMessage(QString mssg);
     
 private:
     CTTableOfPatients *tableOfPatients;
@@ -45,9 +48,10 @@ public slots:
     void proccessData(QByteArray table_data, QString table_name);
 
 private slots:
-    void execParsedQuery(QString initStmt, QString whereStmt);
+    void execParsedQuery(QString initStmt, QString whereStmt, Data type_of_data);
     void requestWorkLog();
     void showMessageStatus(QString message);
+    void afterTableInit();
 
 };
 

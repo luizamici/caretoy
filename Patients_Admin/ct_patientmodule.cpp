@@ -61,6 +61,16 @@ void CTPatientModule::showOkMessage(QString message){
     statusBar->showMessage(message,5000);
 }
 
+void CTPatientModule::showFailureMessage(QString message)
+{
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "red" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage(message,5000);
+}
+
+
+
 void CTPatientModule::showErrorMessage(QString errorMessage){
 
     QPalette palette;

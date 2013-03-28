@@ -124,6 +124,16 @@ void CTPatientModuleAdmin::showConfirmationMessageStatus(){
     patientModule->showOkMessage("Operation successful!");
 }
 
+void CTPatientModuleAdmin::showFailureMessageStatus()
+{
+    patientModule->showFailureMessage("Operation failed!");
+}
+
+void CTPatientModuleAdmin::showMessage(QString mssg)
+{
+    patientModule->showWarningMessage(mssg);
+}
+
 
 /*Select on pre-known columns of the table patients*/
 void CTPatientModuleAdmin::requestTableOfScenarios()
@@ -144,6 +154,7 @@ void CTPatientModuleAdmin::requestTableOfScenarios()
     QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
                                                "test_scenario",rec);
     execParsedQuery(stmt, QString());
+    qApp->setProperty("dirty_data", T_Scenarios);
 }
 
 

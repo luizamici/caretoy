@@ -20,13 +20,17 @@ public:
     CTQSqlTableOfResults *sqlTableOfResults;
 
 private:
+    int reconnectTimeOuts;
     CTSslClientThread *sslClientThread;
     void initializeStaffModule();
+    void refreshStaffModule();
 
 private slots:
     void authenticate(QString username, QString psswd);
     void processXML(QByteArray data);
     void proccessData(QByteArray data, QString table_name);
+    void connectionLost(QString mss);
+    void timerTimeout();
     
 public slots:
     void loginSuccessful();

@@ -147,5 +147,6 @@ QString CTQueryParser::prepareQuery(QString initStmt, QString whereStmt)
         }
     }
     stream.writeEndElement();//end query
+    qDebug() << stmt;
     return stmt;
 }

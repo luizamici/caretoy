@@ -3,10 +3,10 @@
 
 #include <QWidget>
 #include <QTreeView>
+#include <QAbstractItemView>
+#include <QSortFilterProxyModel>
 #include "DbTableXML/ct_tabledata.h"
 #include "DbTableXML/ct_tablemodel.h"
-#include <QAbstractItemView>
-
 #include "DbTreeXml/ct_treemodel.h"
 
 class CTTreeOfWorkLogs : public QTreeView
@@ -18,10 +18,15 @@ public:
     void init(QByteArray table_data);
 
     QStringList getWorklog(QModelIndex index);
+    QStringList getWorklogByDate(QDate date);
+    QStringList *getParentNodes();
     QStringList save(QString log, QString id);
     QStringList saveNew(QString log);
+    QStringList deleteLog(QString id);
     CTTreeModel *xmlTree;
-    
+
+private:
+    QSortFilterProxyModel *filterModel; 
 
     
 public slots:

@@ -14,8 +14,13 @@ CTSearchPatient::CTSearchPatient(QWidget *parent) :
 
 
 void CTSearchPatient::search(int index){
-    ui->qleINputSearch->setEnabled(true);
-    emit searchBy(index);
+    if(index != 0)
+    {
+        ui->qleINputSearch->setEnabled(true);
+        emit searchBy(index);
+    }
+    else
+        ui->qleINputSearch->setEnabled(false);
 }
 
 

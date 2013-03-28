@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtGui>
+#include "CareToy_Admin/ct_defs.h"
 
 namespace Ui {
 class CTWorklogsWidget;
@@ -23,6 +24,12 @@ private slots:
     void on_qtb_editButton_clicked();
     void on_qtbNewButton_clicked();
     void showLog(QModelIndex index);
+    void showLogByDate(QDate date_selected);
+    void contractButtonToggled(bool toggled);
+    void on_qtb_calendarview_clicked(const QDate &date);
+    void tabChanged(int id);
+
+    void on_qtbDeleteButton_clicked();
 
 private:
     Ui::CTWorklogsWidget *ui;
@@ -35,7 +42,8 @@ private:
 
 signals:
     void nothingToSave(QString message);
-    void execParsedQuery(QString init_stmt,QString where_stmt);
+    void execParsedQuery(QString init_stmt,QString where_stmt,
+                         Data type_of_data = T_Worklogs);
 };
 
 #endif // CT_WORKLOGSWIDGET_H

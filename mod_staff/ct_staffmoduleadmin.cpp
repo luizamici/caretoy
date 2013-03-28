@@ -8,10 +8,7 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
     QWidget(parent)
 {
     /*Two submodules*/
-//    workLogs = new CTWorklogs();
-
     workLogs = new CTWorklogsWidget();
-
     tableOfPatients = new CTTableOfPatients(this->parentWidget());
 
     staffModule = new CTStaffModule(this->parentWidget());
@@ -27,10 +24,13 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
             SLOT(setEnabled(bool)));
     connect(tableOfPatients,SIGNAL(tableSelected(bool)),staffModule->editButton,
             SLOT(setEnabled(bool)));
-    connect(tableOfPatients,SIGNAL(execParsedQuery(QString,QString)),this,
-            SLOT(execParsedQuery(QString,QString)));
-    connect(workLogs, SIGNAL(execParsedQuery(QString,QString)),this, SLOT(execParsedQuery(QString,QString)));
+    connect(tableOfPatients,SIGNAL(execParsedQuery(QString,QString,Data)),this,
+            SLOT(execParsedQuery(QString,QString,Data)));
+    connect(workLogs, SIGNAL(execParsedQuery(QString,QString,Data)),this, SLOT(
+                execParsedQuery(QString,QString,Data)));
 
+    connect(tableOfPatients, SIGNAL(tableInitialized()),this, SLOT(
+                afterTableInit()));
 
     connect(staffModule->editButton,SIGNAL(clicked()),this,SLOT(requestEdit()));
     connect(staffModule->addButton,SIGNAL(clicked()),this, SLOT(requestNew()));
@@ -44,18 +44,33 @@ CTStaffModuleAdmin::CTStaffModuleAdmin(QWidget *parent) :
 
 void CTStaffModuleAdmin::initialize(){
 
+    qDebug() << "CTStaffModuleAdmin::initialize";
     staffModule->label_1->setText(qApp->property("UserName").toString() + " "
                      + qApp->property("UserSurname").toString());
-    staffModule->label_2->setText("<font color= green>" + qApp->property("UserLastLogin").
+    staffModule->label_2->setText("<font color= green>" + tr("Last login: ") + qApp->property("UserLastLogin").
                      toString() + " </font>");
-    requestTable();
-    connect(tableOfPatients, SIGNAL(tableInitialized()),this, SLOT(requestWorkLog()));
+    requestPatientsTable();
+    staffModule->showMessage("Retreiving data from the DB...");
 }
 
+void CTStaffModuleAdmin::refresh()
+{
+    if(qApp->property("dirty_data") == T_Patient)
+        requestPatientsTable();
+    else if(qApp->property("dirty_data") == T_Worklogs)
+        requestWorkLog();
+}
+
+void CTStaffModuleAdmin::afterTableInit()
+{
+    if(qApp->property("dirty_data") == T_NoOne)
+        requestWorkLog();
+}
 
 /*Select on pre-known columns of the table patients*/
-void CTStaffModuleAdmin::requestTable()
+void CTStaffModuleAdmin::requestPatientsTable()
 {
+    qDebug() << "CTStaffModuleAdmin::requestTable()";
     QStringList fieldNames = QStringList() <<"id" << "firstname"
                                           << "lastname"
                                           << "parent_1" << "parent_2"
@@ -74,12 +89,12 @@ void CTStaffModuleAdmin::requestTable()
     }
     QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
                                                "patients",rec);
-    execParsedQuery(stmt, QString());
+    execParsedQuery(stmt, QString(), T_NoOne);
 }
 
 void CTStaffModuleAdmin::requestWorkLog()
 {
-    qDebug() << "Requesting worlogs";
+    qDebug() << "CTStaffModuleAdmin::requestWorkLog";
     QStringList fieldNames = QStringList() << "relativetimestamp" << "log" << "id" ;
 
     CTTableRecord rec = CTTableRecord();
@@ -89,14 +104,29 @@ void CTStaffModuleAdmin::requestWorkLog()
         rec.insert(i, CTTableField(fieldName, fieldName));
         i++;
     }
-    QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
+    QString init_stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
                                                "worklogs",rec);
-    execParsedQuery(stmt, QString());
+
+    rec.clear();
+    CTTableField field;
+    field.setName("staff");
+    field.setValue(qApp->property("UserID").toString());
+    rec.append(field);
+
+    QString where_stmt = CTQueryParser::xmlStatement(CTQueryParser::WhereStatement,
+                                                     "worklogs",rec);
+    execParsedQuery(init_stmt, where_stmt, T_NoOne);
 }
 
-void CTStaffModuleAdmin::execParsedQuery(QString initStmt, QString whereStmt)
+void CTStaffModuleAdmin::execParsedQuery(QString initStmt, QString whereStmt, Data type_of_data)
 {
-    qDebug() << initStmt << whereStmt;
+    qDebug() << "CTStaffModuleAdmin::execParsedQuery" ;
+    if(type_of_data == T_Patient)
+        qDebug( ) << "Setting patient data as dirty";
+    else if(type_of_data == T_Worklogs)
+        qDebug() << "Setting worklogs data as dirty";
+    if(type_of_data != T_NoOne)
+        qApp->setProperty("dirty_data", type_of_data);
     emit requestToWriteIntoSocket(CTQueryParser::prepareQuery(
                                       initStmt,whereStmt), CT_DBSDATA);
 }
@@ -108,7 +138,6 @@ void CTStaffModuleAdmin::proccessData(QByteArray table_data, QString table_name)
         tableOfPatients->init(CTXmlDataParser::parse_table(table_data));
     else if(table_name == "worklogs")
     {
-        qDebug() << table_data;
         workLogs->init(table_data);
     }
 }
@@ -155,12 +184,23 @@ void CTStaffModuleAdmin::showConfirmationMessageStatus(){
     staffModule->showOkMessage("Operation successful!");
 }
 
+void CTStaffModuleAdmin::showFailureMessageStatus()
+{
+    staffModule->showFailureMessage("Operation failed!");
+}
+
+void CTStaffModuleAdmin::showWarningMessage(QString mssg)
+{
+    staffModule->showMessage(mssg);
+}
+
 void CTStaffModuleAdmin::showMessageStatus(QString message){
     QPalette palette;
     palette.setColor( QPalette::WindowText, "black" );
     staffModule->statusBar->setPalette( palette );
     staffModule->statusBar->showMessage(message,5000);
 }
+
 /*******************************************************************************/
 
 

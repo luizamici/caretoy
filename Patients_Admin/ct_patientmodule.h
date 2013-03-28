@@ -22,6 +22,8 @@ public:
 
    QMessageBox *warningMessage;
 
+   void showFailureMessage(QString message);
+
 protected:
     void changeEvent(QEvent *e);
     

@@ -16,32 +16,24 @@ public:
     void initializeFormWithPatient(QHash<QString,QString> patient);
     void initializeNewPatient();
 
-    void setRow(QString row);
     void setIdList(QStringList id_list);
     bool unsavedChanges();
     bool updateButtonEnabled();
-
     bool newPatient;
 private:
     MandatoryFieldGroup *group;
-
     CTWizardLayout *patientsForm;
     QPushButton *updateButton;
     QHash<QString,QString> localPatient;
     QString row;
     QStringList idList;
-
-    QString getRow();
     bool areChanges(QHash<QString,QString> patientFromUI);
-
     void clearLocalData();
-
 
 signals:
     void nothingToSave(QString message);
     void insert(QHash<QString,QString> newPatient);
     void update(QHash<QString,QString> patientToUpdate);
-
 
 public slots:
     void reset();

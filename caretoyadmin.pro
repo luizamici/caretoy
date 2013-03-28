@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     DbTableXML/ct_xmldataparser.cpp \
     DbTreeXml/ct_treemodel.cpp \
     mod_staff/ct_treeofworklogs.cpp \
-    mod_staff/ct_worklogswidget.cpp
+    mod_staff/ct_worklogswidget.cpp \
+    mod_staff/ct_calendar.cpp
 
 HEADERS += \
     mod_staff/ct_tableofpatients.h \
@@ -58,7 +59,9 @@ HEADERS += \
     DbTableXML/ct_xmldataparser.h \
     DbTreeXml/ct_treemodel.h \
     mod_staff/ct_treeofworklogs.h \
-    mod_staff/ct_worklogswidget.h
+    mod_staff/ct_worklogswidget.h \
+    CareToy_Admin/ct_aux.h \
+    mod_staff/ct_calendar.h
 
 
 FORMS += \

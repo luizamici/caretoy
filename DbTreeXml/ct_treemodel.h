@@ -28,15 +28,18 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     QStringList getChildAt(const QModelIndex &parent);
+    QStringList getFirstChild();
     QStringList updateLog(QString log, QString id);
     QStringList saveLog(QString log);
+    QStringList deleteLogById(QString id_log);
+
+    QStringList *parentNodes;
 
 private:
     void setupModelData(const QStringList &parents, const QList<QStringList> &children, CTTreeItem *parent);
 
     QStringList getParents(QByteArray data);
     QList<QStringList> getChildren(QByteArray data);
-    QString formatDate(QString date);
 
     CTTreeItem *rootItem;
 };

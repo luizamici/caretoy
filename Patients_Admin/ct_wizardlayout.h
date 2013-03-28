@@ -17,6 +17,7 @@ public:
     ~CTWizardLayout();
 
     void setPatient(QHash<QString,QString> patient);
+    void resetPatient(QHash<QString, QString> patient);
     QHash<QString,QString> getPatient();
 
     void validReferenceEditing(bool b);

@@ -8,5 +8,6 @@
 #define CT_CHUNKSIZE 512
 
 enum { ST_TYPE, ST_SIZE, ST_DATA };
+enum Data{T_Patient, T_Worklogs, T_Scenarios, T_NoOne};
 
 #endif // CT_DEFS_H

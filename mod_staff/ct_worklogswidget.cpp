@@ -12,8 +12,15 @@ CTWorklogsWidget::CTWorklogsWidget(QWidget *parent) :
 
     currentLog = "";
     idLog = "";
-    connect(ui->treeofworklogs, SIGNAL(clicked(QModelIndex)), this,
+    connect(ui->qtb_treeview, SIGNAL(clicked(QModelIndex)), this,
             SLOT(showLog(QModelIndex)));
+    connect(ui->qtb_contract_all, SIGNAL(clicked(bool)),this, SLOT(
+                contractButtonToggled(bool)));
+
+    connect(ui->qtb_calendarview, SIGNAL(clicked(QDate)), this, SLOT(
+                on_qtb_calendarview_clicked(QDate)));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)),this, SLOT(
+                tabChanged(int)));
 }
 
 
@@ -25,30 +32,57 @@ CTWorklogsWidget::~CTWorklogsWidget()
 
 void CTWorklogsWidget::init(QByteArray table_data)
 {
-    ui->treeofworklogs->init(table_data);
+    ui->qtb_treeview->init(table_data);
 }
 
+void CTWorklogsWidget::tabChanged(int id)
+{
+    if(id = 1)
+        ui->qtb_calendarview->init(ui->qtb_treeview->getParentNodes());
+}
 
 void CTWorklogsWidget::showLog(QModelIndex index)
 {
-    QStringList _log= ui->treeofworklogs->getWorklog(index);
+    QStringList _log= ui->qtb_treeview->getWorklog(index);
     idLog = _log.at(1);
     currentLog = _log.at(0);
     ui->qte_worklogedit->setText(currentLog);
     readMode();
 }
 
+void CTWorklogsWidget::showLogByDate(QDate date_selected)
+{
+
+}
+
+void CTWorklogsWidget::contractButtonToggled(bool toggled)
+{
+    if(true == toggled)
+    {
+        ui->qtb_contract_all->setText("Expand all");
+        ui->qtb_treeview->collapseAll();
+    }
+    else
+    {
+        ui->qtb_contract_all->setText("Collapse all");
+        ui->qtb_treeview->expandAll();
+    }
+}
 
 void CTWorklogsWidget::on_qtb_saveButton_clicked()
 {
-    if(currentLog != ui->qte_worklogedit->toPlainText() && !idLog.trimmed().isEmpty())
+    if(currentLog != ui->qte_worklogedit->toPlainText() &&
+            !idLog.trimmed().isEmpty())
     {
-        QStringList stmt = ui->treeofworklogs->save(ui->qte_worklogedit->toPlainText(), idLog);
+        QStringList stmt = ui->qtb_treeview->save(
+                    ui->qte_worklogedit->toPlainText(), idLog);
         execParsedQuery(stmt.at(0), stmt.at(1));
     }
-    else if(currentLog != ui->qte_worklogedit->toPlainText() && idLog.trimmed().isEmpty())
+    else if(currentLog != ui->qte_worklogedit->toPlainText() &&
+            idLog.trimmed().isEmpty())
     {
-        QStringList stmt = ui->treeofworklogs->saveNew(ui->qte_worklogedit->toPlainText());
+        QStringList stmt = ui->qtb_treeview->saveNew(
+                    ui->qte_worklogedit->toPlainText());
         execParsedQuery(stmt.at(0), stmt.at(1));
     }
     else
@@ -58,6 +92,25 @@ void CTWorklogsWidget::on_qtb_saveButton_clicked()
 void CTWorklogsWidget::on_qtb_editButton_clicked(){editMode();}
 
 void CTWorklogsWidget::on_qtbNewButton_clicked(){ newLogMode();}
+
+
+void CTWorklogsWidget::on_qtbDeleteButton_clicked()
+{
+    QStringList stmt = ui->qtb_treeview->deleteLog(idLog);
+    execParsedQuery(stmt.at(0), stmt.at(1));
+}
+
+void CTWorklogsWidget::on_qtb_calendarview_clicked(const QDate &date)
+{
+        QStringList _log= ui->qtb_treeview->getWorklogByDate(date);
+        if(!_log.isEmpty())
+        {
+            idLog = _log.at(1);
+            currentLog = _log.at(0);
+            ui->qte_worklogedit->setText(currentLog);
+            readMode();
+        }
+}
 
 void CTWorklogsWidget::readMode()
 {

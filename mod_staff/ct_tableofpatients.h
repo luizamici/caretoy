@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QAbstractItemView>
 #include <QtGui>
-
+#include "CareToy_Admin/ct_defs.h"
 #include "DbTableXML/ct_tablemodel.h"
 
 
@@ -30,7 +30,7 @@ signals:
     void tableSelected(bool b);
 
 
-    void execParsedQuery(QString init_stmt,QString where_stmt);
+    void execParsedQuery(QString init_stmt,QString where_stmt, Data type_of_data = T_Patient);
     void tableInitialized();
     
 public slots:

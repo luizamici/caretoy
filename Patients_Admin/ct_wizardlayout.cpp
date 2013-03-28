@@ -55,6 +55,30 @@ QHash<QString,QString> CTWizardLayout::getPatient(){
     return _patient;
 }
 
+void CTWizardLayout::resetPatient(QHash<QString, QString> patient)
+{
+    foreach(QLineEdit *lineEdit, findChildren<QLineEdit*>()){
+        QString key = lineEdit->objectName().remove(0,3).toLower();
+        if(patient[key] != lineEdit->placeholderText())
+            lineEdit->setText(patient[key]);
+        if(patient[key] == lineEdit->placeholderText()
+                && lineEdit->text() != lineEdit->placeholderText())
+            lineEdit->clear();
+    }
+    QTextEdit *notes = findChild<QTextEdit*>();
+    notes->setPlainText(patient["notes"]);
+    QComboBox *qcb_sex = findChild<QComboBox*>("qcbSex");
+    if(patient["sex"] == "F"){
+        qcb_sex->setCurrentIndex(qcb_sex->findText("Female"));
+    }else if(patient["sex"] == "M"){
+        qcb_sex->setCurrentIndex(qcb_sex->findText("Male"));
+    }
+    QComboBox *qcb_gestAge = findChild<QComboBox*>("qcbGest_age");
+    qcb_gestAge->setCurrentIndex(qcb_gestAge->findText(patient["gest_age"]));
+    QDateEdit *qde_date = findChild<QDateEdit*>();
+    qde_date->setDate(QDate::fromString(patient["date_of_birth"],"yyyy-MM-dd"));
+}
+
 /*
  *Clears all the input data
  */

@@ -152,4 +152,20 @@ void CTStaffModule::showOkMessage(QString message){
     statusBar->showMessage(message,5000);
 }
 
+void CTStaffModule::showFailureMessage(QString message)
+{
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "red" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage(message,5000);
+}
+
+void CTStaffModule::showMessage(QString message)
+{
+    QPalette palette;
+    palette.setColor( QPalette::WindowText, "black" );
+    statusBar->setPalette( palette );
+    statusBar->showMessage(message,6000);
+}
+
 
