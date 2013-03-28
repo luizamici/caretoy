@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     TableOfScenariosFromXML/ct_scenariosadmin.cpp \
     CareToy_Admin/ct_admin.cpp \
     Scenario_Designer/ct_wizard.cpp \
-    Scenario_Designer/ct_wizardpage.cpp
+    Scenario_Designer/ct_wizardpage.cpp \
+    Scenario_Designer/ct_conftoylring.cpp
 
 
 HEADERS += \
@@ -75,7 +76,8 @@ HEADERS += \
     TableOfScenariosFromXML/ct_scenariosadmin.h \
     CareToy_Admin/ct_admin.h \
     Scenario_Designer/ct_wizard.h \
-    Scenario_Designer/ct_wizardpage.h
+    Scenario_Designer/ct_wizardpage.h \
+    Scenario_Designer/ct_conftoylring.h
 
 FORMS += \
     Scenario_Designer/ct_conftoystick.ui \
@@ -90,7 +92,8 @@ FORMS += \
     Scenario_Designer/ct_blockconfig.ui \
     Scenario_Designer/ct_simpleblock.ui \
     CareToy_Admin/ct_logindialog.ui \
-    Scenario_Designer/ct_wizard.ui
+    Scenario_Designer/ct_wizard.ui \
+    Scenario_Designer/ct_conftoylring.ui
 
 RESOURCES += \
     ct_resources.qrc

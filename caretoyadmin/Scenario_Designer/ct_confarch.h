@@ -21,13 +21,14 @@ public:
 private:
     Ui::CTConfArch *ui;
     QList<CTLight *> light_stimuli;
-    QList<CTSpeaker*> speaker_stimuli;
+    QList<CTSpeaker*> speaker_stimuli, speaker_actions;
     double calculateRequiredTime();
     double block_duration;
 
 private slots:
     void updateBlockRuntime(bool value);
     void updateBlockRuntime(double value);
+    void on_qrb_null_event_toggled(bool checked);
 };
 
 #endif // CT_CONFARCH_H

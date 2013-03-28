@@ -47,6 +47,10 @@ CTSimpleBlock::CTSimpleBlock(int id, QWidget *parent) :
         ui->qlb_block_name->setText("Screen wall");
         ui->qlb_block_image->setPixmap(QPixmap(":/images/screen_wall.png"));
         break;
+    case CT_BLOCK_LRING:
+        ui->qlb_block_name->setText("Large ring");
+        ui->qlb_block_image->setPixmap(QPixmap(":/images/ring.png"));
+        break;
     default:
         break;
     }

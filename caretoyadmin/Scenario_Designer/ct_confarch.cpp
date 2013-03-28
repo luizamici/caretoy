@@ -9,6 +9,7 @@ CTConfArch::CTConfArch(QWidget *parent) :
     ui(new Ui::CTConfArch)
 {
     ui->setupUi(this);
+    ui->tabFeedbackAction->setDisabled(true);
     block_duration = (double) 0.0;
 
     for (int i = 0; i < NUM_LIGHTS; i++)
@@ -46,14 +47,35 @@ CTConfArch::CTConfArch(QWidget *parent) :
         connect(st_speaker->duration_max,SIGNAL(valueChanged(double)),
                 this, SLOT(updateBlockRuntime(double)));
 
+
+        CTSpeaker *ac_speaker = new CTSpeaker(i+1, true);
+        speaker_actions.append(ac_speaker);
+        ui->qgb_actions->layout()->addWidget(ac_speaker);
+
         /* Add separating lines */
         if (i+1 != NUM_SPEAKERS)
         {
             QFrame *qh_st_line = new QFrame();
             qh_st_line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
             ui->qgb_stimuli->layout()->addWidget(qh_st_line);
+
+            QFrame *qh_ac_line = new QFrame();
+            qh_ac_line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+            ui->qgb_actions->layout()->addWidget(qh_ac_line);
         }
     }
+    /* Establish automatic enabling/disabling of related event controls */
+    connect(ui->qrb_position_event, SIGNAL(toggled(bool)),
+           ui->qcb_position, SLOT(setEnabled(bool)));
+    connect(ui->qrb_body_event,SIGNAL(toggled(bool)),
+           ui->qcb_body,SLOT(setEnabled(bool)));
+    connect(ui->qrb_head_event,SIGNAL(toggled(bool)),
+           ui->qcb_head,SLOT(setEnabled(bool)));
+
+    connect(ui->qsb_duration_min,SIGNAL(valueChanged(double)),
+            ui->qsb_duration_max,SLOT(setMinimumValue(double)));
+    connect(ui->qsb_duration_max,SIGNAL(valueChanged(double)),
+            ui->qsb_duration_min,SLOT(setMaximumValue(double)));
 }
 
 CTConfArch::~CTConfArch()
@@ -75,6 +97,7 @@ bool CTConfArch::setParameters(QString xml)
     //TODO: UNCOMMENT WHEN SPEAKERS ENABLED FOR ARCH
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     /**********************************************/
+    int num_actions = NUM_SPEAKERS;
 
     QXmlSimpleReader xmlReader;
     QXmlInputSource *source = new QXmlInputSource();
@@ -85,13 +108,15 @@ bool CTConfArch::setParameters(QString xml)
      *Passing pointer of the class to the xml parser handler,
      *in order to set the parsed values into it's input fields
      */
-    handler->setWidget(9, this, num_stimuli, 0);
+    handler->setWidget(9, this, num_stimuli, num_actions);
     QList<CTConstLight*> empty1;
     QList<CTScreen*> empty3;
     QList<CTBigLight*> empty4;
     QList<CTButton*> empty5;
+    QList<CTLight*> empty6;
     handler->setStimuli(empty1, speaker_stimuli, light_stimuli,empty3,empty4,
                         empty5);
+    handler->setActions(empty1,speaker_actions,empty3,empty4,empty5,empty6);
 
     xmlReader.setContentHandler(handler);
     xmlReader.setErrorHandler(handler);
@@ -156,8 +181,74 @@ QString CTConfArch::getParameters(QString value){
         speaker_stimuli.at(i)->getParameters(stream);
     }
     stream.writeEndElement(); // end stimuli
-    stream.writeEndElement(); // end block
 
+    /* Insert block feedback events */
+    stream.writeStartElement("feedback");
+    stream.writeStartElement("event");
+    if (ui->qrb_null_event->isChecked())
+    {
+        stream.writeAttribute("id", "0");
+        stream.writeAttribute("name", "none");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","none");
+        stream.writeCharacters("");
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_position_event->isChecked())
+    {
+        stream.writeAttribute("id", "3");
+        stream.writeAttribute("name", "position");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_position->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_body_event->isChecked())
+    {
+        stream.writeAttribute("id", "4");
+        stream.writeAttribute("name", "body");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_body->currentText());
+        stream.writeEndElement();//end condition
+    }
+    else if (ui->qrb_head_event->isChecked())
+    {
+        stream.writeAttribute("id", "5");
+        stream.writeAttribute("name", "head");
+        stream.writeStartElement("condition");
+        stream.writeAttribute("type","textual");
+        stream.writeCharacters(ui->qcb_head->currentText());
+        stream.writeEndElement();//end condition
+    }
+    stream.writeEndElement(); //end event
+
+    /* Insert block feedback actions */
+    stream.writeStartElement("actions");
+    int num_actions = NUM_SPEAKERS;
+    stream.writeAttribute("number",QString::number(num_actions));
+
+    for (int i = 0; i < NUM_SPEAKERS; i++)
+    {
+        speaker_actions.at(i)->getParameters(stream);
+
+        /*
+         *The content of the spin boxes of the min and max duration
+         *are stored into each action tag
+         */
+        stream.writeStartElement("duration");
+        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeEndElement();//end duration
+
+        stream.writeEndElement(); //end action or stimulus
+
+    }
+    stream.writeEndElement(); //end actions
+    stream.writeEndElement(); //end feedback
+
+    stream.writeEndElement(); // end block
+    qDebug()<< parameters;
     return parameters;
 }
 
@@ -228,4 +319,10 @@ void CTConfArch::updateBlockRuntime(double value)
     {
         ui->qsb_pause->setValue(block_duration - calculateRequiredTime());
     }
+}
+
+
+void CTConfArch::on_qrb_null_event_toggled(bool checked)
+{
+     ui->tabFeedbackAction->setDisabled(checked);
 }

@@ -180,6 +180,23 @@ void CTBlockConfig::showParameters(int id, QString xml)
         }
         break;
     }
+    case CT_BLOCK_LRING:
+    {
+        CTConfToyLRing *config = new CTConfToyLRing();
+        ui->qsa_config->setWidget(config);
+        if(!xml.isEmpty())
+        {
+            if(!config->setParameters(xml))
+                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                             "CTBlockConfig::showParameters -> wall right block parameters not set ");
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                         "CTBlockConfig::showParameters -> empty parameters passed to wall_right block");
+        }
+        break;
+    }
     default:
         break;
     }
@@ -269,6 +286,15 @@ void CTBlockConfig::resetConfig()
     {
         delete ui->qsa_config->widget();
         CTConfWallScreen *config = new CTConfWallScreen();
+        ui->qsa_config->setWidget(config);
+        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
+                    "CTBlockConfig::resetConfig resetting screen block. ");
+        break;
+    }
+    case CT_BLOCK_LRING:
+    {
+        delete ui->qsa_config->widget();
+        CTConfToyLRing *config = new CTConfToyLRing();
         ui->qsa_config->setWidget(config);
         Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
                     "CTBlockConfig::resetConfig resetting screen block. ");
@@ -369,6 +395,16 @@ void CTBlockConfig::saveConfiguration()
     case CT_BLOCK_WALL_SCREEN:
     {
         CTConfWallScreen *config = (CTConfWallScreen *) ui->qsa_config->widget();
+        QString parameters = config->getParameters("QXmlStreamWriter");
+        if(parameters.isEmpty())
+            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
+                        "CTBlockConfig::saveConfiguration got parameters from screen block empty! ");
+        emit finishedConfig(parameters);
+        break;
+    }
+    case CT_BLOCK_LRING:
+    {
+        CTConfToyLRing *config = (CTConfToyLRing *) ui->qsa_config->widget();
         QString parameters = config->getParameters("QXmlStreamWriter");
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(

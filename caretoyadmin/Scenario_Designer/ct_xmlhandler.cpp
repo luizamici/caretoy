@@ -8,18 +8,17 @@ bool CTXmlHandler::setSubWidgets(int id_widget, QWidget *widget)
     /*Setting pointers to each ui component of the widget*/
     qte_comment = widget->findChild<QPlainTextEdit*>("qte_comment");
     qsb_block_repetitions = widget->findChild<CTSpinBox*>("qsb_block_repetitions");
-    if(id_widget != CT_BLOCK_ARCH){
-        qrb_null_event = widget->findChild<QRadioButton*>("qrb_null_event");
-        qrb_position_event = widget->findChild<QRadioButton*>("qrb_position_event");
-        qcb_position = widget->findChild<QComboBox*>("qcb_position");
-        qrb_body_event = widget->findChild<QRadioButton*>("qrb_body_event");
-        qcb_body = widget->findChild<QComboBox*>("qcb_body");
-        qcb_head = widget->findChild<QComboBox*>("qcb_head");
-        qrb_head_event = widget->findChild<QRadioButton*>("qrb_head_event");
 
-        qsb_duration_min = widget->findChild<CTDoubleSpinBox*>("qsb_duration_min");
-        qsb_duration_max = widget->findChild<CTDoubleSpinBox*>("qsb_duration_max");
-    }
+    qrb_null_event = widget->findChild<QRadioButton*>("qrb_null_event");
+    qrb_position_event = widget->findChild<QRadioButton*>("qrb_position_event");
+    qcb_position = widget->findChild<QComboBox*>("qcb_position");
+    qrb_body_event = widget->findChild<QRadioButton*>("qrb_body_event");
+    qcb_body = widget->findChild<QComboBox*>("qcb_body");
+    qcb_head = widget->findChild<QComboBox*>("qcb_head");
+    qrb_head_event = widget->findChild<QRadioButton*>("qrb_head_event");
+
+    qsb_duration_min = widget->findChild<CTDoubleSpinBox*>("qsb_duration_min");
+    qsb_duration_max = widget->findChild<CTDoubleSpinBox*>("qsb_duration_max");
 
     if(id_widget == CT_BLOCK_FLOWER || id_widget == CT_BLOCK_MICKEY)
     {
@@ -175,6 +174,19 @@ void CTXmlHandler::setActions(QList<CTConstLight *> &lightAction,
             biglight_actions = bigLightAction;
             button_actions = buttonAction;
             arch_light_actions = archLightAction;
+            speaker_actions = speakerAction;
+        }
+        else
+        {
+            Log4Qt::Logger::logger(QLatin1String("CTXmlHandler"))->warn(
+                        "CTXmlHandler::setActions -> An error with the args"
+                        "detected: empty lists!");
+        }
+    }
+    if(idWidget == CT_BLOCK_ARCH)
+    {
+        if(!speakerAction.isEmpty())
+        {
             speaker_actions = speakerAction;
         }
         else
@@ -454,6 +466,7 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("feedback") && elementName.contains("event")
             && elementName.contains("condition"))
     {
+        qDebug() << "CTXmlHandler::characters ";
         if("null" == event_name)
         {
            qrb_null_event->setChecked(true);

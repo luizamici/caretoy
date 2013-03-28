@@ -241,6 +241,7 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         else if ("Right wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT, this); }
         else if ("Screen wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN, this); }
         else if ("Arch" == name) { block = new CTSimpleBlock(CT_BLOCK_ARCH, this); }
+        else if("Large ring" == name){block = new CTSimpleBlock(CT_BLOCK_LRING,this); }
 
 //        QDomDocument doc("");
 //        doc.setContent(config);

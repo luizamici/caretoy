@@ -55,6 +55,10 @@ void CTBlockSource::initialize()
     layout->addWidget(block_arch);
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
                 "Arch added ...");
+    CTSimpleBlock *block_lring = new CTSimpleBlock(CT_BLOCK_LRING);
+    layout->addWidget(block_lring);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Large ring added ...");
 
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
                 "Exit CTBlockSource::initialize . ");
