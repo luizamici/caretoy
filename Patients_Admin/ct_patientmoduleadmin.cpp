@@ -48,6 +48,7 @@ void CTPatientModuleAdmin::initEdit(QHash<QString, QString> patient)
      *The selected-for-editting patient's data is stored into a local variable
      *in order to check for changed data through the patient module interface
      */
+    qDebug() << "CTPatientModuleAdmin::initEdit: " << patient;
     localPatientData.clear();
     localPatientData = patient;
     form->initializeFormWithPatient(localPatientData);

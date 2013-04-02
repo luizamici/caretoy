@@ -68,6 +68,7 @@ void CTPatientsForm::initializeFormWithPatient(
         QHash<QString,QString> patient)
 {
     localPatient = patient;
+    qDebug() << "CTPatientsForm::initializeFormWithPatient : " << patient;
     patientsForm->clear();
     patientsForm->setPatient(patient);
     patientsForm->validReferenceEditing(false);
@@ -121,7 +122,7 @@ void CTPatientsForm::check()
             if(areChanges(patientFromUI))
             {
                 qDebug() << "update patient";
-                localPatient = patientFromUI;
+                updateLocalData(patientFromUI);
                 emit update(localPatient);
             }
             else
@@ -142,7 +143,7 @@ bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
 
     bool changesDetected = false;
     foreach(QString key, localPatient.keys()){
-        if(localPatient[key] != patientFromUI[key]){
+        if(localPatient[key] != patientFromUI[key] && key != "id"){
             qDebug() << localPatient[key] << " " <<  patientFromUI[key];
             changesDetected =  true;
         }
@@ -153,6 +154,15 @@ bool CTPatientsForm::areChanges(QHash<QString,QString> patientFromUI)
 void CTPatientsForm::clearLocalData()
 {
     localPatient = patientsForm->getPatient();
+}
+
+void CTPatientsForm::updateLocalData(QHash<QString, QString> patientFromUI)
+{
+    foreach(QString key,localPatient.keys())
+    {
+        if(key != "id")
+            localPatient[key] = patientFromUI[key];
+    }
 }
 
 /*

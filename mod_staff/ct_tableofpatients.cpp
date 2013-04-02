@@ -42,6 +42,7 @@ void CTTableOfPatients::init(CTTableData *table_data)
     this->setColumnHidden(12, true);
     this->setColumnHidden(13, true);
     this->setColumnHidden(14, true);
+    this->setColumnHidden(15, true);
 
     /*
      *Signals are emitted if valid rows are selected from the table

@@ -105,7 +105,7 @@ void CTWizardLayout::clear(){
  *Enables/disables the reference line editing
  */
 void CTWizardLayout::validReferenceEditing(bool b){
-    ui->qleId->setEnabled(b);
+    ui->qleRef_key->setEnabled(b);
 }
 
 
@@ -113,7 +113,7 @@ void CTWizardLayout::setCompleter(QStringList id_list){
     qDebug() << "CTWizardLayout::setCompleter";
     QCompleter *completer = new QCompleter(id_list, this);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->qleId->setCompleter(completer);
+    ui->qleRef_key->setCompleter(completer);
 }
 
 CTWizardLayout::~CTWizardLayout()

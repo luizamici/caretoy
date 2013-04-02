@@ -295,7 +295,7 @@
       </widget>
      </item>
      <item row="0" column="6">
-      <widget class="QLineEdit" name="qleId">
+      <widget class="QLineEdit" name="qleRef_key">
        <property name="placeholderText">
         <string>Id</string>
        </property>

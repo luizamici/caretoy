@@ -71,14 +71,14 @@ void CTStaffModuleAdmin::afterTableInit()
 void CTStaffModuleAdmin::requestPatientsTable()
 {
     qDebug() << "CTStaffModuleAdmin::requestTable()";
-    QStringList fieldNames = QStringList() <<"id" << "firstname"
+    QStringList fieldNames = QStringList() <<"ref_key" << "firstname"
                                           << "lastname"
                                           << "parent_1" << "parent_2"
                                           <<  "date_of_birth" << "sex"
                                           << "gest_age" << "attendant"
                                           << "address" << "zip_code"
                                           << "city" << "phone" << "email"
-                                          << "notes";
+                                          << "notes" << "id";
 
     CTTableRecord rec = CTTableRecord();
     int i =0;
@@ -171,6 +171,7 @@ void CTStaffModuleAdmin::updateSelectedPatient(QHash<QString, QString> patientEd
 }
 
 void CTStaffModuleAdmin::saveNewPatient(QHash<QString, QString> newPatient){
+    qDebug() << "CTStaffModuleAdmin::saveNewPatient " << newPatient;
    tableOfPatients->saveNewPatient(newPatient);
 }
 

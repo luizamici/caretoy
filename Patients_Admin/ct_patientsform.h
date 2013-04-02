@@ -29,6 +29,7 @@ private:
     QStringList idList;
     bool areChanges(QHash<QString,QString> patientFromUI);
     void clearLocalData();
+    void updateLocalData(QHash<QString,QString> patientFromUI);
 
 signals:
     void nothingToSave(QString message);

@@ -110,7 +110,7 @@ bool CTTableModel::insertRowIntoTable(const CTTableRecord &rec)
 
 bool CTTableModel::updateRowInTable(const CTTableRecord &rec)
 {
-    qDebug() << "CTTableModel::updateRowInTable";
+    qDebug() << "CTTableModel::updateRowInTable : " << rec.value("id");
     QString  initial_statement = CTQueryParser::xmlStatement(
                 CTQueryParser::UpdateStatement, p_table_data->table_name,
                 rec);
@@ -227,6 +227,7 @@ void CTTableModel::save(QHash<QString,QString> record, bool isNewRecord)
     {
         /*Change a row in the table*/
         int row = getIndex(record["id"]).row();
+        qDebug() << "CTTableModel::save : " << row;
         QModelIndex _index;
         for(int i = 0 ; i < columnCount() ; i++)
         {
@@ -246,9 +247,11 @@ QModelIndex CTTableModel::getIndex(QString id)
         QModelIndex _index;
         for(int i = 0; i < rowCount(); i++)
         {
-            if(data(index(i,0)).toString() == id)
-            {
-                _index = index(i,0);
+            for (int j = 0; j < columnCount(); ++j) {
+                if(data(index(i,j)).toString() == id)
+                {
+                    _index = index(i,0);
+                }
             }
         }
         return _index;
