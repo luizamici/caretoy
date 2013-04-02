@@ -62,8 +62,8 @@ public:
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
-    CTSpinBox *intensity_min;
-    CTSpinBox *intensity_max;
+//    CTSpinBox *intensity_min;
+//    CTSpinBox *intensity_max;
     CTSpinBox *rings_min;
     CTSpinBox *rings_max;
     QComboBox *color;
@@ -91,8 +91,8 @@ public:
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
-    CTSpinBox *intensity_min;
-    CTSpinBox *intensity_max;
+//    CTSpinBox *intensity_min;
+//    CTSpinBox *intensity_max;
     void setParameters(bool b, QHash<QString,QVariant> attr);
     void getParameters(QXmlStreamWriter &stream);
 
@@ -117,8 +117,8 @@ public:
     CTDoubleSpinBox *activation;
     CTDoubleSpinBox *duration_min;
     CTDoubleSpinBox *duration_max;
-    CTSpinBox *intensity_min;
-    CTSpinBox *intensity_max;
+//    CTSpinBox *intensity_min;
+//    CTSpinBox *intensity_max;
     void setParameters(bool b, QHash<QString,QVariant> attr);
     void getParameters(QXmlStreamWriter &stream);
 

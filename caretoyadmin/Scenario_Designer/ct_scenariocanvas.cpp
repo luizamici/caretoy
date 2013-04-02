@@ -232,16 +232,17 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         dataStream >> name >> image >> config >> oldPositionIndex;
 
         CTSimpleBlock *block;
-        if ("Stick" == name) { block = new CTSimpleBlock(CT_BLOCK_STICK, this); }
-        else if ("Flower" == name) { block = new CTSimpleBlock(CT_BLOCK_FLOWER, this); }
-        else if ("Ring" == name) { block = new CTSimpleBlock(CT_BLOCK_RING, this); }
-        else if ("Mickey" == name) { block = new CTSimpleBlock(CT_BLOCK_MICKEY, this); }
+//        if ("Stick" == name) { block = new CTSimpleBlock(CT_BLOCK_STICK, this); }
+//        else if ("Flower" == name) { block = new CTSimpleBlock(CT_BLOCK_FLOWER, this); }
+//        else if ("Ring" == name) { block = new CTSimpleBlock(CT_BLOCK_RING, this); }
+        if ("Mickey" == name) { block = new CTSimpleBlock(CT_BLOCK_MICKEY, this); }
         else if ("UToy" == name) { block = new CTSimpleBlock(CT_BLOCK_U, this); }
         else if ("Left wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT, this); }
         else if ("Right wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT, this); }
         else if ("Screen wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN, this); }
         else if ("Arch" == name) { block = new CTSimpleBlock(CT_BLOCK_ARCH, this); }
         else if("Large ring" == name){block = new CTSimpleBlock(CT_BLOCK_LRING,this); }
+        else if("Small ring" == name){block = new CTSimpleBlock(CT_BLOCK_SRING, this);}
 
 //        QDomDocument doc("");
 //        doc.setContent(config);
@@ -375,28 +376,28 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
         /*When a block is ending*/
         if(reader.isEndElement() && reader.name() == "block")
         {
-            if ("stick" == block_name)
-            {
-                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-                new_block->enableConfig(true);
-                new_block->setConfiguration(xml_conf);
-                blocks.append(new_block);
-            }
-            else if ("flower" == block_name)
-            {
-                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-                new_block->enableConfig(true);
-                new_block->setConfiguration(xml_conf);
-                blocks.append(new_block);
-            }
-            else if ("ring" == block_name)
-            {
-                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-                new_block->enableConfig(true);
-                new_block->setConfiguration(xml_conf);
-                blocks.append(new_block);
-            }
-            else if ("mickey" == block_name)
+//            if ("stick" == block_name)
+//            {
+//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
+//                new_block->enableConfig(true);
+//                new_block->setConfiguration(xml_conf);
+//                blocks.append(new_block);
+//            }
+//            else if ("flower" == block_name)
+//            {
+//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
+//                new_block->enableConfig(true);
+//                new_block->setConfiguration(xml_conf);
+//                blocks.append(new_block);
+//            }
+//            else if ("ring" == block_name)
+//            {
+//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
+//                new_block->enableConfig(true);
+//                new_block->setConfiguration(xml_conf);
+//                blocks.append(new_block);
+//            }
+            if ("mickey" == block_name)
             {
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
                 new_block->enableConfig(true);
@@ -434,6 +435,20 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
             else if ("arch" == block_name)
             {
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if("large_ring" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_LRING);
+                new_block->enableConfig(true);
+                new_block->setConfiguration(xml_conf);
+                blocks.append(new_block);
+            }
+            else if("small_ring" == block_name)
+            {
+                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_SRING);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
                 blocks.append(new_block);
@@ -488,28 +503,28 @@ void CTScenarioCanvas::loadScenarioFromFile()
                 /*When a block is ending*/
                 if(reader.isEndElement() && reader.name() == "block")
                 {
-                    if ("stick" == block_name)
-                    {
-                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-                        new_block->enableConfig(true);
-                        new_block->setConfiguration(xml_conf);
-                        blocks.append(new_block);
-                    }
-                    else if ("flower" == block_name)
-                    {
-                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-                        new_block->enableConfig(true);
-                        new_block->setConfiguration(xml_conf);
-                        blocks.append(new_block);
-                    }
-                    else if ("ring" == block_name)
-                    {
-                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-                        new_block->enableConfig(true);
-                        new_block->setConfiguration(xml_conf);
-                        blocks.append(new_block);
-                    }
-                    else if ("mickey" == block_name)
+//                    if ("stick" == block_name)
+//                    {
+//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
+//                        new_block->enableConfig(true);
+//                        new_block->setConfiguration(xml_conf);
+//                        blocks.append(new_block);
+//                    }
+//                    else if ("flower" == block_name)
+//                    {
+//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
+//                        new_block->enableConfig(true);
+//                        new_block->setConfiguration(xml_conf);
+//                        blocks.append(new_block);
+//                    }
+//                    else if ("ring" == block_name)
+//                    {
+//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
+//                        new_block->enableConfig(true);
+//                        new_block->setConfiguration(xml_conf);
+//                        blocks.append(new_block);
+//                    }
+                    if ("mickey" == block_name)
                     {
                         CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
                         new_block->enableConfig(true);
@@ -547,6 +562,20 @@ void CTScenarioCanvas::loadScenarioFromFile()
                     else if ("arch" == block_name)
                     {
                         CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if("large_ring" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_LRING);
+                        new_block->enableConfig(true);
+                        new_block->setConfiguration(xml_conf);
+                        blocks.append(new_block);
+                    }
+                    else if("small_ring" == block_name)
+                    {
+                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_SRING);
                         new_block->enableConfig(true);
                         new_block->setConfiguration(xml_conf);
                         blocks.append(new_block);

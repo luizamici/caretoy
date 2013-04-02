@@ -11,10 +11,7 @@ include(./include/log4qt/src/log4qt/log4qt.pri)
 
 SOURCES += main.cpp \
     Scenario_Designer/ct_customwidgets.cpp \
-    Scenario_Designer/ct_conftoystick.cpp \
-    Scenario_Designer/ct_conftoyring.cpp \
     Scenario_Designer/ct_conftoymickey.cpp \
-    Scenario_Designer/ct_conftoyflower.cpp \
     Scenario_Designer/ct_conftoyu.cpp \
     Scenario_Designer/ct_confarch.cpp \
     Scenario_Designer/ct_confwallleft.cpp \
@@ -41,16 +38,14 @@ SOURCES += main.cpp \
     CareToy_Admin/ct_admin.cpp \
     Scenario_Designer/ct_wizard.cpp \
     Scenario_Designer/ct_wizardpage.cpp \
-    Scenario_Designer/ct_conftoylring.cpp
+    Scenario_Designer/ct_conftoylring.cpp \
+    Scenario_Designer/ct_conftoysring.cpp
 
 
 HEADERS += \
     CareToy_Admin/ct_defs.h \
     Scenario_Designer/ct_customwidgets.h \
-    Scenario_Designer/ct_conftoystick.h \
-    Scenario_Designer/ct_conftoyring.h \
     Scenario_Designer/ct_conftoymickey.h \
-    Scenario_Designer/ct_conftoyflower.h \
     Scenario_Designer/ct_conftoyu.h \
     Scenario_Designer/ct_confwallleft.h \
     Scenario_Designer/ct_confwallright.h \
@@ -77,13 +72,11 @@ HEADERS += \
     CareToy_Admin/ct_admin.h \
     Scenario_Designer/ct_wizard.h \
     Scenario_Designer/ct_wizardpage.h \
-    Scenario_Designer/ct_conftoylring.h
+    Scenario_Designer/ct_conftoylring.h \
+    Scenario_Designer/ct_conftoysring.h
 
 FORMS += \
-    Scenario_Designer/ct_conftoystick.ui \
-    Scenario_Designer/ct_conftoyring.ui \
     Scenario_Designer/ct_conftoymickey.ui \
-    Scenario_Designer/ct_conftoyflower.ui \
     Scenario_Designer/ct_conftoyu.ui \
     Scenario_Designer/ct_confarch.ui \
     Scenario_Designer/ct_confwallleft.ui \
@@ -93,7 +86,8 @@ FORMS += \
     Scenario_Designer/ct_simpleblock.ui \
     CareToy_Admin/ct_logindialog.ui \
     Scenario_Designer/ct_wizard.ui \
-    Scenario_Designer/ct_conftoylring.ui
+    Scenario_Designer/ct_conftoylring.ui \
+    Scenario_Designer/ct_conftoysring.ui
 
 RESOURCES += \
     ct_resources.qrc

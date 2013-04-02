@@ -1,7 +1,7 @@
 #include "ct_conftoymickey.h"
 #include "ui_ct_conftoymickey.h"
 
-#define NUM_LIGHTS 4
+#define NUM_LIGHTS 3
 #define NUM_SPEAKERS 1
 
 CTConfToyMickey::CTConfToyMickey(QWidget *parent) :

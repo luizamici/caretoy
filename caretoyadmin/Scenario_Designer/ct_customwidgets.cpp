@@ -130,26 +130,26 @@ CTBigLight::CTBigLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the intensity interval *******************/
-    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
-    intensity_min = new CTSpinBox();
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_min->setEnabled(false);
-    layout->addWidget(intensity_min, row_index, 2);
-    intensity_max = new CTSpinBox();
-    intensity_max->setup(" %", 0, 100, 1, 100);
-    intensity_max->setEnabled(false);
-    layout->addWidget(intensity_max, row_index, 3);
-    row_index++;
+//    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
+//    intensity_min = new CTSpinBox();
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_min->setEnabled(false);
+//    layout->addWidget(intensity_min, row_index, 2);
+//    intensity_max = new CTSpinBox();
+//    intensity_max->setup(" %", 0, 100, 1, 100);
+//    intensity_max->setEnabled(false);
+//    layout->addWidget(intensity_max, row_index, 3);
+//    row_index++;
 
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_min, SLOT(setEnabled(bool)));
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_max, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_min, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_max, SLOT(setEnabled(bool)));
 
-    connect(intensity_min, SIGNAL(valueChanged(int)),
-            intensity_max, SLOT(setMinimumValue(int)));
-    connect(intensity_max, SIGNAL(valueChanged(int)),
-            intensity_min, SLOT(setMaximumValue(int)));
+//    connect(intensity_min, SIGNAL(valueChanged(int)),
+//            intensity_max, SLOT(setMinimumValue(int)));
+//    connect(intensity_max, SIGNAL(valueChanged(int)),
+//            intensity_min, SLOT(setMaximumValue(int)));
     /**************************************************************************/
 
     /* Add elements for control over the active rings *************************/
@@ -207,8 +207,8 @@ void CTBigLight::setDefault()
         duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
         duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
     }
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_max->setup(" %", 0, 100, 1, 100);
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_max->setup(" %", 0, 100, 1, 100);
     rings_min->setup(QString(), 1, 1, 1, 1);
     rings_max->setup(QString(), 1, 3, 1, 1);
     color->setCurrentIndex(color->findText("Red"));
@@ -223,9 +223,9 @@ void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
         {
             activation->setValue(attr["val_activation"].toDouble());
         }
-        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
-        intensity_min->setValue(attr["val_intensity_min"].toInt());
-        intensity_max->setValue(attr["val_intensity_max"].toInt());
+//        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
+//        intensity_min->setValue(attr["val_intensity_min"].toInt());
+//        intensity_max->setValue(attr["val_intensity_max"].toInt());
 
         if( NULL != duration_min && NULL != duration_max)
         {
@@ -256,10 +256,14 @@ void CTBigLight::getParameters(QXmlStreamWriter &stream){
         stream.writeCharacters(activation->cleanText());
         stream.writeEndElement(); //end activation
     }
+    /*
+     *Hard coded intensity for CareToy Core parsing
+    */
     stream.writeStartElement("intensity");
-    stream.writeTextElement("from",intensity_min->cleanText());
-    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeTextElement("from","100");
+    stream.writeTextElement("to","100");
     stream.writeEndElement(); // end intensity
+    /*********************************************/
 
     stream.writeStartElement("area");
     stream.writeTextElement("from" , rings_min->cleanText());
@@ -348,26 +352,26 @@ CTButton::CTButton(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the intensity interval *******************/
-    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
-    intensity_min = new CTSpinBox();
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_min->setEnabled(false);
-    layout->addWidget(intensity_min, row_index, 2);
-    intensity_max = new CTSpinBox();
-    intensity_max->setup(" %", 0, 100, 1, 100);
-    intensity_max->setEnabled(false);
-    layout->addWidget(intensity_max, row_index, 3);
-    row_index++;
+//    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
+//    intensity_min = new CTSpinBox();
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_min->setEnabled(false);
+//    layout->addWidget(intensity_min, row_index, 2);
+//    intensity_max = new CTSpinBox();
+//    intensity_max->setup(" %", 0, 100, 1, 100);
+//    intensity_max->setEnabled(false);
+//    layout->addWidget(intensity_max, row_index, 3);
+//    row_index++;
 
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_min, SLOT(setEnabled(bool)));
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_max, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_min, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_max, SLOT(setEnabled(bool)));
 
-    connect(intensity_min, SIGNAL(valueChanged(int)),
-            intensity_max, SLOT(setMinimumValue(int)));
-    connect(intensity_max, SIGNAL(valueChanged(int)),
-            intensity_min, SLOT(setMaximumValue(int)));
+//    connect(intensity_min, SIGNAL(valueChanged(int)),
+//            intensity_max, SLOT(setMinimumValue(int)));
+//    connect(intensity_max, SIGNAL(valueChanged(int)),
+//            intensity_min, SLOT(setMaximumValue(int)));
 
     /**************************************************************************/
 
@@ -393,8 +397,8 @@ void CTButton::setDefault()
         duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
         duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
     }
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_max->setup(" %", 0, 100, 1, 100);
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_max->setup(" %", 0, 100, 1, 100);
 }
 
 
@@ -407,9 +411,9 @@ void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
         {
             activation->setValue(attr["val_activation"].toDouble());
         }
-        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
-        intensity_min->setValue(attr["val_intensity_min"].toInt());
-        intensity_max->setValue(attr["val_intensity_max"].toInt());
+//        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
+//        intensity_min->setValue(attr["val_intensity_min"].toInt());
+//        intensity_max->setValue(attr["val_intensity_max"].toInt());
 
         if( NULL != duration_min && NULL != duration_max)
         {
@@ -436,8 +440,8 @@ void CTButton::getParameters(QXmlStreamWriter &stream){
         stream.writeEndElement(); //end activation
     }
     stream.writeStartElement("intensity");
-    stream.writeTextElement("from",intensity_min->cleanText());
-    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeTextElement("from","100");
+    stream.writeTextElement("to","100");
     stream.writeEndElement(); // end intensity
     if(NULL != duration_min && NULL!= duration_max)
     {
@@ -518,26 +522,26 @@ CTLight::CTLight(int id, bool action, QWidget *parent) :
     /**************************************************************************/
 
     /* Add elements for control over the intensity interval *******************/
-    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
-    intensity_min = new CTSpinBox();
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_min->setEnabled(false);
-    layout->addWidget(intensity_min, row_index, 2);
-    intensity_max = new CTSpinBox();
-    intensity_max->setup(" %", 0, 100, 1,100);
-    intensity_max->setEnabled(false);
-    layout->addWidget(intensity_max, row_index, 3);
-    row_index++;
+//    layout->addWidget(new QLabel("Intensity interval"), row_index, 1);
+//    intensity_min = new CTSpinBox();
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_min->setEnabled(false);
+//    layout->addWidget(intensity_min, row_index, 2);
+//    intensity_max = new CTSpinBox();
+//    intensity_max->setup(" %", 0, 100, 1,100);
+//    intensity_max->setEnabled(false);
+//    layout->addWidget(intensity_max, row_index, 3);
+//    row_index++;
 
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_min, SLOT(setEnabled(bool)));
-    connect(state, SIGNAL(toggled(bool)),
-            intensity_max, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_min, SLOT(setEnabled(bool)));
+//    connect(state, SIGNAL(toggled(bool)),
+//            intensity_max, SLOT(setEnabled(bool)));
 
-    connect(intensity_min, SIGNAL(valueChanged(int)),
-            intensity_max, SLOT(setMinimumValue(int)));
-    connect(intensity_max, SIGNAL(valueChanged(int)),
-            intensity_min, SLOT(setMaximumValue(int)));
+//    connect(intensity_min, SIGNAL(valueChanged(int)),
+//            intensity_max, SLOT(setMinimumValue(int)));
+//    connect(intensity_max, SIGNAL(valueChanged(int)),
+//            intensity_min, SLOT(setMaximumValue(int)));
     /**************************************************************************/
 
     connect(state, SIGNAL(toggled(bool)),
@@ -562,8 +566,8 @@ void CTLight::setDefault()
         duration_min->setup(" sec.", 1, 0.1, 1.0, 0.1, 0.1);
         duration_max->setup(" sec.", 1, 0.1, 300.0, 0.1, 1.0);
     }
-    intensity_min->setup(" %", 0, 100, 1, 0);
-    intensity_max->setup(" %", 0, 100, 1, 100);
+//    intensity_min->setup(" %", 0, 100, 1, 0);
+//    intensity_max->setup(" %", 0, 100, 1, 100);
 }
 
 void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
@@ -581,9 +585,9 @@ void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
             duration_min->setValue(attr["val_duration_min"].toDouble());
             duration_max->setValue(attr["val_duration_max"].toDouble());
         }
-        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
-        intensity_min->setValue(attr["val_intensity_min"].toInt());
-        intensity_max->setValue(attr["val_intensity_max"].toInt());
+//        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
+//        intensity_min->setValue(attr["val_intensity_min"].toInt());
+//        intensity_max->setValue(attr["val_intensity_max"].toInt());
     }
 }
 
@@ -602,10 +606,13 @@ void CTLight::getParameters(QXmlStreamWriter &stream){
         stream.writeCharacters(activation->cleanText());
         stream.writeEndElement(); //end activation
     }
+    /*Hard coded for CareToy Core */
     stream.writeStartElement("intensity");
-    stream.writeTextElement("from",intensity_min->cleanText());
-    stream.writeTextElement("to",intensity_max->cleanText());
+    stream.writeTextElement("from","100");
+    stream.writeTextElement("to","100");
     stream.writeEndElement(); // end intensity
+    /***************************************/
+
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");

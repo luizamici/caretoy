@@ -19,18 +19,18 @@ void CTBlockSource::initialize()
     layout->setSpacing(10);
     this->setLayout(layout);
 
-    CTSimpleBlock *block_stick = new CTSimpleBlock(CT_BLOCK_STICK);
-    layout->addWidget(block_stick);
-    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
-                "Stick added ...");
-    CTSimpleBlock *block_flower = new CTSimpleBlock(CT_BLOCK_FLOWER);
-    layout->addWidget(block_flower);
-    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
-                "Flower added ...");
-    CTSimpleBlock *block_ring = new CTSimpleBlock(CT_BLOCK_RING);
-    layout->addWidget(block_ring);
-    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
-                "Ring added ...");
+//    CTSimpleBlock *block_stick = new CTSimpleBlock(CT_BLOCK_STICK);
+//    layout->addWidget(block_stick);
+//    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+//                "Stick added ...");
+//    CTSimpleBlock *block_flower = new CTSimpleBlock(CT_BLOCK_FLOWER);
+//    layout->addWidget(block_flower);
+//    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+//                "Flower added ...");
+//    CTSimpleBlock *block_ring = new CTSimpleBlock(CT_BLOCK_RING);
+//    layout->addWidget(block_ring);
+//    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+//                "Ring added ...");
     CTSimpleBlock *block_mickey = new CTSimpleBlock(CT_BLOCK_MICKEY);
     layout->addWidget(block_mickey);
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
@@ -39,6 +39,14 @@ void CTBlockSource::initialize()
     layout->addWidget(block_u);
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
                 "Utoy added ...");
+    CTSimpleBlock *block_lring = new CTSimpleBlock(CT_BLOCK_LRING);
+    layout->addWidget(block_lring);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Large ring added ...");
+    CTSimpleBlock *block_sring = new CTSimpleBlock(CT_BLOCK_SRING);
+    layout->addWidget(block_sring);
+    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
+                "Small ring added ...");
     CTSimpleBlock *block_wall_left = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
     layout->addWidget(block_wall_left);
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
@@ -55,10 +63,7 @@ void CTBlockSource::initialize()
     layout->addWidget(block_arch);
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
                 "Arch added ...");
-    CTSimpleBlock *block_lring = new CTSimpleBlock(CT_BLOCK_LRING);
-    layout->addWidget(block_lring);
-    Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
-                "Large ring added ...");
+
 
     Log4Qt::Logger::logger(QLatin1String("CTBlockSource"))->info(
                 "Exit CTBlockSource::initialize . ");

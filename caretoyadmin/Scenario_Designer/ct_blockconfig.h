@@ -11,6 +11,7 @@
 #define CT_BLOCK_WALL_SCREEN 8
 #define CT_BLOCK_ARCH 9
 #define CT_BLOCK_LRING 10
+#define CT_BLOCK_SRING 11
 
 #include <QtGui>
 #include <QtXml>
@@ -24,6 +25,7 @@
 #include "ct_confwallright.h"
 #include "ct_confwallscreen.h"
 #include "ct_conftoylring.h"
+#include "ct_conftoysring.h"
 
 //Temporary
 #include "ct_logger.h"
