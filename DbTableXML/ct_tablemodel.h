@@ -34,7 +34,7 @@ public:
     void copyRecord(const QModelIndex &i);
     void deleteRecord(const QModelIndex &index);
     void save(QHash<QString, QString> record, bool isNewRecord);
-    QStringList getListOfId();
+    QStringList getListOfRefKeys();
     
 private:
     CTTableData *p_table_data;

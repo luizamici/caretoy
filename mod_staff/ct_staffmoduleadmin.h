@@ -32,7 +32,7 @@ private:
 
 signals:
     void editSelectedPatient(QHash<QString,QString> patientToEdit);
-    void openNewPatientDialog(QStringList idList);
+    void openNewPatientDialog(QStringList refKeysList);
     void requestToWriteIntoSocket(const QString &parsedQuery,
                                   const quint32 &type);
 

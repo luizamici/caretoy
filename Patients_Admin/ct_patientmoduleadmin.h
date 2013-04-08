@@ -40,7 +40,7 @@ signals:
 
 public slots:
     void initEdit(QHash<QString,QString> patient);
-    void openNewPatientDialog(QStringList idList);
+    void openNewPatientDialog(QStringList refKeysList);
 
     void goBack();
     void searchResults(QString id_scenario);

@@ -257,7 +257,7 @@ QModelIndex CTTableModel::getIndex(QString id)
         return _index;
 }
 
-QStringList CTTableModel::getListOfId()
+QStringList CTTableModel::getListOfRefKeys()
 {
     QStringList idList;
     for (int i = 0; i < rowCount(); ++i) {

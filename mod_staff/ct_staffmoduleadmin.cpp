@@ -153,8 +153,8 @@ void CTStaffModuleAdmin::requestEdit(){
 }
 
 void CTStaffModuleAdmin::requestNew(){
-    QStringList idList = tableOfPatients->getListOfId();
-    emit openNewPatientDialog(idList);
+    QStringList refKeysList = tableOfPatients->getListOfRefKeys();
+    emit openNewPatientDialog(refKeysList);
 }
 
 void CTStaffModuleAdmin::deleteSelectedPatient(){

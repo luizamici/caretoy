@@ -16,7 +16,7 @@ public:
     void initializeFormWithPatient(QHash<QString,QString> patient);
     void initializeNewPatient();
 
-    void setIdList(QStringList id_list);
+    void setRefKeysList(QStringList ref_keys_list);
     bool unsavedChanges();
     bool updateButtonEnabled();
     bool newPatient;
@@ -26,7 +26,7 @@ private:
     QPushButton *updateButton;
     QHash<QString,QString> localPatient;
     QString row;
-    QStringList idList;
+    QStringList refKeysList;
     bool areChanges(QHash<QString,QString> patientFromUI);
     void clearLocalData();
     void updateLocalData(QHash<QString,QString> patientFromUI);

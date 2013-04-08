@@ -19,7 +19,7 @@ public:
     void saveNewPatient(QHash<QString,QString> newPatient);
     void deleteSelectedPatient(QHash<QString,QString> patientToDelete);
     QHash<QString,QString> getSelectedPatient();
-    QStringList getListOfId();
+    QStringList getListOfRefKeys();
 
 
     void init(CTTableData *table_data);

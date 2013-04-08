@@ -58,12 +58,12 @@ void CTPatientModuleAdmin::initEdit(QHash<QString, QString> patient)
 }
 
 
-void CTPatientModuleAdmin::openNewPatientDialog(QStringList idList){
+void CTPatientModuleAdmin::openNewPatientDialog(QStringList refKeysList){
 
     form->newPatient = true;
     localPatientData.clear();
     form->initializeNewPatient();
-    form->setIdList(idList);
+    form->setRefKeysList(refKeysList);
     patientModule->show();
     requestTableOfScenarios();
 }

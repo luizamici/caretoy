@@ -103,7 +103,7 @@ void CTPatientsForm::check()
     /*
      *Checking if the inserted reference(id) already exists
      */
-    if(idList.contains(patientFromUI["id"].trimmed())){
+    if(refKeysList.contains(patientFromUI["id"].trimmed())){
         updateButton->setEnabled(false);
         QMessageBox::critical(0, tr("Patient Admin"),"Inserted Reference already exists!\n"
                               "Please specify a unique reference number for each patient.");
@@ -182,11 +182,11 @@ bool CTPatientsForm::updateButtonEnabled()
 }
 
 
-void CTPatientsForm::setIdList(QStringList id_list){
+void CTPatientsForm::setRefKeysList(QStringList ref_keys_list){
     /*The list of Id is saved in order to double check the inserted Id */
-    this->idList = id_list;
+    this->refKeysList = ref_keys_list;
     /*It is used as a completer for the Id LineEdit*/
-    patientsForm->setCompleter(id_list);
+    patientsForm->setCompleter(ref_keys_list);
 }
 
 

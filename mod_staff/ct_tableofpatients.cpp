@@ -92,8 +92,8 @@ void CTTableOfPatients::deleteSelectedPatient(QHash<QString, QString> patientToD
 }
 
 
-QStringList CTTableOfPatients::getListOfId(){
-    return xmlTable->getListOfId();
+QStringList CTTableOfPatients::getListOfRefKeys(){
+    return xmlTable->getListOfRefKeys();
 }
 
 /*This part is used for searching throught the list of patients*/
