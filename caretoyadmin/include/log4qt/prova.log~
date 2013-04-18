@@ -1,5 +1,0 @@
-2013-01-14 16:48:52.678 [] INFO  CTLogger  - File appender ready for being written
-2013-01-14 16:48:52.679 [] INFO  CTTableOfScenarios  - Table view of scenarios being created
-2013-01-14 16:48:52.695 [] INFO  CTDBConn  - Connection to the DB being attempted...
-2013-01-14 16:48:53.085 [] INFO  CTDBConn  - Connection to the DB established successfully!
-2013-01-14 16:48:53.501 [] INFO  main  - CaretoAdmin application started!
