@@ -36,13 +36,6 @@ FORMS    += \
     ct_videoview.ui \
     ct_graphviewer.ui
 
-
-
-unix:!macx:!symbian: LIBS += -L$$PWD/../../../../usr/local/qwt-6.0.1/lib/ -lqwt
-
-INCLUDEPATH += $$PWD/../../../../usr/local/qwt-6.0.1/include
-DEPENDPATH += $$PWD/../../../../usr/local/qwt-6.0.1/include
-
 unix:!macx:!symbian: LIBS += -L$$PWD/../../../../../../usr/local/qwt-6.0.2/lib/ -lqwt
 
 INCLUDEPATH += $$PWD/../../../../../../usr/local/qwt-6.0.2/include

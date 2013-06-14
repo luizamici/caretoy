@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>Source/2013-01-31_11-02-41.mp4</file>
-        <file>Source/output.xml</file>
+        <file>Source/outcome.xml</file>
     </qresource>
 </RCC>

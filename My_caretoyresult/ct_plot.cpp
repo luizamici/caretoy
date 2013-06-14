@@ -110,8 +110,6 @@ void CTPlot::printCurrent(double scaleDivRangeZoomed){
 void CTPlot::onZoom(QRectF rect){
 
     scaleRect = rect;
-//    qDebug() << "CTPlot::onZoom : x-axis leftBoundery :" << scaleRect.x() ;
-//    qDebug() << "CTPlot::onZoom : x-axis rightBoundery :" << scaleRect.x() + scaleRect.width();
 }
 
 void CTPlot::enableMarkerTracking(bool b){

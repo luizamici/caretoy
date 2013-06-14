@@ -16,23 +16,14 @@ public:
     ~CTDataView();
 
     CTPlot *plot_data;
-    QVector<QPointF> data_1;
-    QVector<QPointF> data_2;
-
-    void initialize();
 
 signals:
     void dataGenerated();
     void skipToSelection(qint64 time);
 
-
 private:
-    int index;
-    int current_index;
     bool zoomEnabled;
-    QVector<QPointF> data_toPush;
-    void sendGeneratedDataToPlot();
-    void generateDataForPlotting();
+
 
 public slots:
     void signalDecreaseMarker();
