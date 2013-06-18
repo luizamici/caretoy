@@ -68,6 +68,12 @@
          <height>240</height>
         </size>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>720</width>
+         <height>820</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>

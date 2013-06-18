@@ -42,9 +42,12 @@ void CTResultView::showMessage(bool b){
 
 void CTResultView::generateReport()
 {
-    QFile *file = new QFile("./Source/outcome.xml");
+    QFile *file = new QFile("/home/luiza/Desktop/outcome.xml");
     if (!file->open(QIODevice::ReadOnly))
+    {
+        qDebug() << "*******Cannot open file";
         return;
+    }
     QXmlStreamReader reader(file);
     QString notes;
     bool read = false;
@@ -96,9 +99,12 @@ void CTResultView::generateReport()
 
 void CTResultView::generateDataForPlotting(){
 
-    QFile *file = new QFile("./Source/outcome.xml");
+    QFile *file = new QFile("/home/luiza/Desktop/outcome.xml");
     if (!file->open(QIODevice::ReadOnly))
+    {
+        qDebug() << "cannot open file";
         return;
+    }
 
     QList<QStringList> listValues_of_sensors;
     QStringList values_sensor;
@@ -112,10 +118,7 @@ void CTResultView::generateDataForPlotting(){
 
         if(reader.isStartElement() && reader.name() == "sensor_values")
         {
-            if(reader.attributes().value("enabled").toString() == "true")
                 readSensor = true;
-            else
-                readSensor = false;
         }
         if(reader.isCharacters() && readSensor == true && !reader.text().
                 toString().trimmed().isEmpty())
@@ -163,6 +166,8 @@ void CTResultView::generateDataForPlotting(){
 
         QStringList s = QStringList();
         s  << "UToy sensor1" << "UToy sensor2";
+//        qDebug() << listData.at(0).size();
+
         ui->qwt_graphviewer->initGraph(2, s);
         ui->qwt_graphviewer->setCurveData(listData.at(0), 1);
         ui->qwt_graphviewer->setCurveData(listData.at(1), 2);

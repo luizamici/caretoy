@@ -30,7 +30,7 @@ private:
     Phonon::VideoWidget *videoWidget;
     Phonon::AudioOutput *audioOutput;
 
-    CTSeekSlider *seekSlider;
+//    CTSeekSlider *seekSlider;
     CTMediaObject *mediaObject;
     bool playingState;
     bool pauseState;

@@ -12,22 +12,23 @@ CTVideoView::CTVideoView(QWidget *parent) :
     //For now I am playing an mp4 video file format. In this case the control of the existance of the MIME is done
     //for the .mp4
     mediaObject = new CTMediaObject();
-
     mediaObject->setTickInterval(100);
 
-    QString filename("./Source/2013-01-31_11-02-41.mp4");
+    QString filename("/home/luiza/Desktop/2013-01-31_11-02-41.mp4");
     if(!Phonon::BackendCapabilities::isMimeTypeAvailable("video/mpeg")){
+        qDebug() << "Unsupported type!";
         QMessageBox::warning(this, tr("There was an Error"),tr("A plugin is needed for playing the video!"));
     }else{mediaObject->setCurrentSource(filename);}
 
     //TODO get the precise dimension of the video, for now it fits to the test video
     videoWidget = new Phonon::VideoWidget(this);
 //    videoWidget->setFixedSize(320,240);
-    videoWidget->setMinimumSize(320,240);
+//    videoWidget->setMinimumSize(320,240);
+//    videoWidget->setAspectRatio(Phonon::VideoWidget::AspectRatioAuto);
     ui->verticalLayout_3->addWidget(videoWidget,0,Qt::AlignCenter);
 
-    seekSlider = new CTSeekSlider(mediaObject,this->parentWidget());
-    ui->verticalLayout_3->addWidget(seekSlider);
+//    seekSlider = new CTSeekSlider(mediaObject,this->parentWidget());
+//    ui->verticalLayout_3->addWidget(seekSlider);
 
     ui->lcdNumber->display("00:00");
 
