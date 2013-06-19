@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <phonon>
 #include "ct_mediaobject.h"
+#include "ct_seekslider.h"
 
 namespace Ui {
 class CTVideoView;
@@ -29,6 +30,7 @@ private:
     Phonon::VideoWidget *videoWidget;
     Phonon::AudioOutput *audioOutput;
 
+//    CTSeekSlider *seekSlider;
     CTMediaObject *mediaObject;
     bool playingState;
     bool pauseState;
