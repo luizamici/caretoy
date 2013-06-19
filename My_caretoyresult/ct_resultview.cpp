@@ -11,28 +11,8 @@ CTResultView::CTResultView(QWidget *parent) :
 
    //This is a toolButton that helps switching between zoomed mode
    //and normal mode of the plot
-
-    /*******************This is temporary******************************/
-    QString name = QFileDialog::getOpenFileName(this, "Select xml file",
-                                                QDir::currentPath());
-    if (!name.isNull())
-    {
-         QFile *file = new QFile(name);
-         QFile *file2 = new QFile(name);
-         if (file->open(QIODevice::ReadOnly))
-         {
-             generateReport(file);
-
-         }
-         file->close();
-         if(file2->open(QIODevice::ReadOnly))
-         {
-            generateDataForPlotting(file2);
-         }
-
-         file2->close();
-    }
-    /********************************************************************/
+    generateReport();
+    generateDataForPlotting();
 
     statusBar = new QStatusBar();
     statusBar->setMaximumHeight(20);
@@ -60,8 +40,14 @@ void CTResultView::showMessage(bool b){
                                 "function on the graph");}
 }
 
-void CTResultView::generateReport(QFile *file)
+void CTResultView::generateReport()
 {
+    QFile *file = new QFile("/home/luiza/Desktop/outcome.xml");
+    if (!file->open(QIODevice::ReadOnly))
+    {
+        qDebug() << "*******Cannot open file";
+        return;
+    }
     QXmlStreamReader reader(file);
     QString notes;
     bool read = false;
@@ -111,15 +97,20 @@ void CTResultView::generateReport(QFile *file)
 }
 
 
-void CTResultView::generateDataForPlotting(QFile *file2){
+void CTResultView::generateDataForPlotting(){
+
+    QFile *file = new QFile("/home/luiza/Desktop/outcome.xml");
+    if (!file->open(QIODevice::ReadOnly))
+    {
+        qDebug() << "cannot open file";
+        return;
+    }
 
     QList<QStringList> listValues_of_sensors;
     QStringList values_sensor;
     QList<QVector<QPointF> > listData;
-    QString sensor_type;
-    int numberOfSensors = 0;
 
-    QXmlStreamReader reader(file2);
+    QXmlStreamReader reader(file);
     bool readSensor = false;
     while(!reader.atEnd())
     {
@@ -127,17 +118,12 @@ void CTResultView::generateDataForPlotting(QFile *file2){
 
         if(reader.isStartElement() && reader.name() == "sensor_values")
         {
-            readSensor = true;
-            sensor_type = reader.attributes().value("type").toString();
+                readSensor = true;
         }
         if(reader.isCharacters() && readSensor == true && !reader.text().
                 toString().trimmed().isEmpty())
         {
             values_sensor = reader.text().toString().split(" ");
-        }
-        if(reader.isStartElement() && readSensor == true && reader.name() == "sensor")
-        {
-            numberOfSensors++;
         }
         if(reader.isEndElement() && readSensor == true && reader.name() == "sensor")
         {
@@ -179,10 +165,7 @@ void CTResultView::generateDataForPlotting(QFile *file2){
         }
 
         QStringList s = QStringList();
-        for (int var = 1; var <= numberOfSensors; ++var) {
-            s << sensor_type + " sensor" + QString::number(var);
-        }
-//        s  << "UToy sensor1" << "UToy sensor2";
+        s  << "UToy sensor1" << "UToy sensor2";
 //        qDebug() << listData.at(0).size();
 
         ui->qwt_graphviewer->initGraph(2, s);

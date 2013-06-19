@@ -3,8 +3,6 @@
 
 #include <QWidget>
 #include <QStatusBar>
-#include <QFile>
-#include <QFileDialog>
 #include <QXmlStreamReader>
 
 namespace Ui {
@@ -23,8 +21,8 @@ private:
     Ui::CTResultView *ui;
     QStatusBar *statusBar;
 
-    void generateReport(QFile *file);
-    void generateDataForPlotting(QFile *file2);
+    void generateReport();
+    void generateDataForPlotting();
 
 public slots:
     void showMessage(bool b);
