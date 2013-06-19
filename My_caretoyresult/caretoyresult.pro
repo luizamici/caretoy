@@ -18,7 +18,6 @@ SOURCES += main.cpp\
     ct_plotmagnifier.cpp \
     ct_plotzoomer.cpp \
     ct_mediaobject.cpp \
-    ct_seekslider.cpp \
     ct_graphviewer.cpp
 
 HEADERS  += ct_resultview.h \
@@ -28,7 +27,6 @@ HEADERS  += ct_resultview.h \
     ct_plotmagnifier.h \
     ct_plotzoomer.h \
     ct_mediaobject.h \
-    ct_seekslider.h \
     ct_graphviewer.h
 
 FORMS    += \

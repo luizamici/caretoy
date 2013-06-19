@@ -9,27 +9,29 @@ CTVideoView::CTVideoView(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //For now I am playing an mp4 video file format. In this case the control of the existance of the MIME is done
-    //for the .mp4
+    //For now I am playing an mp4 video file format. In this case the control of
+    //the existance of the MIME is done for the .mp4
     mediaObject = new CTMediaObject();
     mediaObject->setTickInterval(100);
 
-    QString filename("/home/luiza/Desktop/2013-01-31_11-02-41.mp4");
-    if(!Phonon::BackendCapabilities::isMimeTypeAvailable("video/mpeg")){
-        qDebug() << "Unsupported type!";
-        QMessageBox::warning(this, tr("There was an Error"),tr("A plugin is needed for playing the video!"));
-    }else{mediaObject->setCurrentSource(filename);}
+    /**********This is temporary***************************************/
+    QString filename = QFileDialog::getOpenFileName(this, "Select video to display",
+                                                    QDir::currentPath());
+    if (!filename.isNull())
+    {
+        if(!Phonon::BackendCapabilities::isMimeTypeAvailable("video/mpeg")){
+            qDebug() << "Unsupported type!";
+            QMessageBox::warning(this, tr("There was an Error"),
+                                 tr("A plugin is needed for playing the video!"));
+        }else{mediaObject->setCurrentSource(filename);}
+    }
+    /******************************************************************/
 
-    //TODO get the precise dimension of the video, for now it fits to the test video
+//    QString filename("/home/luiza/Desktop/2013-01-31_11-02-41.mp4");
+
     videoWidget = new Phonon::VideoWidget(this);
-//    videoWidget->setFixedSize(320,240);
 //    videoWidget->setMinimumSize(320,240);
-//    videoWidget->setAspectRatio(Phonon::VideoWidget::AspectRatioAuto);
     ui->verticalLayout_3->addWidget(videoWidget,0,Qt::AlignCenter);
-
-//    seekSlider = new CTSeekSlider(mediaObject,this->parentWidget());
-//    ui->verticalLayout_3->addWidget(seekSlider);
-
     ui->lcdNumber->display("00:00");
 
     Phonon::createPath(mediaObject,videoWidget);
@@ -44,11 +46,6 @@ CTVideoView::CTVideoView(QWidget *parent) :
     mediaObject->play();
     mediaObject->pause();
 
-//    QStringList availableMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
-//    foreach (QString availableMimeType,availableMimeTypes){
-//    qDebug() << "The available mimeTypes are :" << availableMimeType;}
-
-
     //connection between the GUI commands and the video control sequences
     connect(ui->playButton,SIGNAL(clicked()),this, SIGNAL(videoPlaying()));
     connect(ui->playButton,SIGNAL(clicked()),mediaObject,SLOT(play()));
@@ -56,7 +53,8 @@ CTVideoView::CTVideoView(QWidget *parent) :
     connect(ui->stopButton,SIGNAL(clicked()),this, SLOT(stopVideo()));
 
     connect(mediaObject, SIGNAL(tick(qint64)), this, SLOT(tick_(qint64)));
-    connect(mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),this, SLOT(stateChanged(Phonon::State, Phonon::State)));
+    connect(mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),this,
+            SLOT(stateChanged(Phonon::State, Phonon::State)));
     connect(ui->pauseButton,SIGNAL(clicked()),this,SIGNAL(pausePlaying()));
     connect(ui->stopButton,SIGNAL(clicked()),this, SIGNAL(stopPlaying()));
 }
