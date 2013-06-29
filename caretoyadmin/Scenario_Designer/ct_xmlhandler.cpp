@@ -417,9 +417,12 @@ bool CTXmlHandler::characters(const QString& ch)
             if(attr["type"] == "light_action" || attr["type"] == "speaker_action"
                     || attr["type"] == "screen_action")
             {
-                qsb_duration_max->setMinimum(attr["val_duration_min"].toDouble());
-                qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
-                qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
+//                qsb_duration_max->setMinimum(attr["val_duration_min"].toDouble());
+                qsb_duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+//                qsb_duration_min->setValue(attr["val_duration_min"].toDouble());
+                qsb_duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+//                qsb_duration_max->setValue(attr["val_duration_max"].toDouble());
+                qsb_duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
             }
             if((attr["type"] == "light_stimulus" || attr["type"] == "light_action")
                     && block_name != "arch" && block_name != "wall_left"
@@ -474,7 +477,8 @@ bool CTXmlHandler::characters(const QString& ch)
         else if("pressure" == event_name)
         {
             qrb_pressure_event->setChecked(true);
-            qsb_pressure->setValue(ch.toDouble());
+//            qsb_pressure->setValue(ch.toDouble());
+            qsb_pressure->setValue(CTUtility::getDouble(ch));
             if(!attr["sensor"].isNull())
             {
                 qcb_pressure->setCurrentIndex(qcb_pressure->findText(
@@ -489,7 +493,8 @@ bool CTXmlHandler::characters(const QString& ch)
                 qcb_force->setCurrentIndex(qcb_force->findText(
                                            attr["sensor"].toString()));
             }
-            qsb_force->setValue(ch.toDouble());
+//            qsb_force->setValue(ch.toDouble());
+            qsb_force->setValue(CTUtility::getDouble(ch));
         }
         else if("position" == event_name)
         {

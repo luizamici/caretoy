@@ -29,6 +29,7 @@ private:
     bool readingSocket;
 
     QString _tableRequest;
+    bool semaphore;
 
 signals:
     void notConnected(QString warning);

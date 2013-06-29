@@ -48,6 +48,8 @@ private:
 signals:
     void finishedConfig(QString xml);
 
+    void finishedConfigs(QString xml,QString comment);
+
 private slots:
     void resetConfig();
     void saveConfiguration();

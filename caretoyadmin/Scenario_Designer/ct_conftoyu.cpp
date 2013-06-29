@@ -98,6 +98,12 @@ CTConfToyU::~CTConfToyU()
     delete ui;
 }
 
+
+QString CTConfToyU::getComment()
+{
+    return ui->qte_comment->toPlainText();
+}
+
 /*!
  * \brief CTConfToyU::setParameters
  *
@@ -232,7 +238,8 @@ QString CTConfToyU::getParameters(QString value){
         stream.writeAttribute("sensor",ui->qcb_pressure->currentText());
         stream.writeStartElement("condition");
         stream.writeAttribute("type", "numerical");
-        stream.writeCharacters(ui->qsb_pressure->cleanText());
+//        stream.writeCharacters(ui->qsb_pressure->cleanText());
+        stream.writeCharacters(CTUtility::getString(ui->qsb_pressure->value()));
         stream.writeEndElement(); // end condition
     }
     else if (ui->qrb_position_event->isChecked())
@@ -278,8 +285,10 @@ QString CTConfToyU::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus
@@ -294,8 +303,10 @@ QString CTConfToyU::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus

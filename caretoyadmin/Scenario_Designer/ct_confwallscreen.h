@@ -18,6 +18,8 @@ public:
     bool setParameters(QString xml);
     QString getParameters(QString value);
 
+    QString getComment();
+
 private:
     Ui::CTConfWallScreen *ui;
     QList<CTScreen *> screen_stimuli, screen_action;

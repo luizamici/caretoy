@@ -43,8 +43,8 @@ public slots:
     void setMinimumValue(double value);
     void setMaximumValue(double value);
 
-    double valueFromText(const QString& text) const;
-    QString textFromValue(double value) const;
+//    double valueFromText(const QString& text) const;
+//    QString textFromValue(double value) const;
 };
 
 /* ########################################################################## */
@@ -214,5 +214,15 @@ private:
 private slots:
     void stateChecked(bool b);
 };
+
+/* ########################################################################### */
+
+class CTUtility
+{
+public:
+    static QString getString(double double_value);
+    static double getDouble(QString string_value);
+};
+
 
 #endif // CT_CUSTOMWIDGETS_H

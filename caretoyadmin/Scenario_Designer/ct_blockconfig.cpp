@@ -375,7 +375,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from mickey block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters, config->getComment());
         break;
     }
     case CT_BLOCK_U:
@@ -385,7 +385,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from uToy block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     case CT_BLOCK_ARCH:
@@ -395,7 +395,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from arch block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters, config->getComment());
         break;
     }
     case CT_BLOCK_WALL_LEFT:
@@ -405,7 +405,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from wall_left block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     case CT_BLOCK_WALL_RIGHT:
@@ -415,7 +415,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from wall_right block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     case CT_BLOCK_WALL_SCREEN:
@@ -425,7 +425,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from screen block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     case CT_BLOCK_LRING:
@@ -435,7 +435,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from large_ring block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     case CT_BLOCK_SRING:
@@ -445,7 +445,7 @@ void CTBlockConfig::saveConfiguration()
         if(parameters.isEmpty())
             Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
                         "CTBlockConfig::saveConfiguration got parameters from small_ring block empty! ");
-        emit finishedConfig(parameters);
+        emit finishedConfigs(parameters,config->getComment());
         break;
     }
     default:

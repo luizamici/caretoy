@@ -237,7 +237,8 @@ QString CTConfToyMickey::getParameters(QString value){
         stream.writeAttribute("name", "pressure");
         stream.writeStartElement("condition");
         stream.writeAttribute("type", "numerical");
-        stream.writeCharacters(ui->qsb_pressure->cleanText());
+//        stream.writeCharacters(ui->qsb_pressure->cleanText());
+        stream.writeCharacters(CTUtility::getString(ui->qsb_pressure->value()));
         stream.writeEndElement(); // end condition
     }
     else if (ui->qrb_force_event->isChecked())
@@ -247,7 +248,8 @@ QString CTConfToyMickey::getParameters(QString value){
         stream.writeAttribute("sensor", ui->qcb_force->currentText());
         stream.writeStartElement("condition");
         stream.writeAttribute("type","numerical");
-        stream.writeCharacters(ui->qsb_force->cleanText());
+//        stream.writeCharacters(ui->qsb_force->cleanText());
+        stream.writeCharacters(CTUtility::getString(ui->qsb_force->value()));
         stream.writeEndElement();//end condition
     }
     else if (ui->qrb_position_event->isChecked())
@@ -293,8 +295,10 @@ QString CTConfToyMickey::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus
@@ -309,8 +313,10 @@ QString CTConfToyMickey::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus
@@ -321,6 +327,12 @@ QString CTConfToyMickey::getParameters(QString value){
     stream.writeEndElement(); // end block
 
     return parameters;
+}
+
+
+QString CTConfToyMickey::getComment()
+{
+    return ui->qte_comment->toPlainText();
 }
 
 /*!

@@ -63,6 +63,7 @@ QStringList CTWizard::getInputData()
 {
     QStringList _data;
     _data << ui->qle_description->text();
+    _data << ui->ql_image->text();
     _data << ui->qde_execution->date().toString("yyyy-MM-dd");
     _data << ui->qsb_execution->text();
     return _data;
@@ -70,12 +71,14 @@ QStringList CTWizard::getInputData()
 
 
 void CTWizard::setInputData(QString description, QString execution_day,
-                            QString execution_order)
+                            QString execution_order, QString image_name)
 {
     ui->qle_description->setText(description);
     QDate date(QDate::fromString(execution_day,"yyyy-MM-dd"));
     ui->qde_execution->setDate(date);
     ui->qsb_execution->setValue(execution_order.toInt());
+    if(image_name != "")
+        ui->ql_image->setText(image_name);
 }
 
 void CTWizard::setOutcomeMeasures(QString outcomeM)
@@ -98,5 +101,22 @@ void CTWizard::setOutcomeMeasures(QString outcomeM)
             if("true" == reader.text().toString()){ chb->setChecked(true);}
             else if("false" == reader.text()){ chb->setChecked(false);}
         }
+    }
+}
+
+void CTWizard::on_qbt_browse_clicked()
+{
+    QString name = QFileDialog::getOpenFileName(this, "Load scenario",
+                                                QDir::currentPath()+"/scenarios_manual",
+                                                tr("Images (*.png *.xpm *.jpg)"));
+    if (!name.isNull())
+    {
+        ui->ql_image->setText(name);
+//        QFile *file = new QFile(name);
+//        if (file->open(QIODevice::ReadOnly))
+//        {
+//            QByteArray data = file->readAll();
+//            QString data_base64 = data.toBase64();
+//        }
     }
 }

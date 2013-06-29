@@ -60,7 +60,6 @@ CTSimpleBlock::CTSimpleBlock(int id, QWidget *parent) :
     default:
         break;
     }
-
     ui->qlb_block_info->setPixmap(QPixmap(":/images/ct_info.png"));
     ui->qlb_block_info->setToolTip("Block has not been configured yet.");
 }
@@ -78,6 +77,11 @@ QPixmap CTSimpleBlock::getImage()
     return pixmap;
 }
 
+void CTSimpleBlock::setToolTip(const QString &toolTip)
+{
+    ui->qlb_block_info->setToolTip(toolTip);
+}
+
 void CTSimpleBlock::setConfiguration(QString xml)
 {
     Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
@@ -86,8 +90,21 @@ void CTSimpleBlock::setConfiguration(QString xml)
         Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
                     "CTSimpleBlock::setConfiguration -> setting empty configuration!");
     xml_config = xml;
+    qDebug() << xml;
     Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
                 "Exit CTSimpleBlock::setConfiguration . ");
+}
+
+void CTSimpleBlock::setConfigurations(QString xml,QString comment)
+{
+    if(xml.isEmpty())
+        Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
+                    "CTSimpleBlock::setConfiguration -> setting empty configuration!");
+    xml_config = xml;
+    if(comment.trimmed() == "")
+        setToolTip("No description for this block");
+    else
+        setToolTip(comment);
 }
 
 QString CTSimpleBlock::getConfiguration(QString str)
@@ -115,11 +132,14 @@ void CTSimpleBlock::mouseDoubleClickEvent(QMouseEvent *event)
     {
         event->accept();
         CTBlockConfig block_config;
-        block_config.setWindowTitle("Block configuration: " +
+        block_config.setWindowTitle(tr("[*]Block configuration: ") +
                                     ui->qlb_block_name->text());
         block_config.showParameters(id, xml_config);
-        connect(&block_config,SIGNAL(finishedConfig(QString)),
-                this, SLOT(setConfiguration(QString)));
+//        connect(&block_config,SIGNAL(finishedConfig(QString)),
+//                this, SLOT(setConfiguration(QString)));
+
+        connect(&block_config, SIGNAL(finishedConfigs(QString,QString)),
+                this, SLOT(setConfigurations(QString,QString)));
         block_config.exec();
     }
     else {

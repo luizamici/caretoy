@@ -19,7 +19,17 @@ void CTSslClientThread::initialize()
     waitForTable = false;
     readingSocket = false;
 
+
+    QFile ctCaCert("./ssl/caretoy_ca.crt");
+    ctCaCert.open(QIODevice::ReadOnly);
+    QSslCertificate caCert(ctCaCert.readAll());
+    ctCaCert.close();
+
     socket = new QSslSocket(this);
+    socket->addCaCertificate(caCert);
+
+    semaphore = false;
+
     connect(socket, SIGNAL(connected()), this, SLOT(connectedToHost()));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
             this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
@@ -72,6 +82,8 @@ void CTSslClientThread::sslErrors(const QList<QSslError> &errors)
 
 void CTSslClientThread::socketReadyRead()
 {
+    semaphore = true;
+
     readingSocket = true;
     QByteArray payload;
     while (_dataSize <= socket->bytesAvailable())
@@ -83,6 +95,7 @@ void CTSslClientThread::socketReadyRead()
             if (-1 == recv)
             {
                 qDebug() << socket->errorString();
+                semaphore = false;
                 return;
             }
 
@@ -91,6 +104,7 @@ void CTSslClientThread::socketReadyRead()
             if (-1 == recv)
             {
                 qDebug() << socket->errorString();
+                semaphore = false;
                 return;
             }
             if(CT_PKTDATA == _readType || CT_DBSDATA == _readType)
@@ -129,18 +143,23 @@ void CTSslClientThread::socketReadyRead()
         }
         readingSocket = false;
     }
+    semaphore = false;
+
 }
 
 void CTSslClientThread::connectedToHost()
 {
     qDebug() << "Connected to " << "fsm.caretoy.eu : 61499";
-    emit connectionSuccessful("Connected to fsm.caretoy.eu:61499");
+    emit connectionSuccessful("Connected to server!");
 }
 
 
 bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
                                         const quint32 &type)
 {
+    semaphore = true;
+
+    qDebug() << Q_FUNC_INFO << parsedQuery;
     QByteArray out;
     out.append(parsedQuery);
     // Write data type
@@ -161,11 +180,13 @@ bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
         socket->waitForBytesWritten();
         pos += written;
     }
+    semaphore = false;
     return true;
 }
 
 void CTSslClientThread::requestTable(const QString &parsedQuery, const quint32 &type)
 {
+    qDebug() << Q_FUNC_INFO << parsedQuery;
     waitForTable = true;
     _tableRequest = parsedQuery;
     writeIntoSocket(parsedQuery, type);

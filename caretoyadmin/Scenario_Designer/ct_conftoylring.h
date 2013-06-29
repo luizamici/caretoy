@@ -18,6 +18,8 @@ public:
 
     bool setParameters(QString xml);
     QString getParameters(QString value);
+
+    QString getComment();
     
 private slots:
     void updateBlockRuntime(bool value);

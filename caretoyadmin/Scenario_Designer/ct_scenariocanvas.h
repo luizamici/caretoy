@@ -20,6 +20,7 @@ public:
     QString getExecutionDay();
     QString getExecutionOrder();
     QString getOutcomeMeasures();
+    QString getImageName();
 
 
 private:
@@ -36,6 +37,7 @@ private:
     QString execution_day;
     QString execution_order;
     QString outcome_measures;
+    QString image_description;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

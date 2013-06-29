@@ -100,7 +100,8 @@ void CTScenarioConfig::saveScenarioToDB()
     {
         wizard->setInputData(scenarioCanvas->getDescription(),
                              scenarioCanvas->getExecutionDay(),
-                             scenarioCanvas->getExecutionOrder());
+                             scenarioCanvas->getExecutionOrder(),
+                             scenarioCanvas->getImageName());
         wizard->setOutcomeMeasures(scenarioCanvas->getOutcomeMeasures());
     }
 

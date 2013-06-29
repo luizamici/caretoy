@@ -19,6 +19,8 @@ public:
     QString getConfiguration(QString str);
     void enableConfig(bool value);
 
+    void setToolTip(const QString &toolTip);
+
 private:
     Ui::CTSimpleBlock *ui;
     int id;
@@ -31,6 +33,7 @@ protected:
 
 public slots:
     void setConfiguration(QString xml);
+    void setConfigurations(QString xml, QString comment);
 };
 
 #endif // CT_SIMPLEBLOCK_H

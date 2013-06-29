@@ -18,6 +18,8 @@ public:
     bool setParameters(QString xml);
     QString getParameters(QString value);
 
+    QString getComment();
+
 private:
     Ui::CTConfWallRight *ui;
     QList<CTBigLight *> biglight_stimuli, biglight_actions;

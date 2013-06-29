@@ -49,6 +49,7 @@ void CTAdmin::authenticate(QString username, QString psswd)
 void CTAdmin::processXML(QByteArray data)
 {
     QXmlStreamReader reader(data);
+    qDebug() << data;
     while (!reader.atEnd())
     {
         reader.readNext();
@@ -64,9 +65,11 @@ void CTAdmin::processXML(QByteArray data)
                     dialog->close();
                     scenarioAdmin->initialize();
                 }
-                if("failure" == type)
-                    dialog->statusBar->showMessage(attr.value("user_id").
-                                                   toString(), 5000);
+                else if("failure" == type)
+                {
+                    qDebug() << attr.value("user_id").toString();
+                    dialog->showMessage("Username or Password incorrect");
+                }
             }
             else if("query_reply" == tagName)
             {

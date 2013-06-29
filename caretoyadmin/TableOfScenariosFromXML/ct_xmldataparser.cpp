@@ -13,6 +13,7 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
     CTTableRecord rec;
     CTTableRecord _rec;
     QList<CTTableField> fields;
+    QStringList fieldNames;
     QList< QPair< QString, CTTableField> > _constraints;
     int i;
 
@@ -53,7 +54,11 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
                 p.second = field;
                 _constraints.append(p);
             }
-            fields.append(field);
+            if(!fieldNames.contains(field.name()))
+            {
+                fieldNames << field.name();
+                fields.append(field);
+            }
         }
         if(reader.isEndElement() && reader.name() == "fields")
         {
@@ -76,16 +81,19 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
         {
             if(!reader.text().toString().trimmed().isEmpty())
             {
+//                qDebug() << Q_FUNC_INFO << i << reader.text().toString();
                 rec.setValue(i,reader.text().toString());
                 i++;
             }
         }
         if(reader.isEndElement() && reader.name() == "row")
         {
+//            qDebug()<< rec.count();
             tableData->insertRecord(-1,rec);
         }
         if(reader.isEndElement() && reader.name() == "table" && tableEmpty == true)
         {
+//            qDebug()<< rec.count();
             tableData->insertRecord(-1, rec);
             tableData->constraints = _constraints;
         }
@@ -94,5 +102,6 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
             tableData->constraints = _constraints;
         }
     }
+//    qDebug() << Q_FUNC_INFO << tableData->numColumns;
     return tableData;
 }

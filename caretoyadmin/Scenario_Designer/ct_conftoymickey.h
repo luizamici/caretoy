@@ -18,6 +18,8 @@ public:
     bool setParameters(QString xml);
     QString getParameters(QString value);
 
+    QString getComment();
+
 private:
     Ui::CTConfToyMickey *ui;
     QList<CTConstLight *> light_stimuli, light_actions;

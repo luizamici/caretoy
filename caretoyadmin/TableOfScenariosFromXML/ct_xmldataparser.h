@@ -4,6 +4,7 @@
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QObject>
+#include <QtGlobal>
 
 
 //class CTTableData;

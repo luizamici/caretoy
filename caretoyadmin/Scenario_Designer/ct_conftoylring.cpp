@@ -94,6 +94,12 @@ CTConfToyLRing::~CTConfToyLRing()
 }
 
 
+QString CTConfToyLRing::getComment()
+{
+    return ui->qte_comment->toPlainText();
+}
+
+
 /*!
  * \brief CTConfToyLRing::setParameters
  *
@@ -104,6 +110,7 @@ CTConfToyLRing::~CTConfToyLRing()
  */
 bool CTConfToyLRing::setParameters(QString xml)
 {
+    qDebug() << Q_FUNC_INFO << xml;
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
 
@@ -155,7 +162,7 @@ QString CTConfToyLRing::getParameters(QString value){
 
     stream.writeStartElement("block");
     stream.writeAttribute("id", "1");
-    stream.writeAttribute("name", "large_ring");
+    stream.writeAttribute("name", "ring");
 
     /* Insert block comment */
     stream.writeStartElement("comment");
@@ -226,7 +233,8 @@ QString CTConfToyLRing::getParameters(QString value){
         stream.writeAttribute("name", "pressure");
         stream.writeStartElement("condition");
         stream.writeAttribute("type", "numerical");
-        stream.writeCharacters(ui->qsb_pressure->cleanText());
+//        stream.writeCharacters(ui->qsb_pressure->cleanText());
+        stream.writeCharacters(CTUtility::getString(ui->qsb_pressure->value()));
         stream.writeEndElement(); // end condition
     }
     else if (ui->qrb_position_event->isChecked())
@@ -288,8 +296,10 @@ QString CTConfToyLRing::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus

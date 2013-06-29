@@ -20,11 +20,13 @@ public:
     ~CTWizard();
 
     void setInputData(QString description, QString execution_day,
-                                QString execution_order);
+                                QString execution_order, QString image_name);
     void setOutcomeMeasures(QString outcomeM);
     
 private slots:
     void accepted();
+
+    void on_qbt_browse_clicked();
 
 private:
     Ui::CTWizard *ui;

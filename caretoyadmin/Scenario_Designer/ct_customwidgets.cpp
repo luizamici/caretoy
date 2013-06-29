@@ -46,22 +46,23 @@ void CTDoubleSpinBox::setup(QString suffix,
 void CTDoubleSpinBox::setMinimumValue(double value) { setMinimum(value); }
 void CTDoubleSpinBox::setMaximumValue(double value) { setMaximum(value); }
 
-/*Added auxiliary methods for standardizing the usage of the point in doubles*/
-QString CTDoubleSpinBox::textFromValue(double value) const
-{
-    QString text = QDoubleSpinBox::textFromValue(value);
-    return text.replace(QLocale().decimalPoint(), QLatin1Char('.'));
-}
+///*Added auxiliary methods for standardizing the usage of the point in doubles*/
+//QString CTDoubleSpinBox::textFromValue(double value) const
+//{
+//    QString text = QDoubleSpinBox::textFromValue(value);
+//    return text.replace(QLocale().decimalPoint(), QLatin1Char('.'));
+//}
 
-/*
- *Even though a point might be used in the text version of a double,
- *it will be displayed according to the local settings
- */
-double CTDoubleSpinBox::valueFromText(const QString& text) const
-{
-    return QString(text).replace(QLatin1Char('.'),QLocale().decimalPoint()).
-            toDouble();
-}
+///*
+// *Even though a point might be used in the text version of a double,
+// *it will be displayed according to the local settings
+// */
+//double CTDoubleSpinBox::valueFromText(const QString& text) const
+//{
+//    return QString(text).replace(QLatin1Char('.'),QLocale().decimalPoint()).
+//            toDouble();
+//}
+
 
 /* ########################################################################## */
 
@@ -221,7 +222,8 @@ void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
 //        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
 //        intensity_min->setValue(attr["val_intensity_min"].toInt());
@@ -229,9 +231,12 @@ void CTBigLight::setParameters(bool b, QHash<QString,QVariant> attr)
 
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
         rings_max->setMinimum(attr["val_rings_min"].toInt());
         rings_min->setValue(attr["val_rings_min"].toInt());
@@ -253,7 +258,8 @@ void CTBigLight::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     /*
@@ -277,8 +283,10 @@ void CTBigLight::getParameters(QXmlStreamWriter &stream){
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
 
@@ -409,7 +417,8 @@ void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
 //        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
 //        intensity_min->setValue(attr["val_intensity_min"].toInt());
@@ -417,9 +426,12 @@ void CTButton::setParameters(bool b, QHash<QString,QVariant> attr)
 
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
     }
 }
@@ -436,7 +448,8 @@ void CTButton::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     stream.writeStartElement("intensity");
@@ -446,8 +459,10 @@ void CTButton::getParameters(QXmlStreamWriter &stream){
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from", CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
 
@@ -577,13 +592,17 @@ void CTLight::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
 //        intensity_max->setMinimum(attr["val_intensity_min"].toInt());
 //        intensity_min->setValue(attr["val_intensity_min"].toInt());
@@ -603,7 +622,8 @@ void CTLight::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     /*Hard coded for CareToy Core */
@@ -616,8 +636,10 @@ void CTLight::getParameters(QXmlStreamWriter &stream){
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to",CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
 
@@ -723,13 +745,17 @@ void CTConstLight::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
     }
 }
@@ -747,14 +773,17 @@ void CTConstLight::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from", CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
     if( NULL != activation)
@@ -956,13 +985,17 @@ void CTSpeaker::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
         volume_max->setMinimum(attr["val_volume_min"].toDouble());
         volume_min->setValue(attr["val_volume_min"].toDouble());
@@ -994,7 +1027,8 @@ void CTSpeaker::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     stream.writeStartElement("volume");
@@ -1009,8 +1043,10 @@ void CTSpeaker::getParameters(QXmlStreamWriter &stream){
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from", CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
 
@@ -1135,13 +1171,17 @@ void CTScreen::setParameters(bool b, QHash<QString,QVariant> attr)
         state->setChecked(true);
         if (NULL != activation)
         {
-            activation->setValue(attr["val_activation"].toDouble());
+//            activation->setValue(attr["val_activation"].toDouble());
+            activation->setValue(CTUtility::getDouble(attr["val_activation"].toString()));
         }
         if( NULL != duration_min && NULL != duration_max)
         {
-            duration_max->setMinimum(attr["val_duration_min"].toDouble());
-            duration_min->setValue(attr["val_duration_min"].toDouble());
-            duration_max->setValue(attr["val_duration_max"].toDouble());
+//            duration_max->setMinimum(attr["val_duration_min"].toDouble());
+//            duration_min->setValue(attr["val_duration_min"].toDouble());
+//            duration_max->setValue(attr["val_duration_max"].toDouble());
+            duration_max->setMinimum(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_min->setValue(CTUtility::getDouble(attr["val_duration_min"].toString()));
+            duration_max->setValue(CTUtility::getDouble(attr["val_duration_max"].toString()));
         }
         video->setCurrentIndex(video->findText(attr["val_video"].toString()));
     }
@@ -1160,7 +1200,8 @@ void CTScreen::getParameters(QXmlStreamWriter &stream){
     if (NULL != activation)
     {
         stream.writeStartElement("activation");
-        stream.writeCharacters(activation->cleanText());
+//        stream.writeCharacters(activation->cleanText());
+        stream.writeCharacters(CTUtility::getString(activation->value()));
         stream.writeEndElement(); //end activation
     }
     stream.writeStartElement("video");
@@ -1170,11 +1211,27 @@ void CTScreen::getParameters(QXmlStreamWriter &stream){
     if(NULL != duration_min && NULL!= duration_max)
     {
         stream.writeStartElement("duration");
-        stream.writeTextElement("from", duration_min->cleanText());
-        stream.writeTextElement("to", duration_max->cleanText());
+//        stream.writeTextElement("from", duration_min->cleanText());
+//        stream.writeTextElement("to", duration_max->cleanText());
+        stream.writeTextElement("from", CTUtility::getString(duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(duration_max->value()));
         stream.writeEndElement(); //end duration
     }
     if( NULL != activation)
         stream.writeEndElement(); //end stimulus
+}
+
+
+/* #################################################### */
+QString CTUtility::getString(double double_value)
+{
+    QLocale c(QLocale::English);
+    return c.toString(double_value);
+}
+
+double CTUtility::getDouble(QString string_value)
+{
+    return QString(string_value).replace(QLatin1Char('.'),QLocale().
+                                         decimalPoint()).toDouble();
 }
 

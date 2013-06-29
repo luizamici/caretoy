@@ -11,6 +11,7 @@ CTTableData::CTTableData(const QString &tableName)
 
 bool CTTableData::insertRecord(int pos, const CTTableRecord &rec)
 {
+
     if(pos == -1)
     {
         data.append(rec);

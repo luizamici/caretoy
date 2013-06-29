@@ -345,12 +345,16 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
     creation_date = scenario["creation_date"];
     execution_day = scenario["execution_day"];
     execution_order = scenario["execution_order"];
+    image_description = scenario["image_description"];
 
     titleChanged(description);
     QXmlStreamReader reader(scenario["xml_description"]);
     QString xml_conf;
     QXmlStreamWriter stream(&xml_conf);
     stream.setAutoFormatting(true);
+
+    bool readComment = false;
+    QString comment;
 
     QString block_name;
     while(!reader.atEnd())
@@ -370,6 +374,19 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
         }
         if(reader.isStartElement() && reader.name() == "outcome_measures")
             xml_conf.clear();
+
+        if(reader.isStartElement() && reader.name() == "comment")
+        {
+            readComment = true;
+        }
+        if(reader.isEndElement() && reader.name() == "comment")
+        {
+            readComment = false;
+        }
+        if(reader.isCharacters() && readComment == true)
+        {
+            comment = reader.text().toString().trimmed();
+        }
 
         stream.writeCurrentToken(reader);
 
@@ -402,6 +419,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if ("utoy" == block_name)
@@ -409,6 +427,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_U);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if ("wall_left" == block_name)
@@ -416,6 +435,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if ("wall_right" == block_name)
@@ -423,6 +443,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_RIGHT);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if ("wall_screen" == block_name)
@@ -430,6 +451,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_WALL_SCREEN);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if ("arch" == block_name)
@@ -437,13 +459,15 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_ARCH);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
-            else if("large_ring" == block_name)
+            else if("ring" == block_name)
             {
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_LRING);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
             else if("small_ring" == block_name)
@@ -451,6 +475,7 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_SRING);
                 new_block->enableConfig(true);
                 new_block->setConfiguration(xml_conf);
+                new_block->setToolTip(comment);
                 blocks.append(new_block);
             }
         }
@@ -566,7 +591,7 @@ void CTScenarioCanvas::loadScenarioFromFile()
                         new_block->setConfiguration(xml_conf);
                         blocks.append(new_block);
                     }
-                    else if("large_ring" == block_name)
+                    else if("ring" == block_name)
                     {
                         CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_LRING);
                         new_block->enableConfig(true);
@@ -719,9 +744,10 @@ void CTScenarioCanvas::saveScenario(QStringList data)
         scenario["xml_description"] = xml_scenario;
         scenario["last_edited"] = QDateTime::currentDateTime().
                 toString("yyyy-MM-dd HH:mm");
-        scenario["execution_day"] = data.at(1);
-        scenario["execution_order"] = data.at(2);
+        scenario["execution_day"] = data.at(2);
+        scenario["execution_order"] = data.at(3);
         scenario["description"] = data.at(0);
+        scenario["image_description"] = data.at(1);
         emit save(scenario);
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
@@ -754,4 +780,9 @@ QString CTScenarioCanvas::getExecutionOrder()
 QString CTScenarioCanvas::getOutcomeMeasures()
 {
     return this->outcome_measures;
+}
+
+QString CTScenarioCanvas::getImageName()
+{
+    return this->image_description;
 }

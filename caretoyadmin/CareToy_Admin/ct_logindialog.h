@@ -2,6 +2,7 @@
 #define CT_LOGINDIALOG_H
 
 #include <QDialog>
+#include <QDebug>
 #include <QStatusBar>
 
 namespace Ui {

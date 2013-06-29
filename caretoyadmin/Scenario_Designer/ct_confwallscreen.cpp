@@ -63,6 +63,10 @@ CTConfWallScreen::~CTConfWallScreen()
     delete ui;
 }
 
+QString CTConfWallScreen::getComment()
+{
+    return ui->qte_comment->toPlainText();
+}
 
 /*!
  * \brief CTConfWallScreen::setParameters
@@ -207,8 +211,10 @@ QString CTConfWallScreen::getParameters(QString value){
          *are stored into each action tag
          */
         stream.writeStartElement("duration");
-        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
-        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+//        stream.writeTextElement("from",ui->qsb_duration_min->cleanText());
+//        stream.writeTextElement("to", ui->qsb_duration_max->cleanText());
+        stream.writeTextElement("from",CTUtility::getString(ui->qsb_duration_min->value()));
+        stream.writeTextElement("to", CTUtility::getString(ui->qsb_duration_max->value()));
         stream.writeEndElement();//end duration
 
         stream.writeEndElement(); //end action or stimulus
