@@ -72,11 +72,10 @@ FORMS += \
     mod_staff/ct_worklogswidget.ui
 
 
-
-unix:!macx:!symbian: LIBS += -L$$PWD/../../../../../../usr/local/qwt-6.0.1/lib/ -lqwt
-
-INCLUDEPATH += $$PWD/../../../../../../usr/local/qwt-6.0.1/include
-DEPENDPATH += $$PWD/../../../../../../usr/local/qwt-6.0.1/include
-
 RESOURCES += \
     extraSources.qrc
+
+unix:!macx:!symbian: LIBS += -L$$PWD/../../../../../../usr/local/qwt-6.0.2/lib/ -lqwt
+
+INCLUDEPATH += $$PWD/../../../../../../usr/local/qwt-6.0.2/include
+DEPENDPATH += $$PWD/../../../../../../usr/local/qwt-6.0.2/include

@@ -12,7 +12,8 @@ CTStaffModule::CTStaffModule(QWidget *parent) :
 
     this->setWindowTitle("Staff Module");
     this->setWindowIcon(QIcon(":images/logo.jpeg"));
-    this->setMinimumSize(1200,800);
+    //TODO
+    this->setMinimumSize(1200,800); //to be resized
     // Center the widget on the screen
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 - this->height()/2);
