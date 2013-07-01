@@ -14,4 +14,9 @@
         <file>images/wall.png</file>
         <file>images/logo.png</file>
     </qresource>
+    <qresource prefix="/manual">
+        <file alias="scenario_01.png">scenarios_manual/scenarios_image_documents/scenario_01_scaled.png</file>
+        <file alias="scenario_02.png">scenarios_manual/scenarios_image_documents/scenario_02_scaled.png</file>
+        <file alias="scenario_03.png">scenarios_manual/scenarios_image_documents/scenario_03_scaled.png</file>
+    </qresource>
 </RCC>

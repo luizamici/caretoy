@@ -40,28 +40,28 @@ void CTScenariosAdmin::initialize()
 void CTScenariosAdmin::storeImage(QHash<QString, QString> scenario)
 {
 
-    QString statement;
-    QXmlStreamWriter stream(&statement);
-    stream.setAutoFormatting(true);
+//    QString statement;
+//    QXmlStreamWriter stream(&statement);
+//    stream.setAutoFormatting(true);
 
-    stream.writeStartElement("insert_image");
-    stream.writeStartElement("id_scenario");
-    stream.writeCharacters(scenario["id"]);
-    stream.writeEndElement();// end id_scenario
-    stream.writeStartElement("scenario_image");
-    QString data_base64;
-    QFile *file = new QFile(scenario["image_description"]);
-    if (file->open(QIODevice::ReadOnly))
-    {
-        QByteArray data = file->readAll();
-        data_base64 = data.toBase64();
-    }
-    stream.writeCharacters(data_base64);
-    stream.writeEndElement();// end scenario_image
-    stream.writeEndElement();//end insert_image
-    qDebug() << statement;
-    if(!data_base64.isEmpty())
-        requestToWriteIntoSocket(statement, CT_DBSDATA);
+//    stream.writeStartElement("insert_image");
+//    stream.writeStartElement("id_scenario");
+//    stream.writeCharacters(scenario["id"]);
+//    stream.writeEndElement();// end id_scenario
+//    stream.writeStartElement("scenario_image");
+//    QString data_base64;
+//    QFile *file = new QFile(scenario["image_description"]);
+//    if (file->open(QIODevice::ReadOnly))
+//    {
+//        QByteArray data = file->readAll();
+//        data_base64 = data.toBase64();
+//    }
+//    stream.writeCharacters(data_base64);
+//    stream.writeEndElement();// end scenario_image
+//    stream.writeEndElement();//end insert_image
+//    qDebug() << statement;
+//    if(!data_base64.isEmpty())
+//        requestToWriteIntoSocket(statement, CT_DBSDATA);
 }
 
 void CTScenariosAdmin::execParsedQuery(QString initStmt, QString whereStmt)
@@ -84,8 +84,8 @@ void CTScenariosAdmin::requestTable()
     QStringList fieldNames = QStringList() <<"id" << "execution_day"
                                           << "execution_order"
                                           << "creation_date" << "last_edited"
-                                          <<  "description" << "xml_description"
-                                           << "flag" << "image_description";
+                                          <<  "description" << "image_description"
+                                           << "xml_description" << "flag" ;
 
     CTTableRecord rec = CTTableRecord();
     int i =0;

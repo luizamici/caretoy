@@ -14,7 +14,6 @@ CTWizard::CTWizard(QWidget *parent) :
     ui->CTWizardPageInput->registerFields("qde_execution*", ui->qde_execution);
     ui->CTWizardPageInput->registerFields("qsb_execution*", ui->qsb_execution);
 
-//    ui->qgb_outcome_measures->test();
 
     connect(this->button(FinishButton), SIGNAL(clicked()),this, SLOT(accepted()));
 }
@@ -63,7 +62,7 @@ QStringList CTWizard::getInputData()
 {
     QStringList _data;
     _data << ui->qle_description->text();
-    _data << ui->ql_image->text();
+    _data << ui->qcb_image->currentText();
     _data << ui->qde_execution->date().toString("yyyy-MM-dd");
     _data << ui->qsb_execution->text();
     return _data;
@@ -77,8 +76,7 @@ void CTWizard::setInputData(QString description, QString execution_day,
     QDate date(QDate::fromString(execution_day,"yyyy-MM-dd"));
     ui->qde_execution->setDate(date);
     ui->qsb_execution->setValue(execution_order.toInt());
-    if(image_name != "")
-        ui->ql_image->setText(image_name);
+    ui->qcb_image->setCurrentIndex(ui->qcb_image->findText(image_name));
 }
 
 void CTWizard::setOutcomeMeasures(QString outcomeM)
@@ -104,19 +102,17 @@ void CTWizard::setOutcomeMeasures(QString outcomeM)
     }
 }
 
-void CTWizard::on_qbt_browse_clicked()
+void CTWizard::on_qcb_image_currentIndexChanged(const QString &arg1)
 {
-    QString name = QFileDialog::getOpenFileName(this, "Load scenario",
-                                                QDir::currentPath()+"/scenarios_manual",
-                                                tr("Images (*.png *.xpm *.jpg)"));
-    if (!name.isNull())
+    QImage image = QImage(":/manual/" + arg1);
+    if (image.isNull())
     {
-        ui->ql_image->setText(name);
-//        QFile *file = new QFile(name);
-//        if (file->open(QIODevice::ReadOnly))
-//        {
-//            QByteArray data = file->readAll();
-//            QString data_base64 = data.toBase64();
-//        }
+        ui->qle_image->clear();
+        ui->qle_image->setText("..preview of scenario document here");
     }
+    else
+    {
+        ui->qle_image->setPixmap(QPixmap::fromImage(image));
+    }
+    return;
 }

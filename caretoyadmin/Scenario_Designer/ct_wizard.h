@@ -25,8 +25,7 @@ public:
     
 private slots:
     void accepted();
-
-    void on_qbt_browse_clicked();
+    void on_qcb_image_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::CTWizard *ui;

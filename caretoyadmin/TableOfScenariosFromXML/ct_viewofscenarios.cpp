@@ -6,7 +6,7 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QVBoxLayout *mainLayout = new QVBoxLayout();
     this->setWindowTitle("CareToy Admin");
     this->setLayout(mainLayout);
-    this->setFixedSize(1000, 400);
+    this->setFixedSize(1200, 500);
 
     table = new QTableView();
 
@@ -18,7 +18,6 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
 
     /*activates selection of whole row*/
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
-
     table->setSortingEnabled(true);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
@@ -67,11 +66,11 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     xmlTable->setHeader(3,"Creation date");
     xmlTable->setHeader(4, "Last edited");
     xmlTable->setHeader(5, "Description");
-
+    xmlTable->setHeader(6, "Scenario's document");
 
     /*columns which are not wished to be viewd */
-    table->setColumnHidden(6, true); // xml_description hidden
-    table->setColumnHidden(7, true);
+    table->setColumnHidden(7, true); // xml_description hidden
+    table->setColumnHidden(8, true);
 
     /*
      *Signals are emitted if valid rows are selected from the table
