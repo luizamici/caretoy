@@ -82,6 +82,7 @@ void CTSslClientThread::sslErrors(const QList<QSslError> &errors)
 
 void CTSslClientThread::socketReadyRead()
 {
+    qDebug() << Q_FUNC_INFO;
     semaphore = true;
 
     readingSocket = true;

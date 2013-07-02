@@ -85,7 +85,7 @@ void CTScenariosAdmin::requestTable()
                                           << "execution_order"
                                           << "creation_date" << "last_edited"
                                           <<  "description" << "image_description"
-                                           << "xml_description" << "flag" ;
+                                           << "xml_description" << "flag" << "position_image" ;
 
     CTTableRecord rec = CTTableRecord();
     int i =0;

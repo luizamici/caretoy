@@ -13,7 +13,8 @@ CTWizard::CTWizard(QWidget *parent) :
     ui->CTWizardPageInput->registerFields("qle_description*", ui->qle_description);
     ui->CTWizardPageInput->registerFields("qde_execution*", ui->qde_execution);
     ui->CTWizardPageInput->registerFields("qsb_execution*", ui->qsb_execution);
-
+    ui->CTWizardPageInput->registerFields("qcb_image",ui->qcb_image);
+    ui->CTWizardPageInput->registerFields("qcb_image_position",ui->qcb_image_position);
 
     connect(this->button(FinishButton), SIGNAL(clicked()),this, SLOT(accepted()));
 }

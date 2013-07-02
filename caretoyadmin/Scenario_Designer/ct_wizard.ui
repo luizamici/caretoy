@@ -75,12 +75,22 @@
         </item>
         <item>
          <property name="text">
-          <string>scenario_02.png</string>
+          <string>Scenario6.png</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>scenario_03.png</string>
+          <string>Scenario11-1.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Scenario13-1.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Scenario18-3.png</string>
          </property>
         </item>
        </widget>
@@ -104,6 +114,31 @@
         <item>
          <property name="text">
           <string>Choose and image...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>prone_leftwall.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>prone_rightwall.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>prone_screenwall.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sitting.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>supine.png</string>
          </property>
         </item>
        </widget>
