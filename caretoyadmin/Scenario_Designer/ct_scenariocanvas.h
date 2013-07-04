@@ -51,7 +51,6 @@ public slots:
     void clear();
     void loadScenarioFromFile();
     void loadScenario(QHash<QString,QString> scenario);
-    void saveScenario(QString description, QString execution_day, QString execution_order);
     void saveScenario(QStringList data);
 
 signals:

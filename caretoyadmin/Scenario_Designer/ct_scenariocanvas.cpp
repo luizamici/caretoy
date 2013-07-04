@@ -232,9 +232,6 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
         dataStream >> name >> image >> config >> oldPositionIndex;
 
         CTSimpleBlock *block;
-//        if ("Stick" == name) { block = new CTSimpleBlock(CT_BLOCK_STICK, this); }
-//        else if ("Flower" == name) { block = new CTSimpleBlock(CT_BLOCK_FLOWER, this); }
-//        else if ("Ring" == name) { block = new CTSimpleBlock(CT_BLOCK_RING, this); }
         if ("Mickey" == name) { block = new CTSimpleBlock(CT_BLOCK_MICKEY, this); }
         else if ("UToy" == name) { block = new CTSimpleBlock(CT_BLOCK_U, this); }
         else if ("Left wall" == name) { block = new CTSimpleBlock(CT_BLOCK_WALL_LEFT, this); }
@@ -393,27 +390,6 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
         /*When a block is ending*/
         if(reader.isEndElement() && reader.name() == "block")
         {
-//            if ("stick" == block_name)
-//            {
-//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-//                new_block->enableConfig(true);
-//                new_block->setConfiguration(xml_conf);
-//                blocks.append(new_block);
-//            }
-//            else if ("flower" == block_name)
-//            {
-//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-//                new_block->enableConfig(true);
-//                new_block->setConfiguration(xml_conf);
-//                blocks.append(new_block);
-//            }
-//            else if ("ring" == block_name)
-//            {
-//                CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-//                new_block->enableConfig(true);
-//                new_block->setConfiguration(xml_conf);
-//                blocks.append(new_block);
-//            }
             if ("mickey" == block_name)
             {
                 CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
@@ -528,27 +504,6 @@ void CTScenarioCanvas::loadScenarioFromFile()
                 /*When a block is ending*/
                 if(reader.isEndElement() && reader.name() == "block")
                 {
-//                    if ("stick" == block_name)
-//                    {
-//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_STICK);
-//                        new_block->enableConfig(true);
-//                        new_block->setConfiguration(xml_conf);
-//                        blocks.append(new_block);
-//                    }
-//                    else if ("flower" == block_name)
-//                    {
-//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_FLOWER);
-//                        new_block->enableConfig(true);
-//                        new_block->setConfiguration(xml_conf);
-//                        blocks.append(new_block);
-//                    }
-//                    else if ("ring" == block_name)
-//                    {
-//                        CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_RING);
-//                        new_block->enableConfig(true);
-//                        new_block->setConfiguration(xml_conf);
-//                        blocks.append(new_block);
-//                    }
                     if ("mickey" == block_name)
                     {
                         CTSimpleBlock *new_block = new CTSimpleBlock(CT_BLOCK_MICKEY);
@@ -615,70 +570,6 @@ void CTScenarioCanvas::loadScenarioFromFile()
                 "Exit CTScenarioCanvas::loadScenarioFromFile .");
 }
 
-
-
-void CTScenarioCanvas::saveScenario(QString description,
-                                      QString execution_day,
-                                      QString execution_order)
-{
-    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Entering CTScenarioCanvas::saveScenario ...");
-    QHash<QString,QString> scenario;
-    if(!this->blocks.isEmpty())
-    {
-        QString xml_scenario;
-        QXmlStreamWriter stream(&xml_scenario);
-        stream.setAutoFormatting(true);
-        stream.setAutoFormattingIndent(2);
-        stream.writeStartDocument();
-        stream.writeStartElement("scenario_data");
-        stream.writeStartElement("blocks");
-        stream.writeAttribute("number", QString::number(this->blocks.count()));
-
-        for (int i = 0; i < this->blocks.count(); i++)
-        {
-            QString xml = this->blocks.at(i)->getConfiguration("Using sax parser");
-            if(xml.isEmpty())
-                Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->warn("CTScenarioCanvas::saveScenario() "
-                              " Found configuration empty for block :"
-                              + this->blocks.at(i)->getName());
-            QXmlStreamReader reader(xml);
-            while(!reader.atEnd())
-            {
-                reader.readNext();
-                if(reader.tokenType() != QXmlStreamReader::StartDocument)
-                    stream.writeCurrentToken(reader);
-                if(reader.isEndElement() && reader.name() == "block")
-                {
-                    break;
-                }
-            }
-        }
-        stream.writeEndElement();
-        stream.writeEndElement();
-        stream.writeEndDocument();
-
-        if(isNewScenario()){
-            scenario["creation_date"] = QDateTime::currentDateTime().
-                    toString("yyyy-MM-dd HH:mm");
-        }
-        else
-            scenario["creation_date"] = creation_date;
-
-        if(!isNewScenario()){
-            scenario["id"] = id_scenario;
-        }
-        scenario["xml_description"] = xml_scenario;
-        scenario["last_edited"] = QDateTime::currentDateTime().
-                toString("yyyy-MM-dd HH:mm");
-        scenario["execution_day"] = execution_day;
-        scenario["execution_order"] = execution_order;
-        scenario["description"] = description;
-        emit save(scenario);
-    }
-    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Exit CTScenarioCanvas::saveScenario .");
-}
 
 void CTScenarioCanvas::saveScenario(QStringList data)
 {
