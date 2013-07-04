@@ -1,4 +1,5 @@
 #include "ct_scenariocanvas.h"
+#include "ct_scenariodata.h"
 
 #define BLOCK_EDGE 130
 
@@ -11,12 +12,6 @@ CTScenarioCanvas::CTScenarioCanvas(QWidget *parent) : QWidget(parent)
     this->contentLayout = 0;
     this->blocks.clear();
 
-    id_scenario = "";
-    description = "";
-    creation_date = "";
-    execution_day = "";
-    execution_order = "";
-
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas's constructor. ");
 }
@@ -28,6 +23,9 @@ void CTScenarioCanvas::initialize()
                 "Entering CTScenarioCanvas::initialize ...");
     // Initialize/configure visual appearance
     this->setAcceptDrops(true);
+
+    //without this parameter the widget is visualized smaller the first time!
+    this->setMinimumWidth(890);
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(10);
@@ -77,9 +75,11 @@ void CTScenarioCanvas::updateBlockSequence()
                 "Entering CTScenarioCanvas::updateBlockSequence ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
+    qDebug() << Q_FUNC_INFO << this->width();
     for (int i = 0; i < this->blocks.count(); i++)
     {
         this->contentLayout->addWidget(this->blocks.at(i), i/numberOfColumns, i%numberOfColumns);
+        qDebug() << Q_FUNC_INFO << i/numberOfColumns << i%numberOfColumns;
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "CTScenarioCanvas::updateBlockSequence -> UPDATE: Number of blocks: "
@@ -309,43 +309,37 @@ void CTScenarioCanvas::resetScenario()
         CTSimpleBlock *tmp = this->blocks.takeFirst();
         delete tmp;
     }
+    CTScenarioData::instance().clearData();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::resetScenario .");
 }
 
 void CTScenarioCanvas::clear()
 {
-    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Entering CTScenarioCanvas::clear ...");
-    resetScenario();
-    id_scenario.clear();
-    description.clear();
-    creation_date.clear();
-    execution_day.clear();
-    execution_order.clear();
-    outcome_measures.clear();
-    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-                "Exit CTScenarioCanvas::clear .");
+//    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+//                "Entering CTScenarioCanvas::clear ...");
+
+////    CTScenarioData::instance().clearData();
+//    resetScenario();
+//    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
+//                "Exit CTScenarioCanvas::clear .");
 }
 
 /*Load selected scenario*/
-void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
+void CTScenarioCanvas::loadScenario()
 {
+    qDebug() << Q_FUNC_INFO << "init";
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Entering CTScenarioCanvas::loadScenario ...");
     /*clearing the canvas*/
-    if (!this->blocks.isEmpty()) { clear(); }
+    if (!this->blocks.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << this->blocks.count();
+        resetScenario(); }
 
-    /*getting the id_scenario for editing*/
-    id_scenario = scenario["id"];
-    description = scenario["description"];
-    creation_date = scenario["creation_date"];
-    execution_day = scenario["execution_day"];
-    execution_order = scenario["execution_order"];
-    image_description = scenario["image_description"];
+    titleChanged(CTScenarioData::instance().data()->description);
+    QString xml_description = CTScenarioData::instance().data()->xml_description;
 
-    titleChanged(description);
-    QXmlStreamReader reader(scenario["xml_description"]);
+    QXmlStreamReader reader(xml_description);
     QString xml_conf;
     QXmlStreamWriter stream(&xml_conf);
     stream.setAutoFormatting(true);
@@ -456,8 +450,9 @@ void CTScenarioCanvas::loadScenario(QHash<QString, QString> scenario)
             }
         }
 
-        if(reader.isEndElement() && reader.name() == "outcome_measures")
-            outcome_measures = xml_conf;
+        if(reader.isEndElement() && reader.name() == "outcome_measures"){
+            CTScenarioData::instance().data()->outcome_measures = xml_conf;
+        }
     }
     updateBlockSequence();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
@@ -570,8 +565,7 @@ void CTScenarioCanvas::loadScenarioFromFile()
                 "Exit CTScenarioCanvas::loadScenarioFromFile .");
 }
 
-
-void CTScenarioCanvas::saveScenario(QStringList data)
+void CTScenarioCanvas::saveScenario()
 {
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Entering CTScenarioCanvas::saveScenario ...");
@@ -608,7 +602,7 @@ void CTScenarioCanvas::saveScenario(QStringList data)
         }
         stream.writeEndElement(); //end blocks
 
-        QXmlStreamReader reader(data.at(4));
+        QXmlStreamReader reader(CTScenarioData::instance().data()->outcome_measures);
         while(!reader.atEnd())
         {
             reader.readNext();
@@ -627,54 +621,36 @@ void CTScenarioCanvas::saveScenario(QStringList data)
                     toString("yyyy-MM-dd HH:mm");
         }
         else
-            scenario["creation_date"] = creation_date;
+            scenario["creation_date"] = CTScenarioData::instance().data()->
+                    creation_date;
 
         if(!isNewScenario()){
-            scenario["id"] = id_scenario;
+            scenario["id"] = CTScenarioData::instance().data()->id;
         }
         scenario["xml_description"] = xml_scenario;
-        qDebug() << Q_FUNC_INFO << xml_scenario;
         scenario["last_edited"] = QDateTime::currentDateTime().
                 toString("yyyy-MM-dd HH:mm");
-        scenario["execution_day"] = data.at(2);
-        scenario["execution_order"] = data.at(3);
-        scenario["description"] = data.at(0);
-        scenario["image_description"] = data.at(1);
+
+        scenario["execution_day"] = CTScenarioData::instance().data()->
+                execution_day;
+        scenario["execution_order"] = CTScenarioData::instance().data()->
+                execution_order;
+        scenario["description"] = CTScenarioData::instance().data()->description;
+        scenario["image_description"] = CTScenarioData::instance().data()->
+                image_description;
+        scenario["position_image"] = CTScenarioData::instance().data()->position_image;
         emit save(scenario);
     }
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::saveScenario .");
+    qDebug() << Q_FUNC_INFO << "end";
 }
 
 bool CTScenarioCanvas::isNewScenario()
 {
-    if(id_scenario.isEmpty())
+    if(CTScenarioData::instance().data()->id.isEmpty())
         return true;
     else
         return false;
 }
 
-QString CTScenarioCanvas::getDescription()
-{
-    return this->description;
-}
-
-QString CTScenarioCanvas::getExecutionDay()
-{
-    return this->execution_day;
-}
-
-QString CTScenarioCanvas::getExecutionOrder()
-{
-    return this->execution_order;
-}
-
-QString CTScenarioCanvas::getOutcomeMeasures()
-{
-    return this->outcome_measures;
-}
-
-QString CTScenarioCanvas::getImageName()
-{
-    return this->image_description;
-}

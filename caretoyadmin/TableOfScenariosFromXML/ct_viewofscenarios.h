@@ -25,7 +25,7 @@ private:
     bool tableSelected;
 
 signals:
-    void editScenario(QHash<QString,QString> scenario);
+    void editScenario();
     void newScenario();
 
     void exec(QString parsedQuery);

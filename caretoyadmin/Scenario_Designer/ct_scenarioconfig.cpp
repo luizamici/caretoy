@@ -68,6 +68,8 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
                 resetScenario()));
     connect(qpbSaveToDB,SIGNAL(clicked()),this, SLOT(saveScenarioToDB()));
     connect(qpbCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(qpbCancel,SIGNAL(clicked()),scenarioCanvas,SLOT(resetScenario()));
+
     connect(qpbLoad, SIGNAL(clicked()),scenarioCanvas, SLOT(
                 loadScenarioFromFile()));
 
@@ -84,9 +86,15 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
                 "Layout of the scenario configuration widget ready.");
 }
 
-void CTScenarioConfig::openScenario(QHash<QString, QString> scenario)
+void CTScenarioConfig::closeEvent(QCloseEvent *ev)
 {
-    scenarioCanvas->loadScenario(scenario);
+    scenarioCanvas->resetScenario();
+    return;
+}
+
+void CTScenarioConfig::openScenario()
+{
+    scenarioCanvas->loadScenario();
 }
 
 void CTScenarioConfig::saveScenarioToDB()
@@ -94,16 +102,18 @@ void CTScenarioConfig::saveScenarioToDB()
     wizard = new CTWizard();
 
     connect(qpbCancel, SIGNAL(clicked()),wizard, SLOT(close()));
-    connect(wizard, SIGNAL(accepted(QStringList)), scenarioCanvas, SLOT(
-                saveScenario(QStringList)));
-    if(!scenarioCanvas->isNewScenario())
-    {
-        wizard->setInputData(scenarioCanvas->getDescription(),
-                             scenarioCanvas->getExecutionDay(),
-                             scenarioCanvas->getExecutionOrder(),
-                             scenarioCanvas->getImageName());
-        wizard->setOutcomeMeasures(scenarioCanvas->getOutcomeMeasures());
-    }
+    connect(wizard, SIGNAL(save()), scenarioCanvas, SLOT(
+                saveScenario()));
+//    if(!scenarioCanvas->isNewScenario())
+//    {
+//        wizard->setInputData(CTScenarioData::instance().data()->description,
+//                             CTScenarioData::instance().data()->execution_day,
+//                             CTScenarioData::instance().data()->execution_order,
+//                             CTScenarioData::instance().data()->image_description,
+//                             CTScenarioData::instance().data()->position_image);
+//        wizard->setOutcomeMeasures(CTScenarioData::instance().data()->outcome_measures);
+//    }
+    wizard->initialize(scenarioCanvas->isNewScenario());
 
     Qt::WindowFlags flags = wizard->windowFlags();
     flags ^= Qt::WindowStaysOnTopHint;

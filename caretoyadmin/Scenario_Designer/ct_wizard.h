@@ -19,8 +19,11 @@ public:
     explicit CTWizard(QWidget *parent = 0);
     ~CTWizard();
 
+    void initialize(bool newScenario);
+
+
     void setInputData(QString description, QString execution_day,
-                                QString execution_order, QString image_name);
+                                QString execution_order, QString image_name, QString position_image);
     void setOutcomeMeasures(QString outcomeM);
     
 private slots:
@@ -32,9 +35,10 @@ private:
 
     QString getOutcomeMeasures();
     QStringList getInputData();
+    void saveData();
 
 signals:
-    void accepted(QStringList data);
+    void save();
 };
 
 

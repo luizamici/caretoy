@@ -20,11 +20,13 @@ private:
     CTWizard *wizard;
     QPushButton *qpbCancel;
 
+    void closeEvent(QCloseEvent * ev);
+
 private slots:
     void saveScenarioToDB();
 
 public slots:
-    void openScenario(QHash<QString, QString> scenario);
+    void openScenario();
 
 };
 

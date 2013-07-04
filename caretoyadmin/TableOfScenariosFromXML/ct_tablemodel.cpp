@@ -1,6 +1,7 @@
 #include "ct_tablemodel.h"
 #include "ct_queryparser.h"
 #include "ct_tabledata.h"
+#include "ct_scenariodata.h"
 
 
 CTTableModel::CTTableModel(CTTableData* table_data, QObject *parent)
@@ -159,14 +160,17 @@ bool CTTableModel::deleteRowFromTable(const CTTableRecord &rec)
     return true;
 }
 
-QHash<QString,QString> CTTableModel::record(const QModelIndex &index)
+void CTTableModel::record(const QModelIndex &index)
 {
     if (!index.isValid())
-        return QHash<QString,QString>();
+        return;
+//        return QHash<QString,QString>();
 
     if (index.row() >= rowCount() || index.row() < 0)
-        return QHash<QString,QString>();
-    return map_to_hash(p_table_data->getRecord(index.row()));
+        return;
+//        return QHash<QString,QString>();
+    exportData(p_table_data->getRecord(index.row()));
+//    return map_to_hash(p_table_data->getRecord(index.row()));
 }
 
 void CTTableModel::copyRecord(const QModelIndex &i)
@@ -275,3 +279,18 @@ CTTableRecord CTTableModel::map_from_hash(QHash<QString,QString> &scenario)
     return rec;
 }
 /*************************************************************/
+
+void CTTableModel::exportData(const CTTableRecord &rec)
+{
+    qDebug() << Q_FUNC_INFO;
+    CTScenarioData::instance().data()->id = rec.value("id");
+    CTScenarioData::instance().data()->xml_description = rec.value("xml_description");
+    CTScenarioData::instance().data()->creation_date = rec.value("creation_date");
+    CTScenarioData::instance().data()->execution_day = rec.value("execution_day");
+    CTScenarioData::instance().data()->execution_order = rec.value("execution_order");
+    CTScenarioData::instance().data()->description = rec.value("description");
+    CTScenarioData::instance().data()->image_description = rec.value("image_description");
+    CTScenarioData::instance().data()->position_image = rec.value("position_image");
+    return;
+}
+

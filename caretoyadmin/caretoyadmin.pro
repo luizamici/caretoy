@@ -73,7 +73,8 @@ HEADERS += \
     Scenario_Designer/ct_wizard.h \
     Scenario_Designer/ct_wizardpage.h \
     Scenario_Designer/ct_conftoylring.h \
-    Scenario_Designer/ct_conftoysring.h
+    Scenario_Designer/ct_conftoysring.h \
+    ct_scenariodata.h
 
 FORMS += \
     Scenario_Designer/ct_conftoymickey.ui \

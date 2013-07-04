@@ -28,7 +28,7 @@ public:
                  int role=Qt::EditRole);
 
 
-    QHash<QString,QString> record(const QModelIndex &index);
+    void record(const QModelIndex &index);
 
     void setHeader(int section,const QVariant &value);
     void copyRecord(const QModelIndex &i);
@@ -45,6 +45,9 @@ private:
 
     QHash<QString,QString> map_to_hash(const CTTableRecord &rec);
     CTTableRecord map_from_hash(QHash<QString,QString> &scenario);
+
+    void exportData(const CTTableRecord &rec);
+
     QModelIndex getIndex(QString id);
     QVector<QVariant> *headerDt;
 

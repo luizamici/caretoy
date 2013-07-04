@@ -17,11 +17,9 @@ void CTScenariosAdmin::initialize()
                 execParsedQuery(QString,QString)));
 
     /*Connections between viewOfScenarios and the scenario designer*/
-    connect(view,SIGNAL(editScenario(QHash<QString,QString>)),config, SLOT(show()));
-    connect(view, SIGNAL(editScenario(QHash<QString,QString>)),
-            config,SLOT(openScenario(QHash<QString,QString>)));
-    connect(view, SIGNAL(editScenario(QHash<QString,QString>)), config,
-            SLOT(show()));
+//    connect(view,SIGNAL(editScenario(QHash<QString,QString>)),config, SLOT(show()));
+    connect(view, SIGNAL(editScenario()), config,SLOT(openScenario()));
+    connect(view, SIGNAL(editScenario()), config,SLOT(show()));
 
     connect(view, SIGNAL(newScenario()), config, SLOT(show()));
     connect(view, SIGNAL(newScenario()), config->scenarioCanvas,

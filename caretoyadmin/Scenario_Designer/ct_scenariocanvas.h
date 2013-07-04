@@ -16,12 +16,6 @@ public:
     explicit CTScenarioCanvas(QWidget *parent = 0);
     void initialize();
     bool isNewScenario();
-    QString getDescription();
-    QString getExecutionDay();
-    QString getExecutionOrder();
-    QString getOutcomeMeasures();
-    QString getImageName();
-
 
 private:
     QPoint dragStartPosition;
@@ -30,14 +24,7 @@ private:
     int getPositionIndex(QPoint eventPos, bool dropIndex);
     void updateBlockSequence();
 
-
-    QString id_scenario;
-    QString description;
-    QString creation_date;
-    QString execution_day;
-    QString execution_order;
     QString outcome_measures;
-    QString image_description;
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -50,8 +37,8 @@ public slots:
     void resetScenario();
     void clear();
     void loadScenarioFromFile();
-    void loadScenario(QHash<QString,QString> scenario);
-    void saveScenario(QStringList data);
+    void loadScenario();
+    void saveScenario();
 
 signals:
     void save(QHash<QString,QString> scenario);

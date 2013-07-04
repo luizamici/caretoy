@@ -1,4 +1,5 @@
 #include "ct_viewofscenarios.h"
+#include "ct_scenariodata.h"
 
 CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QWidget(parent)
@@ -71,6 +72,7 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     /*columns which are not wished to be viewd */
     table->setColumnHidden(7, true); // xml_description hidden
     table->setColumnHidden(8, true);
+    table->setColumnHidden(9,true);
 
     /*
      *Signals are emitted if valid rows are selected from the table
@@ -91,7 +93,11 @@ void CTViewOfScenarios::tableSelectionChanged(const QItemSelection &selected,
 void CTViewOfScenarios::on_edit_clicked()
 {
     if(tableSelected)
-        editScenario(getSelected());
+    {
+        QModelIndex index = filterModel->mapToSource(table->currentIndex());
+        xmlTable->record(index);
+        editScenario();
+    }
 }
 
 void CTViewOfScenarios::on_add_clicked()
@@ -120,8 +126,8 @@ void CTViewOfScenarios::on_remove_clicked()
 
 QHash<QString,QString> CTViewOfScenarios::getSelected()
 {
-    QModelIndex index = filterModel->mapToSource(table->currentIndex());
-    return xmlTable->record(index);
+//    QModelIndex index = filterModel->mapToSource(table->currentIndex());
+//    return xmlTable->record(index);
 }
 
 
