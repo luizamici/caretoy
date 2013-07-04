@@ -29,40 +29,11 @@ void CTScenariosAdmin::initialize()
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
                     view,SLOT(save(QHash<QString,QString>)));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
-            this, SLOT(storeImage(QHash<QString,QString>)));
-    connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
                     config,SLOT(close()));
     view->statusBar->showMessage("Connection to server established ", 5000);
     requestTable();
 }
 
-
-void CTScenariosAdmin::storeImage(QHash<QString, QString> scenario)
-{
-
-//    QString statement;
-//    QXmlStreamWriter stream(&statement);
-//    stream.setAutoFormatting(true);
-
-//    stream.writeStartElement("insert_image");
-//    stream.writeStartElement("id_scenario");
-//    stream.writeCharacters(scenario["id"]);
-//    stream.writeEndElement();// end id_scenario
-//    stream.writeStartElement("scenario_image");
-//    QString data_base64;
-//    QFile *file = new QFile(scenario["image_description"]);
-//    if (file->open(QIODevice::ReadOnly))
-//    {
-//        QByteArray data = file->readAll();
-//        data_base64 = data.toBase64();
-//    }
-//    stream.writeCharacters(data_base64);
-//    stream.writeEndElement();// end scenario_image
-//    stream.writeEndElement();//end insert_image
-//    qDebug() << statement;
-//    if(!data_base64.isEmpty())
-//        requestToWriteIntoSocket(statement, CT_DBSDATA);
-}
 
 void CTScenariosAdmin::execParsedQuery(QString initStmt, QString whereStmt)
 {

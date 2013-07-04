@@ -32,8 +32,6 @@ public slots:
     void execParsedQuery(QString initStmt, QString whereStmt);
     void proccessData(QByteArray table_data);
 
-private slots:
-    void storeImage(QHash<QString,QString> scenario);
 
 };
 

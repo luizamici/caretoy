@@ -203,7 +203,6 @@ void CTTableModel::deleteRecord(const QModelIndex &index)
 
 void CTTableModel::save(QHash<QString,QString> record)
 {
-    qDebug() << Q_FUNC_INFO << record;
     CTTableRecord rec = map_from_hash(record);
 
     /*Check if new record, case of empty id field*/

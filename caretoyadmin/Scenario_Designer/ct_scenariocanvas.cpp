@@ -608,7 +608,7 @@ void CTScenarioCanvas::saveScenario(QStringList data)
         }
         stream.writeEndElement(); //end blocks
 
-        QXmlStreamReader reader(data.at(3));
+        QXmlStreamReader reader(data.at(4));
         while(!reader.atEnd())
         {
             reader.readNext();
@@ -633,6 +633,7 @@ void CTScenarioCanvas::saveScenario(QStringList data)
             scenario["id"] = id_scenario;
         }
         scenario["xml_description"] = xml_scenario;
+        qDebug() << Q_FUNC_INFO << xml_scenario;
         scenario["last_edited"] = QDateTime::currentDateTime().
                 toString("yyyy-MM-dd HH:mm");
         scenario["execution_day"] = data.at(2);
