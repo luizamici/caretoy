@@ -469,7 +469,6 @@ bool CTXmlHandler::characters(const QString& ch)
     else if(elementName.contains("feedback") && elementName.contains("event")
             && elementName.contains("condition"))
     {
-        qDebug() << "CTXmlHandler::characters ";
         if("null" == event_name)
         {
            qrb_null_event->setChecked(true);

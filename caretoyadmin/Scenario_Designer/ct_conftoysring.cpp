@@ -294,8 +294,6 @@ QString CTConfToySRing::getParameters(QString value){
     stream.writeEndElement(); //end actions
     stream.writeEndElement(); //end feedback
     stream.writeEndElement(); // end block
-
-    qDebug()<< parameters;
     return parameters;
 }
 

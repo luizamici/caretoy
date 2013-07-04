@@ -63,8 +63,6 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         stream.writeAttribute("number", QString::number(row.count()));
         for(int i = 0; i< row.count(); i++)
         {
-            qDebug() << Q_FUNC_INFO << row.field(i).name();
-            qDebug() << Q_FUNC_INFO << row.field(i).defaultValue();
             if(row.field(i).defaultValue().isEmpty())
             {
                 stream.writeStartElement("field");
@@ -118,8 +116,6 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
 /*Wraps the initStms and the whereStmt into one xml query statement*/
 QString CTQueryParser::prepareQuery(QString initStmt, QString whereStmt)
 {
-    qDebug() << initStmt;
-    qDebug() << whereStmt;
     QByteArray arr;
     arr.append(initStmt);
     if(!whereStmt.trimmed().isEmpty())

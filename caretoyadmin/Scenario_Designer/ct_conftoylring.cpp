@@ -110,7 +110,6 @@ QString CTConfToyLRing::getComment()
  */
 bool CTConfToyLRing::setParameters(QString xml)
 {
-    qDebug() << Q_FUNC_INFO << xml;
     int num_stimuli = NUM_LIGHTS + NUM_SPEAKERS;
     int num_actions = NUM_LIGHTS + NUM_SPEAKERS;
 
@@ -309,7 +308,6 @@ QString CTConfToyLRing::getParameters(QString value){
     stream.writeEndElement(); //end feedback
     stream.writeEndElement(); // end block
 
-    qDebug()<< parameters;
     return parameters;
 }
 

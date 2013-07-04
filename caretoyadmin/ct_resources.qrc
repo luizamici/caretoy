@@ -15,10 +15,10 @@
         <file>images/logo.png</file>
     </qresource>
     <qresource prefix="/manual">
-        <file alias="scenario_01.png">scenarios_manual/scenarios_image_documents/scenario_01_scaled.png</file>
-        <file alias="Scenario6.png">scenarios_manual/scenarios_image_documents/Scenario6_scaled.png</file>
-        <file alias="Scenario11-1.png">scenarios_manual/scenarios_image_documents/Scenario11-1_scaled.png</file>
-        <file alias="Scenario13-1.png">scenarios_manual/scenarios_image_documents/Scenario13-1_scaled.png</file>
-        <file alias="Scenario18-3.png">scenarios_manual/scenarios_image_documents/Scenario18-3_scaled.png</file>
+        <file alias="scenario_01.png">scenario_manual/scenario_01_scaled.png</file>
+        <file alias="Scenario6.png">scenario_manual/Scenario6_scaled.png</file>
+        <file alias="Scenario11-1.png">scenario_manual/Scenario11-1_scaled.png</file>
+        <file alias="Scenario13-1.png">scenario_manual/Scenario13-1_scaled.png</file>
+        <file alias="Scenario18-3.png">scenario_manual/Scenario18-3_scaled.png</file>
     </qresource>
 </RCC>

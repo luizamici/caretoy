@@ -82,7 +82,6 @@ void CTSslClientThread::sslErrors(const QList<QSslError> &errors)
 
 void CTSslClientThread::socketReadyRead()
 {
-    qDebug() << Q_FUNC_INFO;
     semaphore = true;
 
     readingSocket = true;
@@ -159,8 +158,6 @@ bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
                                         const quint32 &type)
 {
     semaphore = true;
-
-    qDebug() << Q_FUNC_INFO << parsedQuery;
     QByteArray out;
     out.append(parsedQuery);
     // Write data type
@@ -187,7 +184,6 @@ bool CTSslClientThread::writeIntoSocket(const QString &parsedQuery,
 
 void CTSslClientThread::requestTable(const QString &parsedQuery, const quint32 &type)
 {
-    qDebug() << Q_FUNC_INFO << parsedQuery;
     waitForTable = true;
     _tableRequest = parsedQuery;
     writeIntoSocket(parsedQuery, type);

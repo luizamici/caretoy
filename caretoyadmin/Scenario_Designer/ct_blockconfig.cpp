@@ -27,23 +27,6 @@ void CTBlockConfig::showParameters(int id, QString xml)
     this->id = id;
 
     switch (id) {
-//    case CT_BLOCK_FLOWER:
-//    {
-//        CTConfToyFlower *config = new CTConfToyFlower();
-//        ui->qsa_config->setWidget(config);
-//        if (!xml.isEmpty()) {
-//            if(!config->setParameters(xml))
-//               Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                            "CTBlockConfig::showParameters -> flower block"
-//                            "parameters not set ");
-//        }
-//        else
-//        {
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                         "CTBlockConfig::showParameters -> empty parameters passed to flower block");
-//        }
-//        break;
-//    }
     case CT_BLOCK_MICKEY:
     {
         CTConfToyMickey *config = new CTConfToyMickey();
@@ -61,40 +44,6 @@ void CTBlockConfig::showParameters(int id, QString xml)
         }
         break;
     }
-//    case CT_BLOCK_RING:
-//    {
-//        CTConfToyRing *config = new CTConfToyRing();
-//        ui->qsa_config->setWidget(config);
-//        if(!xml.isEmpty())
-//        {
-//            if(!config->setParameters(xml))
-//                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                             "CTBlockConfig::showParameters -> ring block parameters not set ");
-//        }
-//        else
-//        {
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                         "CTBlockConfig::showParameters -> empty parameters passed to ring block");
-//        }
-//        break;
-//    }
-//    case CT_BLOCK_STICK:
-//    {
-//        CTConfToyStick *config = new CTConfToyStick();
-//        ui->qsa_config->setWidget(config);
-//        if(!xml.isEmpty())
-//        {
-//            if(!config->setParameters(xml))
-//                Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                             "CTBlockConfig::showParameters -> stick block parameters not set ");
-//        }
-//        else
-//        {
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                         "CTBlockConfig::showParameters -> empty parameters passed to stick block");
-//        }
-//        break;
-//    }
     case CT_BLOCK_U:
     {
         CTConfToyU *config = new CTConfToyU();
@@ -227,33 +176,6 @@ void CTBlockConfig::resetConfig()
     Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
                 "Entering CTBlockConfig::resetConfig ... ");
     switch (id) {
-//    case CT_BLOCK_STICK:
-//    {
-//        delete ui->qsa_config->widget();
-//        CTConfToyStick *config = new CTConfToyStick();
-//        ui->qsa_config->setWidget(config);
-//        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
-//                    "CTBlockConfig::resetConfig resetting stick block. ");
-//        break;
-//    }
-//    case CT_BLOCK_RING:
-//    {
-//        delete ui->qsa_config->widget();
-//        CTConfToyRing *config = new CTConfToyRing();
-//        ui->qsa_config->setWidget(config);
-//        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
-//                    "CTBlockConfig::resetConfig resetting ring block. ");
-//        break;
-//    }
-//    case CT_BLOCK_FLOWER:
-//    {
-//        delete ui->qsa_config->widget();
-//        CTConfToyFlower *config = new CTConfToyFlower();
-//        ui->qsa_config->setWidget(config);
-//        Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
-//                    "CTBlockConfig::resetConfig resetting flower block. ");
-//        break;
-//    }
     case CT_BLOCK_MICKEY:
     {
         delete ui->qsa_config->widget();
@@ -338,36 +260,6 @@ void CTBlockConfig::saveConfiguration()
     Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->info(
                 "Entering CTBlockConfig::saveConfiguration ... ");
     switch (id) {
-//    case CT_BLOCK_STICK:
-//    {
-//        CTConfToyStick *config = (CTConfToyStick *) ui->qsa_config->widget();
-//        QString parameters = config->getParameters("QXmlStreamWriter");
-//        if(parameters.isEmpty())
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                        "CTBlockConfig::saveConfiguration got parameters from Stick block empty! ");
-//        emit finishedConfig(parameters);
-//        break;
-//    }
-//    case CT_BLOCK_RING:
-//    {
-//        CTConfToyRing *config = (CTConfToyRing *) ui->qsa_config->widget();
-//        QString parameters = config->getParameters("QXmlStreamWriter");
-//        if(parameters.isEmpty())
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                        "CTBlockConfig::saveConfiguration got parameters from ring block empty! ");
-//        emit finishedConfig(parameters);
-//        break;
-//    }
-//    case CT_BLOCK_FLOWER:
-//    {
-//        CTConfToyFlower *config = (CTConfToyFlower *) ui->qsa_config->widget();
-//        QString parameters = config->getParameters("QXmlStreamWriter");
-//        if(parameters.isEmpty())
-//            Log4Qt::Logger::logger(QLatin1String("CTBlockConfig"))->warn(
-//                        "CTBlockConfig::saveConfiguration got parameters from flower block empty! ");
-//        emit finishedConfig(parameters);
-//        break;
-//    }
     case CT_BLOCK_MICKEY:
     {
         CTConfToyMickey *config = (CTConfToyMickey *) ui->qsa_config->widget();

@@ -49,7 +49,6 @@ void CTAdmin::authenticate(QString username, QString psswd)
 void CTAdmin::processXML(QByteArray data)
 {
     QXmlStreamReader reader(data);
-    qDebug() << data;
     while (!reader.atEnd())
     {
         reader.readNext();
@@ -67,7 +66,6 @@ void CTAdmin::processXML(QByteArray data)
                 }
                 else if("failure" == type)
                 {
-                    qDebug() << attr.value("user_id").toString();
                     dialog->showMessage("Username or Password incorrect");
                 }
             }
