@@ -37,6 +37,7 @@ void CTWizard::initialize(bool newScenario)
         ui->qcb_image_position->setCurrentIndex(ui->qcb_image_position->
                                                 findText(CTScenarioData::instance().
                                                          data()->position_image));
+        setOutcomeMeasures(CTScenarioData::instance().data()->outcome_measures);
     }
 }
 
