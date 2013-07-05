@@ -104,17 +104,7 @@ void CTScenarioConfig::saveScenarioToDB()
     connect(qpbCancel, SIGNAL(clicked()),wizard, SLOT(close()));
     connect(wizard, SIGNAL(save()), scenarioCanvas, SLOT(
                 saveScenario()));
-//    if(!scenarioCanvas->isNewScenario())
-//    {
-//        wizard->setInputData(CTScenarioData::instance().data()->description,
-//                             CTScenarioData::instance().data()->execution_day,
-//                             CTScenarioData::instance().data()->execution_order,
-//                             CTScenarioData::instance().data()->image_description,
-//                             CTScenarioData::instance().data()->position_image);
-//        wizard->setOutcomeMeasures(CTScenarioData::instance().data()->outcome_measures);
-//    }
     wizard->initialize(scenarioCanvas->isNewScenario());
-
     Qt::WindowFlags flags = wizard->windowFlags();
     flags ^= Qt::WindowStaysOnTopHint;
     wizard->setWindowFlags( flags );

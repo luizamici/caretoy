@@ -20,6 +20,7 @@ CTWizard::CTWizard(QWidget *parent) :
     connect(this->button(FinishButton), SIGNAL(clicked()),this, SLOT(accepted()));
 }
 
+
 void CTWizard::initialize(bool newScenario)
 {
     if(!newScenario)
@@ -48,14 +49,11 @@ CTWizard::~CTWizard()
 }
 
 /*!
-  If dialog accepted emit signal containing inputData and Outcome measures
+  If dialog accepted emit signal save()
   */
 void CTWizard::accepted()
 {
-//    QStringList _out;
     saveData();
-//    _out << getInputData() << getOutcomeMeasures();
-
     emit save();
 }
 
@@ -81,32 +79,6 @@ QString CTWizard::getOutcomeMeasures()
     return outcomeMeasures;
 }
 
-/*!
-  Return the input data as a QStringList
-  */
-QStringList CTWizard::getInputData()
-{
-    QStringList _data;
-//    _data << ui->qle_description->text();
-//    _data << ui->qcb_image->currentText();
-//    _data << ui->qde_execution->date().toString("yyyy-MM-dd");
-//    _data << ui->qsb_execution->text();
-//    _data << ui->qcb_image_position->currentText();
-    return _data;
-}
-
-
-void CTWizard::setInputData(QString description, QString execution_day,
-                            QString execution_order, QString image_name,
-                            QString position_image)
-{
-    ui->qle_description->setText(description);
-    QDate date(QDate::fromString(execution_day,"yyyy-MM-dd"));
-    ui->qde_execution->setDate(date);
-    ui->qsb_execution->setValue(execution_order.toInt());
-    ui->qcb_image->setCurrentIndex(ui->qcb_image->findText(image_name));
-    ui->qcb_image_position->setCurrentIndex(ui->qcb_image_position->findText(position_image));
-}
 
 void CTWizard::setOutcomeMeasures(QString outcomeM)
 {

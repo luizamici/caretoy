@@ -20,10 +20,6 @@ public:
     ~CTWizard();
 
     void initialize(bool newScenario);
-
-
-    void setInputData(QString description, QString execution_day,
-                                QString execution_order, QString image_name, QString position_image);
     void setOutcomeMeasures(QString outcomeM);
     
 private slots:
@@ -34,7 +30,6 @@ private:
     Ui::CTWizard *ui;
 
     QString getOutcomeMeasures();
-    QStringList getInputData();
     void saveData();
 
 signals:
