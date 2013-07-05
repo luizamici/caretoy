@@ -22,8 +22,8 @@ void CTScenariosAdmin::initialize()
     connect(view, SIGNAL(editScenario()), config,SLOT(show()));
 
     connect(view, SIGNAL(newScenario()), config, SLOT(show()));
-    connect(view, SIGNAL(newScenario()), config->scenarioCanvas,
-            SLOT(clear()));
+//    connect(view, SIGNAL(newScenario()), config->scenarioCanvas,
+//            SLOT(clear()));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),
                     view,SLOT(save(QHash<QString,QString>)));
     connect(config->scenarioCanvas,SIGNAL(save(QHash<QString,QString>)),

@@ -75,12 +75,12 @@ void CTScenarioCanvas::updateBlockSequence()
                 "Entering CTScenarioCanvas::updateBlockSequence ...");
     int cellEdge = BLOCK_EDGE + 10;
     int numberOfColumns = this->width() / cellEdge;
-    qDebug() << Q_FUNC_INFO << this->width();
     for (int i = 0; i < this->blocks.count(); i++)
     {
         this->contentLayout->addWidget(this->blocks.at(i), i/numberOfColumns, i%numberOfColumns);
-        qDebug() << Q_FUNC_INFO << i/numberOfColumns << i%numberOfColumns;
+        connect(this->blocks.at(i),SIGNAL(updateRuntime(QString)),this, SLOT(calculateRuntime()));
     }
+    calculateRuntime();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "CTScenarioCanvas::updateBlockSequence -> UPDATE: Number of blocks: "
                 + this->blocks.count());
@@ -298,6 +298,18 @@ void CTScenarioCanvas::dropEvent(QDropEvent *event)
     else { event->ignore(); }
 }
 
+void CTScenarioCanvas::calculateRuntime()
+{
+    double tot_runtime = 0.0;
+    for (int var = 0; var < this->blocks.count(); ++var) {
+        double runtime = this->blocks.at(var)->getRuntime();
+        tot_runtime += runtime;
+    }
+    qDebug() << Q_FUNC_INFO << tot_runtime;
+    emit updateRuntime(tot_runtime);
+}
+
+
 // Clear the scenario sequence.
 void CTScenarioCanvas::resetScenario()
 {
@@ -310,20 +322,11 @@ void CTScenarioCanvas::resetScenario()
         delete tmp;
     }
     CTScenarioData::instance().clearData();
+    calculateRuntime();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::resetScenario .");
 }
 
-void CTScenarioCanvas::clear()
-{
-//    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-//                "Entering CTScenarioCanvas::clear ...");
-
-////    CTScenarioData::instance().clearData();
-//    resetScenario();
-//    Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
-//                "Exit CTScenarioCanvas::clear .");
-}
 
 /*Load selected scenario*/
 void CTScenarioCanvas::loadScenario()

@@ -14,6 +14,21 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
     layout->setSpacing(10);
     this->setLayout(layout);
 
+    QHBoxLayout *runtimeLayout = new QHBoxLayout();
+    runtimeLayout->setMargin(0);
+    runtimeLayout->setSpacing(10);
+    layout->addLayout(runtimeLayout);
+
+    QLabel *label = new QLabel(tr("Total runtime of the scenario: "));
+    runtimeLayout->addWidget(label);
+    QLabel *label2 = new QLabel(tr("second(s)"));
+
+    runtime = new QLCDNumber();
+    runtime->setSegmentStyle(QLCDNumber::Flat);
+    runtimeLayout->addWidget(runtime);
+    runtimeLayout->addWidget(label2);
+    runtimeLayout->addStretch();
+
     QHBoxLayout *scenarioLayout = new QHBoxLayout();
     scenarioLayout->setMargin(0);
     scenarioLayout->setSpacing(10);
@@ -77,6 +92,9 @@ CTScenarioConfig::CTScenarioConfig(QWidget *parent) : QWidget(parent)
                 setWindowTitle(QString)));
     connect(this, SIGNAL(destroyed()),scenarioCanvas,SIGNAL(destroyed()));
 
+    connect(scenarioCanvas,SIGNAL(updateRuntime(double)),this, SLOT(
+                setRuntime(double)));
+
     // Center the widget on the screen
     QRect desktop = QApplication::desktop()->availableGeometry();
     this->move(desktop.width()/2 - this->width()/2, desktop.height()/2 -
@@ -113,3 +131,7 @@ void CTScenarioConfig::saveScenarioToDB()
     wizard->activateWindow();
 }
 
+void CTScenarioConfig::setRuntime(double total_runtime)
+{
+    this->runtime->display(total_runtime);
+}

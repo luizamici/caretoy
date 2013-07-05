@@ -35,14 +35,15 @@ protected:
 
 public slots:
     void resetScenario();
-    void clear();
     void loadScenarioFromFile();
     void loadScenario();
     void saveScenario();
+    void calculateRuntime();
 
 signals:
     void save(QHash<QString,QString> scenario);
     void titleChanged(QString newTitle);
+    void updateRuntime(double tot_runtime);
 };
 
 #endif // CT_SCENARIOCANVAS_H

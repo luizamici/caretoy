@@ -19,6 +19,7 @@ public:
 private:
     CTWizard *wizard;
     QPushButton *qpbCancel;
+    QLCDNumber *runtime;
 
     void closeEvent(QCloseEvent * ev);
 
@@ -27,6 +28,7 @@ private slots:
 
 public slots:
     void openScenario();
+    void setRuntime(double total_runtime);
 
 };
 

@@ -20,7 +20,6 @@ CTWizard::CTWizard(QWidget *parent) :
     connect(this->button(FinishButton), SIGNAL(clicked()),this, SLOT(accepted()));
 }
 
-
 void CTWizard::initialize(bool newScenario)
 {
     if(!newScenario)

@@ -88,6 +88,7 @@ void CTSimpleBlock::setConfigurations(QString xml,QString comment)
         Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->warn(
                     "CTSimpleBlock::setConfiguration -> setting empty configuration!");
     xml_config = xml;
+    emit updateRuntime(xml_config);
     if(comment.trimmed() == "")
         setToolTip("No description for this block");
     else
@@ -105,6 +106,38 @@ QString CTSimpleBlock::getConfiguration(QString str)
     Log4Qt::Logger::logger(QLatin1String("CTSimpleBlock"))->info(
                 "Exit CTSimpleBlock::getConfiguration . ");
     return xml_config;
+}
+
+double CTSimpleBlock::getRuntime()
+{
+    double tot_runtime = 0.0;
+    double _duration = 0.0;
+    int _rep = 0;
+    bool readDuration = false;
+    bool readRep = false;
+
+    QXmlStreamReader reader(xml_config);
+    while(!reader.atEnd())
+    {
+        reader.readNext();
+        if(reader.isStartElement() && reader.name() == "duration")
+            readDuration = true;
+        if(reader.isEndElement() && reader.name() == "duration")
+            readDuration = false;
+        if(reader.isStartElement() && reader.name() == "repetitions")
+            readRep = true;
+        if(reader.isEndElement() && reader.name() == "repetitions")
+            readRep = false;
+        if(reader.isCharacters() && !reader.text().toString().trimmed().isEmpty()
+                && readDuration)
+            _duration = reader.text().toString().toDouble();
+        if(reader.isCharacters() && !reader.text().toString().trimmed().isEmpty()
+                && readRep)
+            _rep = reader.text().toString().toInt();
+        if(reader.isEndElement() && reader.name() == "runtime")
+            tot_runtime += (_duration * _rep);
+    }
+    return tot_runtime;
 }
 
 

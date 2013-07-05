@@ -17,6 +17,7 @@ public:
     QString getName();
     QPixmap getImage();
     QString getConfiguration(QString str);
+    double getRuntime();
     void enableConfig(bool value);
 
     void setToolTip(const QString &toolTip);
@@ -34,6 +35,9 @@ protected:
 public slots:
     void setConfiguration(QString xml);
     void setConfigurations(QString xml, QString comment);
+
+signals:
+    void updateRuntime(QString xml_description);
 };
 
 #endif // CT_SIMPLEBLOCK_H
