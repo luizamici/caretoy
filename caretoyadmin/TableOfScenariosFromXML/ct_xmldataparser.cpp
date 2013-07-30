@@ -7,6 +7,7 @@ CTXmlDataParser::CTXmlDataParser()
 
 CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
 {
+    qDebug() << table_data;
     bool tableEmpty = true;
     QXmlStreamReader reader(table_data);
     CTTableData *tableData;

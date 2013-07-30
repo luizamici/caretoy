@@ -185,7 +185,7 @@ void CTTableModel::copyRecord(const QModelIndex &i)
         _indexTo = index(rowCount() - 1, column, QModelIndex());
         if(rec.value("id") != rec.field("id").type())
             rec.setValue("id", rec.field("id").type());
-        if(column == 5)
+        if(column == 3)
         {
             setData(_indexTo, data(_indexFrom).toString() + "(copy)");
             rec.setValue(column,data(_indexFrom).toString() + "(copy)");
@@ -286,7 +286,7 @@ void CTTableModel::exportData(const CTTableRecord &rec)
     CTScenarioData::instance().data()->id = rec.value("id");
     CTScenarioData::instance().data()->xml_description = rec.value("xml_description");
     CTScenarioData::instance().data()->creation_date = rec.value("creation_date");
-    CTScenarioData::instance().data()->execution_day = rec.value("execution_day");
+    CTScenarioData::instance().data()->training_day = rec.value("training_day");
     CTScenarioData::instance().data()->execution_order = rec.value("execution_order");
     CTScenarioData::instance().data()->description = rec.value("description");
     CTScenarioData::instance().data()->image_description = rec.value("image_description");

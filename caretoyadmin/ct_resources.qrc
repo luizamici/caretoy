@@ -6,19 +6,22 @@
         <file>images/ct_trash.png</file>
         <file>images/arch2.png</file>
         <file>images/flower.png</file>
-        <file>images/mickey.png</file>
         <file>images/ring.png</file>
         <file>images/screen_wall.png</file>
         <file>images/stick.png</file>
-        <file>images/uToy.png</file>
         <file>images/wall.png</file>
         <file>images/logo.png</file>
+        <file>images/LRing_scaled.png</file>
+        <file>images/SRing_scaled.png</file>
+        <file>images/UToy_scaled.png</file>
+        <file>images/Mickey_scaled.png</file>
     </qresource>
     <qresource prefix="/manual">
-        <file alias="scenario_01.png">scenario_manual/scenario_01_scaled.png</file>
-        <file alias="Scenario6.png">scenario_manual/Scenario6_scaled.png</file>
-        <file alias="Scenario11-1.png">scenario_manual/Scenario11-1_scaled.png</file>
-        <file alias="Scenario13-1.png">scenario_manual/Scenario13-1_scaled.png</file>
-        <file alias="Scenario18-3.png">scenario_manual/Scenario18-3_scaled.png</file>
+        <file alias="Scenario3-1.png">scenarios_manual/Scenario3-1_scaled.png</file>
+        <file alias="Scenario6.png">scenarios_manual/Scenario6_scaled.png</file>
+        <file alias="Scenario11-1.png">scenarios_manual/Scenario11-1_scaled.png</file>
+        <file alias="Scenario18-3.png">scenarios_manual/Scenario18-3_scaled.png</file>
+        <file alias="Scenario_screen.png">scenarios_manual/scenario_screen_scaled.png</file>
+        <file alias="Scenario13-1.png">scenarios_manual/Scenario13-1_scaled.png</file>
     </qresource>
 </RCC>

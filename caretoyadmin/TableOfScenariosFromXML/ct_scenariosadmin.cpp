@@ -42,6 +42,8 @@ void CTScenariosAdmin::execParsedQuery(QString initStmt, QString whereStmt)
 
 void CTScenariosAdmin::proccessData(QByteArray table_data)
 {
+    view->setEnabled(true);
+    showMessage("Information retreived successfully.");
     view->init(CTXmlDataParser::parse_table(table_data));
 }
 
@@ -49,12 +51,13 @@ void CTScenariosAdmin::proccessData(QByteArray table_data)
 /*Select on pre-known columns of the table test_scenario*/
 void CTScenariosAdmin::requestTable()
 {
-
-    QStringList fieldNames = QStringList() <<"id" << "execution_day"
-                                          << "execution_order"
+    view->setEnabled(false);
+    QStringList fieldNames = QStringList() <<"id"
                                           << "creation_date" << "last_edited"
-                                          <<  "description" << "image_description"
-                                           << "xml_description" << "flag" << "position_image" ;
+                                          <<  "description"
+                                          << "training_day"
+                                          << "execution_order" << "image_description"
+                                          << "xml_description" << "flag" << "position_image" ;
 
     CTTableRecord rec = CTTableRecord();
     int i =0;
@@ -66,7 +69,7 @@ void CTScenariosAdmin::requestTable()
     QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
                                                "test_scenario",rec);
     execParsedQuery(stmt, QString());
-    showMessage("Retreiving table from DB...");
+    view->statusBar->showMessage("Retreiving table from DB. Please wait...");
 }
 
 void CTScenariosAdmin::showMessage(QString mssg)

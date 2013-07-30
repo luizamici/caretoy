@@ -20,6 +20,11 @@ public:
     QStatusBar *statusBar;
 
 private:
+
+    QPushButton *edit;
+    QPushButton *copy;
+    QPushButton *remove;
+
     QSortFilterProxyModel *filterModel;
     QHash<QString, QString> getSelected();
     bool tableSelected;

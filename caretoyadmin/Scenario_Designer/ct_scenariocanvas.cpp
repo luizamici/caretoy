@@ -322,7 +322,8 @@ void CTScenarioCanvas::resetScenario()
         delete tmp;
     }
     CTScenarioData::instance().clearData();
-    calculateRuntime();
+    updateRuntime(0.0);
+//    calculateRuntime();
     Log4Qt::Logger::logger(QLatin1String("CTScenarioCanvas"))->info(
                 "Exit CTScenarioCanvas::resetScenario .");
 }
@@ -634,8 +635,8 @@ void CTScenarioCanvas::saveScenario()
         scenario["last_edited"] = QDateTime::currentDateTime().
                 toString("yyyy-MM-dd HH:mm");
 
-        scenario["execution_day"] = CTScenarioData::instance().data()->
-                execution_day;
+        scenario["training_day"] = CTScenarioData::instance().data()->
+                training_day;
         scenario["execution_order"] = CTScenarioData::instance().data()->
                 execution_order;
         scenario["description"] = CTScenarioData::instance().data()->description;

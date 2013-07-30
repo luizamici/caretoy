@@ -30,6 +30,7 @@ private slots:
 
 public slots:
     void showMessage(QString mss);
+    void enableOkBtn(bool enable);
 };
 
 #endif // CT_LOGINDIALOG_H

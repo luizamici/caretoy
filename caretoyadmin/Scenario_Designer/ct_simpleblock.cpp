@@ -13,11 +13,11 @@ CTSimpleBlock::CTSimpleBlock(int id, QWidget *parent) :
     switch (id) {
     case CT_BLOCK_MICKEY:
         ui->qlb_block_name->setText("Mickey");
-        ui->qlb_block_image->setPixmap(QPixmap(":/images/mickey.png"));
+        ui->qlb_block_image->setPixmap(QPixmap(":/images/Mickey_scaled.png"));
         break;
     case CT_BLOCK_U:
         ui->qlb_block_name->setText("UToy");
-        ui->qlb_block_image->setPixmap(QPixmap(":/images/uToy.png"));
+        ui->qlb_block_image->setPixmap(QPixmap(":/images/UToy_scaled.png"));
         break;
     case CT_BLOCK_ARCH:
         ui->qlb_block_name->setText("Arch");
@@ -37,12 +37,12 @@ CTSimpleBlock::CTSimpleBlock(int id, QWidget *parent) :
         break;
     case CT_BLOCK_LRING:
         ui->qlb_block_name->setText("Large ring");
-        ui->qlb_block_image->setPixmap(QPixmap(":/images/ring.png"));
+        ui->qlb_block_image->setPixmap(QPixmap(":/images/LRing_scaled.png"));
         break;
     case CT_BLOCK_SRING:
     {
         ui->qlb_block_name->setText("Small ring");
-        ui->qlb_block_image->setPixmap(QPixmap(":/images/ring.png"));
+        ui->qlb_block_image->setPixmap(QPixmap(":/images/SRing_scaled.png"));
         break;
     }
     default:

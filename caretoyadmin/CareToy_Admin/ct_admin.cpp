@@ -61,12 +61,15 @@ void CTAdmin::processXML(QByteArray data)
                 QString type = attr.value("message").toString();
                 if("success" == type)
                 {
+                    dialog->showMessage("Login successful");
                     dialog->close();
                     scenarioAdmin->initialize();
                 }
                 else if("failure" == type)
                 {
-                    dialog->showMessage("Username or Password incorrect");
+                    dialog->enableOkBtn(true);
+                    dialog->showMessage("Username or Password incorrect. "
+                                        "Please try again");
                 }
             }
             else if("query_reply" == tagName)

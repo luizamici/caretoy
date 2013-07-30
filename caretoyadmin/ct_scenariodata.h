@@ -11,25 +11,12 @@ public:
     QString xml_description;
     QString description;
     QString creation_date;
-    QString execution_day;
+    QString training_day;
     QString execution_order;
     QString image_description;
     QString position_image;
     QString outcome_measures;
 };
-
-//typedef struct
-//{
-//    QString id;
-//    QString xml_description;
-//    QString description;
-//    QString creation_date;
-//    QString execution_day;
-//    QString execution_order;
-//    QString image_description;
-//    QString position_image;
-//    QString outcome_measures;
-//} ScData;
 
 
 class CTScenarioData
@@ -43,14 +30,12 @@ public:
 
     CTScData* data(){return _data;}
 
-//    ScData* data() { return &_data; }
-
     void clearData(){
         _data->id.clear();
         _data->xml_description.clear();
         _data->description.clear();
         _data->creation_date.clear();
-        _data->execution_day.clear();
+        _data->training_day.clear();
         _data->execution_order.clear();
         _data->image_description.clear();
         _data->position_image.clear();

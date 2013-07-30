@@ -70,11 +70,6 @@
         </item>
         <item>
          <property name="text">
-          <string>scenario_01.png</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>Scenario6.png</string>
          </property>
         </item>
@@ -91,6 +86,16 @@
         <item>
          <property name="text">
           <string>Scenario18-3.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Scenario3-1.png</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Scenario_screen.png</string>
          </property>
         </item>
        </widget>
@@ -118,27 +123,27 @@
         </item>
         <item>
          <property name="text">
-          <string>prone_leftwall.png</string>
+          <string>posizione_prona_paretedx.png</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>prone_rightwall.png</string>
+          <string>posizione_prona_paretesx.png</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>prone_screenwall.png</string>
+          <string>posizione_prona_schermo.png</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>sitting.png</string>
+          <string>posizione_seduta.png</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>supine.png</string>
+          <string>posizione_supina.png</string>
          </property>
         </item>
        </widget>
@@ -147,20 +152,6 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Day of execution</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDateEdit" name="qde_execution">
-        <property name="date">
-         <date>
-          <year>2012</year>
-          <month>1</month>
-          <day>1</day>
-         </date>
-        </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -196,6 +187,115 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="qcb_training_day">
+        <item>
+         <property name="text">
+          <string>Choose a day...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1st day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2nd day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3rd day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>10th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>11th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>12th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>14th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>15th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>16th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>17th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>18th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>19th day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>20th day</string>
+         </property>
+        </item>
+       </widget>
       </item>
      </layout>
     </item>

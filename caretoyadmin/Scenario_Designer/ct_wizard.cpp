@@ -12,7 +12,7 @@ CTWizard::CTWizard(QWidget *parent) :
       Setting mandatory fields for the wizard
      */
     ui->CTWizardPageInput->registerFields("qle_description*", ui->qle_description);
-    ui->CTWizardPageInput->registerFields("qde_execution*", ui->qde_execution);
+    ui->CTWizardPageInput->registerFields("qcb_training_day",ui->qcb_training_day);
     ui->CTWizardPageInput->registerFields("qsb_execution*", ui->qsb_execution);
     ui->CTWizardPageInput->registerFields("qcb_image",ui->qcb_image);
     ui->CTWizardPageInput->registerFields("qcb_image_position",ui->qcb_image_position);
@@ -26,9 +26,8 @@ void CTWizard::initialize(bool newScenario)
     {
         ui->qle_description->setText(CTScenarioData::instance().data()->
                                      description);
-        QDate date(QDate::fromString(CTScenarioData::instance().data()->
-                                     execution_day,"yyyy-MM-dd"));
-        ui->qde_execution->setDate(date);
+        ui->qcb_training_day->setCurrentIndex(CTScenarioData::instance().data()->
+                                              training_day.toInt());
         ui->qsb_execution->setValue(CTScenarioData::instance().data()->
                                     execution_order.toInt());
         ui->qcb_image->setCurrentIndex(ui->qcb_image->findText(
@@ -121,8 +120,7 @@ void CTWizard::saveData()
 {
     CTScenarioData::instance().data()->description = ui->qle_description->text();
     CTScenarioData::instance().data()->image_description = ui->qcb_image->currentText();
-    CTScenarioData::instance().data()->execution_day = ui->qde_execution->date().
-            toString("yyyy-MM-dd");
+    CTScenarioData::instance().data()->training_day = QString::number(ui->qcb_training_day->currentIndex());
     CTScenarioData::instance().data()->execution_order = ui->qsb_execution->text();
     CTScenarioData::instance().data()->position_image = ui->qcb_image_position->
             currentText();

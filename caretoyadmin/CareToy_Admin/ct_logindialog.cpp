@@ -34,6 +34,7 @@ CTLoginDialog::CTLoginDialog(QWidget *parent) :
 
 void CTLoginDialog::on_okButton_clicked()
 {
+    enableOkBtn(false);
     emit credentials(ui->usernameEdit->text(), ui->passwordEdit->text());
 }
 
@@ -45,6 +46,11 @@ void CTLoginDialog::on_cancelButton_clicked()
 void CTLoginDialog::showMessage(QString mss)
 {
     statusBar->showMessage(mss);
+}
+
+void CTLoginDialog::enableOkBtn(bool enable)
+{
+    ui->okButton->setEnabled(enable);
 }
 
 CTLoginDialog::~CTLoginDialog()

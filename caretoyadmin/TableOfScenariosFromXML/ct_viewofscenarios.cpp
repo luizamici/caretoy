@@ -5,7 +5,7 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QWidget(parent)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    this->setWindowTitle("CareToy Admin");
+    this->setWindowTitle("CareToy Scenario Manager");
     this->setLayout(mainLayout);
     this->setFixedSize(1200, 500);
 
@@ -21,21 +21,28 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
     table->setSortingEnabled(true);
 
+    connect(table->horizontalHeader(),SIGNAL(sectionClicked(int)),this,
+            SLOT(sortByColumn(int)));
+
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     mainLayout->addLayout(buttonLayout);
     mainLayout->addWidget(table);
     statusBar = new QStatusBar();
     mainLayout->addWidget(statusBar);
 
-    QPushButton *edit = new QPushButton(tr("Edit"));
+    edit = new QPushButton(tr("Edit"));
     QPushButton *add = new QPushButton(tr("Add"));
-    QPushButton *copy = new QPushButton(tr("Copy"));
-    QPushButton *remove = new QPushButton(tr("Remove"));
+    copy = new QPushButton(tr("Copy"));
+    remove = new QPushButton(tr("Remove"));
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(edit);
     buttonLayout->addWidget(add);
     buttonLayout->addWidget(copy);
     buttonLayout->addWidget(remove);
+
+    edit->setEnabled(false);
+    remove->setEnabled(false);
+    copy->setEnabled(false);
 
     connect(edit, SIGNAL(clicked()),this, SLOT(on_edit_clicked()));
     connect(add, SIGNAL(clicked()),this, SLOT(on_add_clicked()));
@@ -62,14 +69,14 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     table->setModel(filterModel);
 
     xmlTable->setHeader(0, "ID");
-    xmlTable->setHeader(1,"Execution day");
-    xmlTable->setHeader(2,"Execution order");
-    xmlTable->setHeader(3,"Creation date");
-    xmlTable->setHeader(4, "Last edited");
-    xmlTable->setHeader(5, "Description");
-    xmlTable->setHeader(6, "Scenario's document");
+    xmlTable->setHeader(1,"Creation date");
+    xmlTable->setHeader(2, "Last edited");
+    xmlTable->setHeader(3, "Description");
+    xmlTable->setHeader(4,"Execution day");
+    xmlTable->setHeader(5,"Execution order");
 
     /*columns which are not wished to be viewd */
+    table->setColumnHidden(6,true);
     table->setColumnHidden(7, true); // xml_description hidden
     table->setColumnHidden(8, true);
     table->setColumnHidden(9,true);
@@ -82,13 +89,31 @@ void CTViewOfScenarios::init(CTTableData *table_data)
             this, SLOT(tableSelectionChanged(QItemSelection,QItemSelection)));
 }
 
+
 void CTViewOfScenarios::tableSelectionChanged(const QItemSelection &selected,
                                               const QItemSelection &deselected)
 {
     /*Checks if any rows on the table have been selected*/
-    if(!selected.indexes().isEmpty()){tableSelected = true;}
-    else{tableSelected = false;}
+    if(!selected.indexes().isEmpty())
+    {
+        edit->setEnabled(true);
+        remove->setEnabled(true);
+        copy->setEnabled(true);
+        tableSelected = true;
+    }
+    else{
+        edit->setEnabled(false);
+        remove->setEnabled(false);
+        copy->setEnabled(false);
+        tableSelected = false;}
 }
+
+
+void CTViewOfScenarios::sortByColumn(int column)
+{
+
+}
+
 
 void CTViewOfScenarios::on_edit_clicked()
 {
