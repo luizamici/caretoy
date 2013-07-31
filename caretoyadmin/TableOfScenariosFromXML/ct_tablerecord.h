@@ -18,10 +18,10 @@ public:
     bool operator==(const CTTableRecord &other) const;
     inline bool operator!=(const CTTableRecord &other) const { return !operator==(other); }
 
-    QString value(int i) const;
-    QString value(const QString& name) const;
-    void setValue(int i, const QString &val);
-    void setValue(const QString& name, const QString &val);
+    QVariant value(int i) const;
+    QVariant value(const QString& name) const;
+    void setValue(int i, const QVariant &val);
+    void setValue(const QString& name, const QVariant &val);
 
     void setNull(int i);
     void setNull(const QString& name);

@@ -59,15 +59,39 @@ void CTScenariosAdmin::requestTable()
                                           << "execution_order" << "image_description"
                                           << "xml_description" << "flag" << "position_image" ;
 
-    CTTableRecord rec = CTTableRecord();
-    int i =0;
+    QString stmt;
+    QXmlStreamWriter writer(&stmt);
+    writer.setAutoFormatting(true);
+
+    writer.writeStartElement("select");
+    writer.writeStartElement("table");
+    writer.writeAttribute("name", "test_scenario");
+    writer.writeStartElement("fields");
+    writer.writeAttribute("number", QString::number(fieldNames.count()));
+
     foreach(QString fieldName, fieldNames)
     {
-        rec.insert(i, CTTableField(fieldName, fieldName));
-        i++;
+        writer.writeStartElement("field");
+        writer.writeAttribute("name",fieldName);
+        writer.writeEndElement(); // end field
     }
-    QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
-                                               "test_scenario",rec);
+
+    writer.writeEndElement(); // end fields
+    writer.writeEndElement(); // end table
+    writer.writeEndElement(); // end select
+
+
+//    CTTableRecord rec = CTTableRecord();
+//    int i =0;
+//    foreach(QString fieldName, fieldNames)
+//    {
+//        rec.insert(i, CTTableField(fieldName));
+//        i++;
+//    }
+//    QString stmt = CTQueryParser::xmlStatement(CTQueryParser::SelectStatement,
+//                                               "test_scenario",rec);
+//    qDebug() << Q_FUNC_INFO << stmt;
+
     execParsedQuery(stmt, QString());
     view->statusBar->showMessage("Retreiving table from DB. Please wait...");
 }

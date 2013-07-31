@@ -305,7 +305,6 @@ void CTScenarioCanvas::calculateRuntime()
         double runtime = this->blocks.at(var)->getRuntime();
         tot_runtime += runtime;
     }
-    qDebug() << Q_FUNC_INFO << tot_runtime;
     emit updateRuntime(tot_runtime);
 }
 

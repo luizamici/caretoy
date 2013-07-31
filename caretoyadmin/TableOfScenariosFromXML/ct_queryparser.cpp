@@ -24,7 +24,7 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         for(int i = 0; i< row.count(); i++)
         {
             stream.writeStartElement("field");
-            stream.writeAttribute("name", row.value(i));
+            stream.writeAttribute("name", row.value(i).toString());
             stream.writeEndElement();
         }
         stream.writeEndElement();//end fields
@@ -40,14 +40,14 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         for(int i = 0; i< row.count(); i++)
         {
             /*the auto increment types of the DB are skipped*/
-            if(row.field(i).defaultValue().isEmpty())
+            if(row.field(i).defaultValue().toString().isEmpty())
             {
                 stream.writeStartElement("field");
                 stream.writeAttribute("name", row.fieldName(i));
                 if(row.fieldName(i).contains("xml"))
-                    stream.writeCDATA(row.value(i));
+                    stream.writeCDATA(row.value(i).toString());
                 else
-                    stream.writeCharacters(row.value(i));
+                    stream.writeCharacters(row.value(i).toString());
                 stream.writeEndElement();//end field
             }
         }
@@ -63,14 +63,17 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         stream.writeAttribute("number", QString::number(row.count()));
         for(int i = 0; i< row.count(); i++)
         {
-            if(row.field(i).defaultValue().isEmpty())
+
+            if(row.field(i).defaultValue().toString().isEmpty())
             {
+//                qDebug() << Q_FUNC_INFO <<  row.field(i).value()
+//                         << QVariant::typeToName(row.field(i).type());
                 stream.writeStartElement("field");
                 stream.writeAttribute("name",row.fieldName(i));
                 if(row.fieldName(i).contains("xml"))
-                    stream.writeCDATA(row.value(i));
+                    stream.writeCDATA(row.value(i).toString());
                 else
-                    stream.writeCharacters(row.value(i));
+                    stream.writeCharacters(row.value(i).toString());
                 stream.writeEndElement();//end field
             }
         }
@@ -91,7 +94,8 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
         for(int i = 0; i< row.count(); i++)
         {
             /*Only nn emtpy fields of the rec are prim keys*/
-            if(row.value(i) != row.field(i).type())
+            if(row.field(i).value() != QVariant(row.field(i).type()))
+//            if(!row.field(i).defaultValue().toString().isEmpty())
             {
                 stream.writeStartElement("field");
                 stream.writeAttribute("name",row.fieldName(i));
@@ -100,7 +104,7 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
                 stream.writeAttribute("type", "eq");
                 stream.writeEndElement();//end op
                 stream.writeStartElement("value");
-                stream.writeCharacters(row.value(i));
+                stream.writeCharacters(row.value(i).toString());
                 stream.writeEndElement();//end value
             }
         }
@@ -110,6 +114,7 @@ QString CTQueryParser::xmlStatement(StatementType type, const QString &tableName
     default:
         break;
     }
+    qDebug() << Q_FUNC_INFO << statement;
     return statement;
 }
 

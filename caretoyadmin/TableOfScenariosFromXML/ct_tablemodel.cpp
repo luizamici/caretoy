@@ -124,6 +124,8 @@ bool CTTableModel::updateRowInTable(const CTTableRecord &rec)
     CTTableRecord whereRec = p_table_data->record();
     for(int i =0; i< primaryKeys.size(); i++ )
     {
+        qDebug()<< Q_FUNC_INFO << primaryKeys.at(i).name()
+                   << rec.value(primaryKeys.at(i).name());
         whereRec.setValue(primaryKeys.at(i).name(),rec.value(
                               primaryKeys.at(i).name()));
     }
@@ -183,8 +185,8 @@ void CTTableModel::copyRecord(const QModelIndex &i)
     {
         _indexFrom = index(i.row(),column,QModelIndex());
         _indexTo = index(rowCount() - 1, column, QModelIndex());
-        if(rec.value("id") != rec.field("id").type())
-            rec.setValue("id", rec.field("id").type());
+        if(rec.value("id") != QVariant::typeToName(rec.field("id").type()))
+            rec.setValue("id", QVariant::typeToName(rec.field("id").type()));
         if(column == 3)
         {
             setData(_indexTo, data(_indexFrom).toString() + "(copy)");
@@ -210,7 +212,9 @@ void CTTableModel::save(QHash<QString,QString> record)
     CTTableRecord rec = map_from_hash(record);
 
     /*Check if new record, case of empty id field*/
-    if(rec.value("id") == rec.field("id").type())
+    qDebug() << Q_FUNC_INFO << rec.value("id");
+    if(rec.value("id") == 0)
+//    if(rec.value("id") == QVariant::typeToName(rec.field("id").type()))
     {
         /*Insert a new row in the table*/
         insertRows(0, 1, QModelIndex());
@@ -261,12 +265,12 @@ QModelIndex CTTableModel::getIndex(QString id)
 
 QHash<QString,QString> CTTableModel::map_to_hash(const CTTableRecord &rec)
 {
-    QHash<QString,QString> out;
+/*    QHash<QString,QString> out;
     for(int i = 0; i< rec.count(); i++)
     {
         out[rec.fieldName(i)] = rec.value(i);
     }
-    return out;
+    return out;*/
 }
 
 CTTableRecord CTTableModel::map_from_hash(QHash<QString,QString> &scenario)
@@ -274,7 +278,13 @@ CTTableRecord CTTableModel::map_from_hash(QHash<QString,QString> &scenario)
     CTTableRecord rec = p_table_data->record();
     foreach(QString fieldName, scenario.keys())
     {
-        rec.setValue(fieldName, scenario[fieldName]);
+        if(rec.field(fieldName).type() == QVariant::Int)
+            rec.setValue(fieldName, scenario[fieldName].toInt());
+        else if(rec.field(fieldName).type() == QVariant::String ||
+                rec.field(fieldName).type() == QVariant::DateTime)
+            rec.setValue(fieldName, scenario[fieldName]);
+//        qDebug() << Q_FUNC_INFO << QVariant::typeToName(rec.field(fieldName).type());
+//        rec.setValue(fieldName, scenario[fieldName]);
     }
     return rec;
 }
@@ -282,15 +292,14 @@ CTTableRecord CTTableModel::map_from_hash(QHash<QString,QString> &scenario)
 
 void CTTableModel::exportData(const CTTableRecord &rec)
 {
-    qDebug() << Q_FUNC_INFO;
-    CTScenarioData::instance().data()->id = rec.value("id");
-    CTScenarioData::instance().data()->xml_description = rec.value("xml_description");
-    CTScenarioData::instance().data()->creation_date = rec.value("creation_date");
-    CTScenarioData::instance().data()->training_day = rec.value("training_day");
-    CTScenarioData::instance().data()->execution_order = rec.value("execution_order");
-    CTScenarioData::instance().data()->description = rec.value("description");
-    CTScenarioData::instance().data()->image_description = rec.value("image_description");
-    CTScenarioData::instance().data()->position_image = rec.value("position_image");
+    CTScenarioData::instance().data()->id = rec.value("id").toString();
+    CTScenarioData::instance().data()->xml_description = rec.value("xml_description").toString();
+    CTScenarioData::instance().data()->creation_date = rec.value("creation_date").toString();
+    CTScenarioData::instance().data()->training_day = rec.value("training_day").toString();
+    CTScenarioData::instance().data()->execution_order = rec.value("execution_order").toString();
+    CTScenarioData::instance().data()->description = rec.value("description").toString();
+    CTScenarioData::instance().data()->image_description = rec.value("image_description").toString();
+    CTScenarioData::instance().data()->position_image = rec.value("position_image").toString();
     return;
 }
 

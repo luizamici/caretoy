@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include "ct_xmldataparser.h"
 #include "ct_tablemodel.h"
+#include "ct_proxymodel.h"
 
 class CTViewOfScenarios : public QWidget
 {
@@ -26,8 +27,11 @@ private:
     QPushButton *remove;
 
     QSortFilterProxyModel *filterModel;
+//    CTProxyModel *customFilterModel ;
     QHash<QString, QString> getSelected();
     bool tableSelected;
+//    bool customModelEnabled;
+
 
 signals:
     void editScenario();
@@ -37,7 +41,6 @@ signals:
     void execParsedQuery(QString init_stmt,QString where_stmt);
 public slots:
     void save(QHash<QString, QString> scenario);
-
     void init(CTTableData *table_data);
 
 private slots:
@@ -48,6 +51,8 @@ private slots:
 
     void tableSelectionChanged(const QItemSelection &selected,
                                const QItemSelection &deselected);
+
+//    void sortByColumn(int column);
 
 };
 

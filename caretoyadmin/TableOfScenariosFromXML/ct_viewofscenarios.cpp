@@ -1,6 +1,7 @@
 #include "ct_viewofscenarios.h"
 #include "ct_scenariodata.h"
 
+
 CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
     QWidget(parent)
 {
@@ -19,10 +20,6 @@ CTViewOfScenarios::CTViewOfScenarios(QWidget *parent) :
 
     /*activates selection of whole row*/
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table->setSortingEnabled(true);
-
-    connect(table->horizontalHeader(),SIGNAL(sectionClicked(int)),this,
-            SLOT(sortByColumn(int)));
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     mainLayout->addLayout(buttonLayout);
@@ -67,6 +64,11 @@ void CTViewOfScenarios::init(CTTableData *table_data)
     filterModel = new QSortFilterProxyModel();
     filterModel->setSourceModel(xmlTable);
     table->setModel(filterModel);
+    table->setSortingEnabled(true);
+//    customModelEnabled = false;
+
+//    customFilterModel = new CTProxyModel();
+//    customFilterModel->setSourceModel(xmlTable);
 
     xmlTable->setHeader(0, "ID");
     xmlTable->setHeader(1,"Creation date");
@@ -109,17 +111,32 @@ void CTViewOfScenarios::tableSelectionChanged(const QItemSelection &selected,
 }
 
 
-void CTViewOfScenarios::sortByColumn(int column)
-{
-
-}
+//void CTViewOfScenarios::sortByColumn(int column)
+//{
+//    if(1 == column || 4 == column || 5 == column)
+//    {
+//        table->setModel(customFilterModel);
+//        customFilterModel->sort(column);
+//        customModelEnabled = true;
+//    }
+//    else
+//    {
+//        table->setModel(filterModel);
+//        filterModel->sort(column);
+//        customModelEnabled = false;
+//    }
+//}
 
 
 void CTViewOfScenarios::on_edit_clicked()
 {
     if(tableSelected)
-    {
-        QModelIndex index = filterModel->mapToSource(table->currentIndex());
+    {   
+        QModelIndex index;
+//        if(customModelEnabled)
+//            index = customFilterModel->mapToSource(table->currentIndex());
+//        else
+        index = filterModel->mapToSource(table->currentIndex());
         xmlTable->record(index);
         editScenario();
     }
@@ -134,7 +151,12 @@ void CTViewOfScenarios::on_copy_clicked()
 {
     if(tableSelected)
     {
-        QModelIndex index = filterModel->mapToSource(table->currentIndex());
+        QModelIndex index;
+//        if(customModelEnabled)
+//            index = customFilterModel->mapToSource(table->currentIndex());
+//        else
+        index = filterModel->mapToSource(table->currentIndex());
+//        QModelIndex index = filterModel->mapToSource(table->currentIndex());
         xmlTable->copyRecord(index);
     }
 }
@@ -143,7 +165,12 @@ void CTViewOfScenarios::on_remove_clicked()
 {
     if(tableSelected)
     {
-        QModelIndex index = filterModel->mapToSource(table->currentIndex());
+        QModelIndex index;
+//        if(customModelEnabled)
+//            index = customFilterModel->mapToSource(table->currentIndex());
+//        else
+        index = filterModel->mapToSource(table->currentIndex());
+//        QModelIndex index = filterModel->mapToSource(table->currentIndex());
         xmlTable->deleteRecord(index);
     }
 }
@@ -160,3 +187,4 @@ void CTViewOfScenarios::save(QHash<QString,QString> scenario)
 {
     xmlTable->save(scenario);
 }
+

@@ -26,6 +26,8 @@ public:
     void remove(int pos);
     //TODO implement an index of the primary keys
 
+    void sortByColumn(int column, Qt::SortOrder order);
+
     QList< QPair< QString, CTTableField> > constraints;
 };
 

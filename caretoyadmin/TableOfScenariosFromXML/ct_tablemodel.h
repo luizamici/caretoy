@@ -27,7 +27,6 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role=Qt::EditRole);
 
-
     void record(const QModelIndex &index);
 
     void setHeader(int section,const QVariant &value);

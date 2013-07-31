@@ -5,7 +5,7 @@ class CTTableFieldPrivate
 
 public:
     CTTableFieldPrivate(const QString &name,
-                        QString type) :
+                        QVariant::Type type) :
                   ref(1), nm(name), ro(false), type(type), req(CTTableField::Unknown),
         autoval(false), len(-1), prec(-1)
     {
@@ -28,9 +28,9 @@ public:
     QAtomicInt ref;
     QString nm;
     uint ro: 1;
-    QString type;
+    QVariant::Type type;
     CTTableField::RequiredStatus req;
-    QString def;
+    QVariant def;
     uint autoval: 1;
     int len;
     int prec;
@@ -38,10 +38,10 @@ public:
 };
 
 
-CTTableField::CTTableField(const QString &fieldName, QString type)
+CTTableField::CTTableField(const QString &fieldName, QVariant::Type type)
 {
     d = new CTTableFieldPrivate(fieldName, type);
-    val = type;
+    val = QVariant::typeToName(type);
 }
 
 
@@ -76,7 +76,7 @@ CTTableField::~CTTableField()
         delete d;
 }
 
-void CTTableField::setValue(const QString& value)
+void CTTableField::setValue(const QVariant& value)
 {
     if (isReadOnly())
         return;
@@ -111,20 +111,20 @@ void CTTableField::clear()
 {
     if (isReadOnly())
         return;
-    val = type();
+    val = QVariant(type());
 }
 
-QString CTTableField::type() const
+QVariant::Type CTTableField::type() const
 {
     return d->type;
 }
 
-void CTTableField::setType(QString type)
+void CTTableField::setType(QVariant::Type type)
 {
     detach();
     d->type = type;
-    if (!val.isEmpty())
-        val = type;
+//    if (!val.isNull())
+//        val = QVariant(type);
 }
 
 bool CTTableField::isAutoValue() const
@@ -149,14 +149,14 @@ CTTableField::RequiredStatus CTTableField::requiredStatus() const
     return d->req;
 }
 
-void CTTableField::setDefaultValue(const QString &value)
+void CTTableField::setDefaultValue(const QVariant &value)
 {
     detach();
     d->def = value;
 }
 
 
-QString CTTableField::defaultValue() const
+QVariant CTTableField::defaultValue() const
 {
     return d->def;
 }

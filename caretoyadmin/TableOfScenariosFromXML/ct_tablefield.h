@@ -9,7 +9,7 @@ class CTTableField
 {
 public:
     CTTableField(const QString& fieldName = QString(),
-                 QString type = QString());
+                 QVariant::Type type = QVariant::Invalid);
 
     CTTableField(const CTTableField& other);
     CTTableField& operator=(const CTTableField& other);
@@ -20,16 +20,16 @@ public:
 
     enum RequiredStatus { Unknown = -1, Optional = 0, Required = 1 }; //required for NOT NULL
 
-    void setValue(const QString &value);
-    inline QString value() const  { return val; }
+    void setValue(const QVariant &value);
+    inline QVariant value() const  { return val; }
     void setName(const QString& name);
     QString name() const;
     bool isNull() const;
     void setReadOnly(bool readOnly);
     bool isReadOnly() const;
     void clear();
-    QString type() const;
-    void setType(QString type);
+    QVariant::Type type() const;
+    void setType(QVariant::Type type);
     bool isAutoValue() const;
     void setAutoValue(bool autoVal);
 
@@ -37,8 +37,8 @@ public:
     RequiredStatus requiredStatus() const;
 
     inline void setRequired(bool required)  { setRequiredStatus(required ? Required : Optional); }
-    void setDefaultValue(const QString &value);
-    QString defaultValue() const;
+    void setDefaultValue(const QVariant &value);
+    QVariant defaultValue() const;
 
     void setLength(int fieldLength);
     void setPrecision(int precision);
@@ -49,7 +49,7 @@ public:
 
 private:
     CTTableFieldPrivate* d;
-    QString val;
+    QVariant val;
     void detach();
 };
 

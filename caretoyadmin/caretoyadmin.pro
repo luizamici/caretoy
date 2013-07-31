@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     Scenario_Designer/ct_wizard.cpp \
     Scenario_Designer/ct_wizardpage.cpp \
     Scenario_Designer/ct_conftoylring.cpp \
-    Scenario_Designer/ct_conftoysring.cpp
+    Scenario_Designer/ct_conftoysring.cpp \
+    ct_proxymodel.cpp
 
 
 HEADERS += \
@@ -74,7 +75,8 @@ HEADERS += \
     Scenario_Designer/ct_wizardpage.h \
     Scenario_Designer/ct_conftoylring.h \
     Scenario_Designer/ct_conftoysring.h \
-    ct_scenariodata.h
+    ct_scenariodata.h \
+    ct_proxymodel.h
 
 FORMS += \
     Scenario_Designer/ct_conftoymickey.ui \

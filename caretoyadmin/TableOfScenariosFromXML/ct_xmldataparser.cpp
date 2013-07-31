@@ -7,7 +7,6 @@ CTXmlDataParser::CTXmlDataParser()
 
 CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
 {
-    qDebug() << table_data;
     bool tableEmpty = true;
     QXmlStreamReader reader(table_data);
     CTTableData *tableData;
@@ -31,7 +30,31 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
         {
             CTTableField field;
             field.setName(reader.attributes().value("name").toString());
-            field.setType(reader.attributes().value("type").toString());
+            QVariant::Type type_of_data;
+            QString type = reader.attributes().value("type").toString();
+            if(type == "integer")
+            {
+                type_of_data = QVariant::Int;
+            }
+            else if(type == "timestamp without time zone")
+            {
+                type_of_data = QVariant::DateTime;
+            }
+            else if(type == "character varying")
+            {
+                type_of_data = QVariant::String;
+            }
+            else if(type == "text")
+            {
+                type_of_data = QVariant::String;
+            }
+            else
+            {
+                type_of_data = QVariant::Invalid;
+            }
+
+//            qDebug() << Q_FUNC_INFO << QVariant::typeToName(type_of_data);
+            field.setType(type_of_data);
 
             if(reader.attributes().value("is_nullable").toString() == "YES")
                 field.setRequiredStatus(CTTableField::Required);
@@ -46,7 +69,8 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
             reader.attributes().value("auto").toString() == "true"?
                         field.setAutoValue(true): field.setAutoValue(false);
 
-            field.setDefaultValue(reader.attributes().value("column_default").toString());
+            QString defaultValue = reader.attributes().value("column_default").toString();
+            field.setDefaultValue(QVariant(defaultValue));
 
             if(!reader.attributes().value("constraint_type").toString().isEmpty())
             {
@@ -69,7 +93,11 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
              */
             rec = CTTableRecord();
             for(int i = 0; i< fields.size(); i++)
+            {
+//                qDebug() << Q_FUNC_INFO << QVariant::typeToName(fields.at(i).type());
                 rec.append(fields.at(i));
+//                qDebug() << Q_FUNC_INFO << i << QVariant::typeToName(rec.field(i).type());
+            }
         }
         if(reader.isStartElement() && reader.name() == "row")
         {
@@ -81,20 +109,28 @@ CTTableData *CTXmlDataParser::parse_table(const QByteArray &table_data)
         if(reader.isCharacters())
         {
             if(!reader.text().toString().trimmed().isEmpty())
-            {
-//                qDebug() << Q_FUNC_INFO << i << reader.text().toString();
-                rec.setValue(i,reader.text().toString());
+            {               
+                QString value = reader.text().toString();
+                QString type = QVariant::typeToName(rec.field(i).type());
+                if(type == "int")
+                    rec.setValue(i, value.toInt());
+                else if(type == "QDateTime")
+                {
+                    //Removes the 'T' character from the DB returned timestamp
+                    value.replace("T"," ");
+                    rec.setValue(i, QDateTime::fromString(value, "yyyy-MM-dd HH:mm:ss"));
+                }
+                else
+                    rec.setValue(i, value);
                 i++;
             }
         }
         if(reader.isEndElement() && reader.name() == "row")
         {
-//            qDebug()<< rec.count();
             tableData->insertRecord(-1,rec);
         }
         if(reader.isEndElement() && reader.name() == "table" && tableEmpty == true)
         {
-//            qDebug()<< rec.count();
             tableData->insertRecord(-1, rec);
             tableData->constraints = _constraints;
         }

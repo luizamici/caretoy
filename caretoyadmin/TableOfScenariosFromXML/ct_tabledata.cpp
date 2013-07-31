@@ -56,3 +56,8 @@ void CTTableData::replace(int row, int column, QString value)
     data.replace(row, rec);
 }
 
+
+void CTTableData::sortByColumn(int column, Qt::SortOrder order)
+{
+
+}

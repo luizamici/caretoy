@@ -66,18 +66,18 @@ bool CTTableRecord::operator==(const CTTableRecord &other) const
 }
 
 
-QString CTTableRecord::value(int index) const
+QVariant CTTableRecord::value(int index) const
 {
     return d->fields.value(index).value();
 }
 
 
-QString CTTableRecord::value(const QString& name) const
+QVariant CTTableRecord::value(const QString& name) const
 {
     return value(indexOf(name));
 }
 
-void CTTableRecord::setValue(int index, const QString& val)
+void CTTableRecord::setValue(int index, const QVariant& val)
 {
     if (!d->contains(index))
     return;
@@ -85,7 +85,7 @@ void CTTableRecord::setValue(int index, const QString& val)
     d->fields[index].setValue(val);
 }
 
-void CTTableRecord::setValue(const QString& name, const QString& val)
+void CTTableRecord::setValue(const QString& name, const QVariant& val)
 {
     setValue(indexOf(name), val);
 }
